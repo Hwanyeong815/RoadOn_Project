@@ -18,22 +18,39 @@ const TABS = ['전체', '국내숙소', '해외숙소', '체험·투어입장권
  * - '항공' => flight
  */
 const tabToFilter = (label) => {
-    const l = (label || '').toLowerCase();
-    if (l === '전체' || l === '전체') return { type: null };
-    if (l.includes('국내')) return { type: 'hotel', domestic: true };
-    if (l.includes('해외')) return { type: 'hotel', domestic: false };
-    if (l.includes('체험') || l.includes('투어') || l.includes('입장권'))
-        return { type: ['package', 'tour'] };
-    if (l.includes('항공')) return { type: 'flight' };
+    const l = (label || '').toString();
+    if (/전체/.test(l)) return { type: null };
+    if (/국내/.test(l)) return { type: 'hotel', domestic: true };
+    if (/해외/.test(l)) return { type: 'hotel', domestic: false };
+    if (/체험|투어|입장권/.test(l)) return { type: ['package', 'tour'] };
+    if (/항공/.test(l)) return { type: 'flight' };
     return { type: null };
 };
 
-// 휴리스틱: 호텔 위치 텍스트로 국내/해외 판단
+// 휴리스틱: 호텔 위치 텍스트로 국내/해외 판단 (간단하고 명시적으로 키워드 포함 검사)
 const isDomesticLocation = (loc) => {
     if (!loc) return false;
     const s = String(loc).toLowerCase();
-    // 한국/서울/제주/부산/대구/인천/광주/대전/울산/세종 키워드 포함하면 국내로 본다
-    return /한국|대한|서울|제주|부산|대구|인천|광주|대전|울산|세종|강원|경상|전라|충청/i.test(s);
+    const keywords = [
+        '한국',
+        '대한민국',
+        '서울',
+        '제주',
+        '부산',
+        '대구',
+        '인천',
+        '광주',
+        '대전',
+        '울산',
+        '세종',
+        '강원',
+        '경상',
+        '전라',
+        '충청',
+        'korea',
+        'kr',
+    ].map((k) => k.toLowerCase());
+    return keywords.some((kw) => s.includes(kw));
 };
 
 const Reserve = ({ preview = true, previewCount = 2, onMore = () => {}, items = null }) => {
@@ -41,29 +58,38 @@ const Reserve = ({ preview = true, previewCount = 2, onMore = () => {}, items = 
     const [page, setPage] = useState(1);
     const pageSize = 5;
 
+    // store의 상세화된 데이터 사용 (hydrate 되어 data 필드 포함)
     const storeItems = useReserveStore((s) => s.itemsDetailed);
     const data = Array.isArray(items) ? items : storeItems || [];
 
+    // 탭 변경 시 페이지 초기화
     useEffect(() => setPage(1), [activeTab]);
 
     const filtered = useMemo(() => {
         const f = tabToFilter(activeTab);
         if (!f.type) return data.slice();
+
         if (Array.isArray(f.type)) {
             // package or tour
-            return data.filter((d) => f.type.includes((d.type || '').toString().toLowerCase()));
+            return data.filter((d) =>
+                f.type.includes(((d.type || '') + '').toString().toLowerCase())
+            );
         }
+
         if (f.type === 'hotel' && typeof f.domestic === 'boolean') {
             return data.filter((d) => {
-                if ((d.type || '').toString().toLowerCase() !== 'hotel') return false;
-                // product data의 location로 국내/해외 판별
-                const loc = d.data?.location ?? d.data?.address ?? '';
+                if (((d.type || '') + '').toString().toLowerCase() !== 'hotel') return false;
+                // product data의 location로 국내/해외 판별 (우선 product snapshot, 없으면 merged data)
+                const loc = d.data?.location ?? d.data?.address ?? d.data?.place ?? '';
                 const domestic = isDomesticLocation(loc);
                 return f.domestic ? domestic : !domestic;
             });
         }
+
         // simple type match
-        return data.filter((d) => (d.type || '').toString().toLowerCase() === f.type);
+        return data.filter(
+            (d) => ((d.type || '') + '').toString().toLowerCase() === String(f.type).toLowerCase()
+        );
     }, [data, activeTab]);
 
     const total = filtered.length;

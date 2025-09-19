@@ -1,22 +1,22 @@
-@use '../../styles/utils' as *;
+@use "../../styles/utils" as *;
 
 .home {
-    width: 100%;
+  width: 100%;
+  .inner {
+    padding: 100px 0;
+  }
+  h2 {
+    @include font-32px-B;
+  }
+  @include tablet {
     .inner {
-        padding: 100px 0;
+      padding: 3rem 0;
+      background-color: skyblue;
     }
     h2 {
-        @include font-32px-B;
+      font-size: 3rem;
     }
-    @include tablet {
-        .inner {
-            padding: 3rem 0;
-            background-color: skyblue;
-        }
-        h2 {
-            font-size: 3rem;
-        }
-    }
+  }
 }
 /*
 @include tablet {

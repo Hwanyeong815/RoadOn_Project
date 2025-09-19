@@ -39,21 +39,50 @@ const isDomesticHotel = (item) => {
 };
 
 const WishList = ({ preview = true, onMore = () => {}, previewCount = 2 }) => {
-    // separate selectors -> 불필요한 리렌더 방지
-    const itemsFromStore = useWishStore((s) => s.items);
-    const itemsDetailed = useWishStore((s) => s.itemsDetailed);
+    // store 구독 (items를 주 소스로 사용)
+    const itemsFromStore = useWishStore((s) => s.items) ?? [];
+    const itemsDetailed = useWishStore((s) => s.itemsDetailed) ?? [];
 
-    const rawItems = itemsDetailed ?? itemsFromStore ?? [];
+    // store의 원본 items를 기반으로, itemsDetailed가 있다면 상세데이터를 매칭해서 병합
+    const detailedMap = useMemo(() => {
+        const m = new Map();
+        (itemsDetailed || []).forEach((it) => {
+            const uid = it.uid || `${it.type}-${it.id}`;
+            m.set(uid, it);
+        });
+        return m;
+    }, [itemsDetailed]);
 
-    const items = useMemo(
-        () =>
-            rawItems.map((it) => {
+    const rawItems = useMemo(() => {
+        // itemsFromStore가 있으면(reactive) 이를 기준으로 상세데이터 병합
+        if (Array.isArray(itemsFromStore) && itemsFromStore.length > 0) {
+            return itemsFromStore.map((it) => {
                 const uid = it.uid || `${it.type}-${it.id}`;
-                const type = (it.type || '').toString().toLowerCase();
-                return { uid, type, id: it.id, data: it.data ?? null };
-            }),
-        [rawItems]
-    );
+                const det = detailedMap.get(uid);
+                // 우선순위: detailed data의 data 필드 유지, 아니면 store에 있던 data
+                return {
+                    uid,
+                    type: (it.type || '').toString().toLowerCase(),
+                    id: it.id,
+                    data: det?.data ?? it.data ?? (det ? det.data : null),
+                    // 만약 detailed엔 추가 필드가 필요하면 합쳐서 반환할 수도 있습니다.
+                    ...(det ? { _detailed: det } : {}),
+                };
+            });
+        }
+
+        // store에 항목이 없으면(초기상태 등) detailed를 보여주거나 빈 배열
+        if (Array.isArray(itemsDetailed) && itemsDetailed.length > 0) {
+            return itemsDetailed.map((it) => ({
+                uid: it.uid || `${it.type}-${it.id}`,
+                type: (it.type || '').toString().toLowerCase(),
+                id: it.id,
+                data: it.data ?? null,
+            }));
+        }
+
+        return [];
+    }, [itemsFromStore, itemsDetailed, detailedMap]);
 
     const [activeTab, setActiveTab] = useState(TABS[0]);
     const { page, pageSize, setPage } = usePagination('wishlist', 5);
@@ -61,35 +90,27 @@ const WishList = ({ preview = true, onMore = () => {}, previewCount = 2 }) => {
     const currentPage = Number(page) || 1;
     const currentPageSize = Number(pageSize) || 5;
 
-    // 탭 변경 시 페이지를 1로 리셋하되, 이미 1이면 호출하지 않음 -> 무한 루프 방지
     useEffect(() => {
-        if (Number(page) !== 1) {
-            setPage(1);
-        }
-        // activeTab 변경 시에만 검사하도록 activeTab을 deps에 넣음
-    }, [activeTab, page, setPage]);
+        setPage(1);
+    }, [activeTab, setPage]);
 
-    // 필터링
     const filtered = useMemo(() => {
-        if (activeTab === '전체') return items;
+        if (activeTab === '전체') return rawItems;
         if (activeTab === '국내 숙소')
-            return items.filter((it) => it.type === 'hotel' && isDomesticHotel(it));
+            return rawItems.filter((it) => it.type === 'hotel' && isDomesticHotel(it));
         if (activeTab === '해외 숙소')
-            return items.filter((it) => it.type === 'hotel' && !isDomesticHotel(it));
+            return rawItems.filter((it) => it.type === 'hotel' && !isDomesticHotel(it));
         if (activeTab === '체험·투어 입장권')
-            return items.filter((it) => it.type === 'package' || it.type === 'tour');
-        if (activeTab === '항공') return items.filter((it) => it.type === 'flight');
-        return items;
-    }, [items, activeTab]);
+            return rawItems.filter((it) => it.type === 'package' || it.type === 'tour');
+        if (activeTab === '항공') return rawItems.filter((it) => it.type === 'flight');
+        return rawItems;
+    }, [rawItems, activeTab]);
 
     const total = filtered.length;
 
-    // total 변화로 인해 현재 페이지가 범위를 벗어나면 1로 보정 (이때도 이미 1이면 호출 안 함)
     useEffect(() => {
         const maxPage = Math.max(1, Math.ceil(total / currentPageSize));
-        if (Number(page) > maxPage) {
-            setPage(1);
-        }
+        if (Number(page) > maxPage) setPage(1);
     }, [total, currentPageSize, page, setPage]);
 
     const previewList = useMemo(() => filtered.slice(0, previewCount), [filtered, previewCount]);
@@ -100,11 +121,13 @@ const WishList = ({ preview = true, onMore = () => {}, previewCount = 2 }) => {
     }, [filtered, currentPage, currentPageSize]);
 
     const renderItem = (it) => {
-        if (it.type === 'hotel') return <HotelBox key={it.uid} hotelId={it.id} />;
+        // Box 내부에서 WishButton을 렌더하고 제어하도록 props 전달
+        if (it.type === 'hotel')
+            return <HotelBox key={it.uid} hotelId={it.id} inWishList data={it.data} />;
         if (it.type === 'flight' || it.type === 'air' || it.type === 'airport')
-            return <AirportBox key={it.uid} airportId={it.id} />;
+            return <AirportBox key={it.uid} airportId={it.id} inWishList data={it.data} />;
         if (it.type === 'package' || it.type === 'tour')
-            return <TourBox key={it.uid} packageId={it.id} />;
+            return <TourBox key={it.uid} packageId={it.id} inWishList data={it.data} />;
         return (
             <div key={it.uid} className="wish-unknown">
                 <strong>알 수 없는 항목</strong> - {it.type} / {String(it.id)}

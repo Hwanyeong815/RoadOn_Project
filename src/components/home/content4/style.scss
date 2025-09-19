@@ -1,1 +1,57 @@
 @use "../../../styles/utils" as *;
+.content4 {
+  margin-top: 15rem;
+  width: 100%;
+  height: 86.75rem;
+
+  position: relative;
+  .content4_top {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8.62rem;
+
+    p {
+      font-size: 1.2rem;
+      font-weight: bold;
+      font-size: 2.8125rem;
+    }
+    .text1 {
+      color: #828282;
+    }
+    .text2 {
+      color: $orange;
+    }
+    .imgwrap {
+      position: relative;
+      width: 25.5625rem;
+      height: 32.6875rem;
+
+      .airplane {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        z-index: 2; // 프레임이 위로
+        pointer-events: none;
+      }
+
+      video {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: 1; // 비디오는 뒤에
+        clip-path: ellipse(38% 48% at 50% 50%);
+      }
+    }
+  }
+  .content4_bg {
+    img {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+    }
+  }
+}

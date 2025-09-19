@@ -1,34 +1,62 @@
 // src/components/tour/TourBox.jsx
-import rawPackages from '../../api/packagesData'; // 원래 경로 유지. 필요하면 경로만 바꿔주세요.
 import './style.scss';
 import { useNavigate } from 'react-router-dom';
+import WishButton from '../ui/wishbutton/WishButton';
+import useWishStore from '../../store/wishStore';
 
-const packagesData = Array.isArray(rawPackages)
-    ? rawPackages
-    : // some bundlers export module as { default: [...] }
-    Array.isArray(rawPackages?.default)
-    ? rawPackages.default
-    : [];
+const svgPosterFallback =
+    'data:image/svg+xml;utf8,' +
+    encodeURIComponent(
+        `<svg xmlns='http://www.w3.org/2000/svg' width='400' height='240'>
+      <rect width='100%' height='100%' fill='#f3f4f6'/>
+      <text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle'
+        fill='#9ca3af' font-size='16'>NO IMAGE</text>
+    </svg>`
+    );
 
-// TourBox: packageId가 slug(문자열) 또는 id(숫자/문자)일 수 있음.
-// itemData가 넘어오면 그것을 우선 사용.
-const TourBox = ({ packageId, itemData }) => {
+const toPublic = (maybeName, base) => {
+    if (!maybeName) return null;
+    if (/^(https?:\/\/|\/\/|\/|data:)/i.test(maybeName)) return maybeName;
+    return `${base.replace(/\/$/, '')}/${maybeName}`.replace(/\/{2,}/g, '/');
+};
+
+// 투어 이미지 규칙: tour/main → tour/detail → (그 외) → SVG 폴백
+const pickTourPoster = (tour) => {
+    const main =
+        toPublic(tour?.posterImg, '/images/tour/main') ||
+        toPublic(tour?.mainImg, '/images/tour/main') ||
+        toPublic(tour?.main_image, '/images/tour/main') ||
+        toPublic(tour?.main, '/images/tour/main');
+
+    const detail =
+        toPublic(tour?.backgroundImg, '/images/tour/detail') ||
+        toPublic(tour?.detailImg, '/images/tour/detail') ||
+        toPublic(tour?.detail_image, '/images/tour/detail') ||
+        toPublic(tour?.detail, '/images/tour/detail');
+
+    const others = tour?.image || tour?.thumbnail || null; // 절대경로/루트면 그대로 쓰임
+
+    return main || detail || others || svgPosterFallback;
+};
+
+const DEFAULT_PACKAGES = Object.freeze([]);
+
+const TourBox = ({ packageId, inWishList = false }) => {
     const navigate = useNavigate();
 
-    const tour =
-        itemData ??
-        (packageId &&
-            packagesData.find((p) => {
-                if (!p) return false;
-                return p.slug === packageId || String(p.id) === String(packageId);
-            }));
+    const packages = useWishStore((s) => s.packages) ?? DEFAULT_PACKAGES;
+    const tour = packages.find(
+        (p) => p && (String(p.id) === String(packageId) || p.slug === packageId)
+    );
 
-    if (!tour) {
-        return <div className="tour-box-empty">투어 정보를 찾을 수 없습니다.</div>;
-    }
+    if (!tour)
+        return inWishList ? null : (
+            <div className="tour-box-empty">투어 정보를 찾을 수 없습니다.</div>
+        );
 
     const price = tour.adult_fee ?? tour.adultFee ?? tour.price ?? 0;
-    const slug = tour.slug ?? packageId;
+    const slug = tour.slug ?? tour.id;
+    const poster = pickTourPoster(tour);
 
     return (
         <div
@@ -39,20 +67,29 @@ const TourBox = ({ packageId, itemData }) => {
             onKeyDown={(e) => {
                 if ((e.key === 'Enter' || e.key === ' ') && slug) navigate(`/tours/${slug}`);
             }}
+            style={{ position: 'relative' }}
         >
-            <div className="hotel-image">
+            <div className="hotel-image" style={{ position: 'relative' }}>
                 <img
-                    src={tour.posterImg ?? tour.backgroundImg ?? '/images/tour/default.png'}
-                    alt={tour.title ?? '투어'}
+                    src={poster}
+                    alt={tour.title ?? tour.name ?? '투어'}
+                    loading="lazy"
+                    onError={(e) => {
+                        e.currentTarget.onerror = null;
+                        e.currentTarget.src = svgPosterFallback;
+                    }}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                 />
-                <span className="heart" />
+                <div className="wish-overlay" onClick={(e) => e.stopPropagation()}>
+                    <WishButton type="tour" id={tour.id ?? slug} data={tour} />
+                </div>
             </div>
 
             <div className="hotel-info">
                 <div className="info-top">
                     <div className="top-title">
                         <span>{tour.contents ?? '투어'}</span>
-                        <h4>{tour.title}</h4>
+                        <h4>{tour.title ?? tour.name ?? '제목 없음'}</h4>
                     </div>
                     <div className="rate">
                         <span>{tour.duration ?? tour.date ?? ''}</span>
@@ -62,9 +99,8 @@ const TourBox = ({ packageId, itemData }) => {
                 <div className="info-bottom">
                     <div className="bottom-location">
                         <img src="/images/hotels/search/map_pin.svg" alt="" />
-                        <span>{tour.city ?? tour.country ?? tour.date ?? ''}</span>
+                        <span>{tour.city ?? tour.country ?? tour.location ?? ''}</span>
                     </div>
-
                     <div className="bottom-price">
                         <span>성인 1인</span>
                         <strong>{Number(price).toLocaleString()}원</strong>

@@ -1,0 +1,168 @@
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  clip: rect(0, 0, 0, 0);
+  overflow: hidden;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+.landingpage {
+  width: 100%;
+  height: 100vh;
+  margin: 0;
+  display: flex;
+  background: black;
+}
+.landingpage .inner {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  position: relative;
+}
+.landingpage .inner .symbol {
+  line-height: 0;
+  vertical-align: middle;
+}
+.landingpage .inner .symbol img {
+  box-sizing: border-box;
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.3s ease;
+}
+.landingpage .inner .symbol .default-logo {
+  opacity: 1;
+  z-index: 10;
+}
+.landingpage .inner .symbol .hover-logo {
+  opacity: 0;
+  z-index: 20;
+}
+.landingpage .inner .card {
+  position: relative;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  cursor: pointer;
+}
+.landingpage .inner .card .content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.landingpage .inner .card .content h2 {
+  font-size: 3.75rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 3.75rem;
+  color: #ff7f50;
+  transition: transform 0.3s ease;
+}
+.landingpage .inner .card .content strong {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 2.25rem;
+  color: #ff7f50;
+  margin-top: clamp(5.625px, 1.5625vw, 30px);
+  transition: transform 0.3s ease;
+}
+.landingpage .inner .card .content p {
+  margin-top: clamp(1.875px, 0.5208333333vw, 10px);
+  font-size: 1.75rem;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 2.5rem;
+  color: #d4d4d4;
+  transition: transform 0.3s ease;
+}
+.landingpage .inner .card.vion {
+  background-image: url("/images/landing/vion_bg.png");
+  background-position: 0 0;
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-radius: 0;
+}
+.landingpage .inner .card.vion:hover {
+  background-image: url("/images/landing/vion_bg_hover.png");
+}
+.landingpage .inner .card.vion:hover .content h2,
+.landingpage .inner .card.vion:hover .content strong,
+.landingpage .inner .card.vion:hover .content p {
+  color: #fff;
+  transition: transform 0.3s ease;
+  transform: translateY(-60px);
+}
+.landingpage .inner .card.roadon {
+  background-image: url("/images/landing/roadon_bg.png");
+  background-position: 0 0;
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-radius: 0;
+}
+.landingpage .inner .card.roadon .content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.landingpage .inner .card.roadon .content h2 {
+  font-size: 3.75rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 3.75rem;
+  color: #42bdcc;
+  transition: transform 0.3s ease;
+}
+.landingpage .inner .card.roadon .content strong {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 2.25rem;
+  color: #42bdcc;
+  margin-top: clamp(5.625px, 1.5625vw, 30px);
+  transition: transform 0.3s ease;
+}
+.landingpage .inner .card.roadon .content p {
+  margin-top: clamp(1.875px, 0.5208333333vw, 10px);
+  font-size: 1.75rem;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 2.5rem;
+  color: #d4d4d4;
+  transition: transform 0.3s ease;
+}
+.landingpage .inner .card.roadon:hover {
+  background-image: url("/images/landing/roadon_bg_hover.png");
+}
+.landingpage .inner .card.roadon:hover .content h2,
+.landingpage .inner .card.roadon:hover .content strong,
+.landingpage .inner .card.roadon:hover .content p {
+  color: #fff;
+  transition: transform 0.3s ease;
+  transform: translateY(-60px);
+}
+.landingpage .inner .card.roadon:hover ~ .symbol .default-logo {
+  opacity: 0;
+  z-index: 10;
+}
+.landingpage .inner .card.roadon:hover ~ .symbol .hover-logo {
+  opacity: 1;
+  z-index: 20;
+}
+/*# sourceMappingURL=style.css.map */

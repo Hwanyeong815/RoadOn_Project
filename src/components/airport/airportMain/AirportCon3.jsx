@@ -6,6 +6,7 @@ import useAirportStore from '../../../store/airportStore';
 const AirportCon3 = () => {
     const navigate = useNavigate();
     const airportDetails = useAirportStore((s) => s.airportDetails);
+    const setFilter = useAirportStore((s) => s.setFilter);
 
     const shuffleArray = (array) => {
         const shuffled = [...array];
@@ -18,6 +19,23 @@ const AirportCon3 = () => {
 
     const promoFlights = shuffleArray(airportDetails).slice(0, 4);
 
+    const handleClick = (flight) => {
+        setFilter({
+            mode: 'oneway',
+            segments: [
+                {
+                    from: flight.departureAirport,
+                    to: flight.arrivalAirport,
+                    date: new Date(),
+                },
+            ],
+            dates: [new Date(), null],
+            people: 1,
+            seat: '일반석',
+        });
+        navigate(`/airport/search`);
+    };
+
     return (
         <section className="airport-main-con airport-main-con3">
             <div className="inner">
@@ -28,7 +46,7 @@ const AirportCon3 = () => {
                         <div
                             className="promo-card-con"
                             key={f.id}
-                            onClick={() => navigate(`/airport/${f.slug}`)}
+                            onClick={() => handleClick(f)}
                             style={{ cursor: 'pointer' }}
                         >
                             <img src={f.images} alt={f.airline} />

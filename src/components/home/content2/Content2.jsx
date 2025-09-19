@@ -43,14 +43,23 @@ const CouponEvent = () => {
 
     gsap.to(marquee, {
       x: -totalWidth,
-      duration: 50,
-      ease: "linear",
+      duration: 30,
+      ease: "sine.inOut",
       repeat: -1,
       modifiers: {
         x: gsap.utils.unitize((x) => parseFloat(x) % -totalWidth),
       },
     });
-
+    gsap.utils.toArray(".coupon-item").forEach((item, i) => {
+      gsap.to(item, {
+        y: 80, // 위아래 이동 범위
+        duration: 2,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
+        delay: i * 0.1, // 살짝씩 시간차를 줘서 자연스럽게
+      });
+    });
     return () => {
       gsap.killTweensOf(marquee);
     };
@@ -58,15 +67,21 @@ const CouponEvent = () => {
 
   return (
     <div className="coupon-event-container" ref={containerRef}>
-      <div className="coupon-header" ref={titleRef}>
-        <h2 className="head">
-          SPECIAL <span>EVENT</span>
-        </h2>
-        <span className="special-event-badge">쿠폰 전체 받기</span>
+      <div className="inner">
+        <div className="coupon-header" ref={titleRef}>
+          <h2 className="head">
+            SPECIAL <span>EVENT</span>
+          </h2>
+          <p className="subhead">뭘 좋아할지 몰라 다 준비했어요!</p>
+          <span className="special-event-badge">쿠폰 전체 받기</span>
+        </div>
+        <div className="couponbg">
+          <img src="./images/main/couponbg.png" alt="couponbg" />
+        </div>
       </div>
       <div className="marquee-wrapper">
         <div className="marquee" ref={marqueeRef}>
-          {[...coupons, ...coupons].map((coupon, idx) => (
+          {[...coupons, ...coupons, ...coupons].map((coupon, idx) => (
             <div className="coupon-item" key={idx}>
               <img
                 src={coupon.image}

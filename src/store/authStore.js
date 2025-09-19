@@ -5,7 +5,7 @@ const STORAGE_KEY = 'auth_store_test_v1';
 const generateId = () => `u_${Date.now()}_${Math.floor(Math.random() * 10000)}`;
 
 // === 테스트용 유저 (개발/테스트에서 바로 보이게 할 값) ===
-// WARNING: 테스트용 평문 비밀번호 포함 (절대 운영환경에선 이렇게 하지 마세요)
+
 const defaultTestUser = {
     id: 'u_test_1',
     username: 'honggildong',
@@ -25,7 +25,6 @@ const defaultTestUser = {
     points: 250900,
     reserveCount: 0,
     wishlistCount: 0,
-    // 테스트용 비밀번호 (평문) — 운영 전환 시 반드시 제거/변경
     password: 'password123',
 };
 

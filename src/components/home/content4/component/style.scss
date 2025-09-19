@@ -1,0 +1,14 @@
+@use "../../../../styles/utils" as *;
+
+#scrollText {
+  animation: textFlow 20s linear infinite;
+}
+
+@keyframes textFlow {
+  from {
+    startoffset: 100%;
+  }
+  to {
+    startoffset: 0%;
+  }
+}

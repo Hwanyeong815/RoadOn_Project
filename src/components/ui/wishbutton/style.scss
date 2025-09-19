@@ -3,15 +3,29 @@
 // 임시 스타일 — 필요시 프로젝트 변수/토큰으로 교체하세요.
 
 /* Container when used as overlay inside a card */
+
 .wish-overlay {
     position: absolute;
-    top: 8px;
-    right: 8px;
     z-index: 20;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    /* 부모 카드에 따라 크기/간격 조정 가능 */
+    pointer-events: auto;
+}
+
+.hotel-image {
+    position: relative;
+    .wish-overlay {
+        top: vw(8px);
+        right: vw(8px);
+    }
+}
+.airport-box {
+    position: relative;
+    .wish-overlay {
+        top: vw(8px);
+        left: vw(8px);
+    }
 }
 
 /* Button */

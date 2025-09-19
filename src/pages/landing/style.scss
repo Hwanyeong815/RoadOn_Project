@@ -1,0 +1,150 @@
+@use '../../styles/utils' as *;
+html,
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+.landingpage {
+    width: 100%;
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    background: black;
+    .inner {
+        width: 100%;
+        height: 100vh;
+        display: flex;
+        position: relative;
+        .symbol {
+            line-height: 0;
+            vertical-align: middle;
+            img {
+                box-sizing: border-box;
+                display: block;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                transition: opacity 0.3s ease;
+            }
+            .default-logo {
+                opacity: 1;
+                z-index: 10;
+            }
+            .hover-logo {
+                opacity: 0;
+                z-index: 20;
+            }
+        }
+
+        //vion
+        .card {
+            position: relative;
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            cursor: pointer;
+            .content {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                h2 {
+                    @include font-60px-B;
+                    color: $orange;
+                    transition: transform 0.3s ease;
+                }
+                strong {
+                    display: block;
+                    @include font-24px-M;
+                    color: $orange;
+                    margin-top: vw(30px);
+                    transition: transform 0.3s ease;
+                }
+                p {
+                    margin-top: vw(10px);
+                    @include font-28px;
+                    color: $greyscale-600;
+                    transition: transform 0.3s ease;
+                }
+            }
+            &.vion {
+                background-image: url('/images/landing/vion_bg.png');
+                background-position: 0 0;
+                background-repeat: no-repeat;
+                background-size: cover;
+                border-radius: 0;
+                &:hover {
+                    background-image: url('/images/landing/vion_bg_hover.png');
+                    .content {
+                        h2,
+                        strong,
+                        p {
+                            color: $white;
+                            transition: transform 0.3s ease;
+                            transform: translateY(-60px);
+                        }
+                    }
+                }
+            }
+
+            // roadon
+            &.roadon {
+                .content {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    h2 {
+                        @include font-60px-B;
+                        color: $mint;
+                        transition: transform 0.3s ease;
+                    }
+                    strong {
+                        display: block;
+                        @include font-24px-M;
+                        color: $mint;
+                        margin-top: vw(30px);
+                        transition: transform 0.3s ease;
+                    }
+                    p {
+                        margin-top: vw(10px);
+                        @include font-28px;
+                        color: $greyscale-600;
+                        transition: transform 0.3s ease;
+                    }
+                }
+                background-image: url('/images/landing/roadon_bg.png');
+                background-position: 0 0;
+                background-repeat: no-repeat;
+                background-size: cover;
+                border-radius: 0;
+                &:hover {
+                    background-image: url('/images/landing/roadon_bg_hover.png');
+                    .content {
+                        h2,
+                        strong,
+                        p {
+                            color: $white;
+                            transition: transform 0.3s ease;
+                            transform: translateY(-60px);
+                        }
+                    }
+                    ~ .symbol {
+                        .default-logo {
+                            opacity: 0;
+                            z-index: 10;
+                        }
+                        .hover-logo {
+                            opacity: 1;
+                            z-index: 20;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
