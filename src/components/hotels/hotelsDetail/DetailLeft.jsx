@@ -44,6 +44,14 @@ const DetailLeft = ({
         '개별 바베큐': Bbq,
     };
 
+    const [activeTab, setActiveTab] = useState('시설/서비스');
+
+    const buildingRef = useRef(null);
+    const roomOptionRef = useRef(null);
+    const hotelInfoRef = useRef(null);
+    const locationRef = useRef(null);
+    const reviewsRef = useRef(null);
+
     return (
         <div className="detail-left">
             <section className="detail-title">
@@ -84,15 +92,40 @@ const DetailLeft = ({
             <section className="detail-data">
                 <section className="detail-data-tab">
                     <div className="detail-data-tab-btns-wrap">
-                        <button className="building on">시설/서비스</button>
-                        <button className="room-option">객실 선택</button>
-                        <button className="hotel-info">숙소 정보</button>
-                        <button className="location">위치</button>
-                        <button className="reviews">리뷰</button>
+                        <button
+                            className={activeTab === '시설/서비스' ? 'building on' : 'building'}
+                            onClick={() => setActiveTab('시설/서비스')}
+                        >
+                            시설/서비스
+                        </button>
+                        <button
+                            className={activeTab === '객실 선택' ? 'room-option on' : 'room-option'}
+                            onClick={() => setActiveTab('객실 선택')}
+                        >
+                            객실 선택
+                        </button>
+                        <button
+                            className={activeTab === '숙소 정보' ? 'hotel-info on' : 'hotel-info'}
+                            onClick={() => setActiveTab('숙소 정보')}
+                        >
+                            숙소 정보
+                        </button>
+                        <button
+                            className={activeTab === '위치' ? 'location on' : 'location'}
+                            onClick={() => setActiveTab('위치')}
+                        >
+                            위치
+                        </button>
+                        <button
+                            className={activeTab === '리뷰' ? 'reviews on' : 'reviews'}
+                            onClick={() => setActiveTab('리뷰')}
+                        >
+                            리뷰
+                        </button>
                     </div>
                 </section>
                 <div className="detail-contents">
-                    <div className="con con1 building">
+                    <div className="con con1 building" ref={buildingRef}>
                         <h2>시설/서비스</h2>
                         <ul className="services-list">
                             {hotel.service.map((serviceName, index) => {
@@ -110,7 +143,7 @@ const DetailLeft = ({
                     <div className="con advertise">
                         <img src="/images/hotels/detail/login_first.png" alt="login_first.png" />
                     </div>
-                    <div className="con con2 room-option-wrap">
+                    <div className="con con2 room-option-wrap" ref={roomOptionRef}>
                         <h2>객실 선택</h2>
                         <ul className="room-filter">
                             <li
@@ -148,7 +181,7 @@ const DetailLeft = ({
                             )}
                         </div>
                     </div>
-                    <div className="con con3 hotel-info-wrap">
+                    <div className="con con3 hotel-info-wrap" ref={hotelInfoRef}>
                         <h2>숙소 정보</h2>
                         <p>{hotel.about}</p>
                         <div className="contact">
