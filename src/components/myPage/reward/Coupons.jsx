@@ -59,13 +59,6 @@ const Coupons = ({ userId }) => {
                 </div>
             </section>
 
-            {/* ✅ 쿠폰 개수 표시 */}
-            {/* <section className="coupons-summary">
-                <p>
-                    전체 {totalCount}개 · 사용가능 {availableCount}개 · 사용완료 {usedCount}개
-                </p>
-            </section> */}
-
             <section className="coupons-body">
                 {filteredCoupons.length > 0 ? (
                     filteredCoupons.map((coupon, i) => (

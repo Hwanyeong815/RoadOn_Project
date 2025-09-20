@@ -81,3 +81,48 @@
         }
     }
 }
+
+.coupon-button-wrap {
+    margin: 20px 0;
+
+    .coupon-btn {
+        padding: 10px 16px;
+        border: none;
+        border-radius: 6px;
+        background-color: #ff6b6b;
+        color: #fff;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background 0.2s;
+
+        &:hover {
+            background-color: #ff5252;
+        }
+    }
+
+    .coupon-list {
+        margin-top: 12px;
+        list-style: none;
+        padding: 0;
+
+        li {
+            margin-bottom: 6px;
+            font-size: 14px;
+
+            .label {
+                font-weight: bold;
+                margin-right: 8px;
+            }
+
+            .amount {
+                color: #2e7d32;
+                margin-right: 6px;
+            }
+
+            .used {
+                color: #888;
+                font-size: 12px;
+            }
+        }
+    }
+}

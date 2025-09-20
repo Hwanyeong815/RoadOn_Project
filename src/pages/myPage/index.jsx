@@ -1,4 +1,3 @@
-// src/pages/MyPage.jsx
 import React, { useEffect, useRef, useState } from 'react';
 import Grade from '../../components/myPage/grade';
 import Profile from '../../components/myPage/profile';
@@ -8,6 +7,7 @@ import Reward from '../../components/myPage/reward';
 import Support from '../../components/myPage/support';
 import WishList from '../../components/myPage/wishList';
 import './style.scss';
+import CouponButton from '../../components/ui/coupon/CouponButton';
 
 const SECTION_KEY = 'mypage_section';
 const SUPPORT_TAB_KEY = 'support_tab';
@@ -27,7 +27,6 @@ const MyPage = () => {
     const rewardRef = useRef(null);
     const containerRef = useRef(null);
 
-    // ----- URL helpers -----
     const readSearchParams = () => {
         try {
             return new URLSearchParams(window.location.search);
@@ -46,7 +45,6 @@ const MyPage = () => {
         window.history.replaceState({}, '', newUrl);
     };
 
-    // set URL keys based on activeSection / tabs
     const pushSectionToUrl = (section, opts = {}) => {
         replaceUrlParams((params) => {
             if (!section) {
@@ -55,12 +53,10 @@ const MyPage = () => {
                 params.set(SECTION_KEY, section);
             }
 
-            // support tab
             if (section === 'support' && opts.tab) params.set(SUPPORT_TAB_KEY, opts.tab);
-            // reward tab
+
             if (section === 'reward' && opts.tab) params.set(REWARD_TAB_KEY, opts.tab);
 
-            // if opts explicitly clear a tab
             if (opts.clearSupportTab) params.delete(SUPPORT_TAB_KEY);
             if (opts.clearRewardTab) params.delete(REWARD_TAB_KEY);
 
@@ -68,7 +64,6 @@ const MyPage = () => {
         });
     };
 
-    // ----- sync from URL on mount -----
     useEffect(() => {
         if (typeof window === 'undefined') return;
 
@@ -86,7 +81,6 @@ const MyPage = () => {
         if (sTab) setSupportTab(sTab);
         if (rTab) setRewardTab(rTab);
 
-        // popstate: 브라우저 뒤로/앞으로 버튼 반영
         const onPop = () => {
             const p = readSearchParams();
             const sec2 = p.get(SECTION_KEY);
@@ -99,22 +93,17 @@ const MyPage = () => {
         };
         window.addEventListener('popstate', onPop);
         return () => window.removeEventListener('popstate', onPop);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []); // 마운트 시 한 번
+    }, []);
 
-    // ----- onNavigate: Profile에서 호출함 -----
-    // onNavigate(section, opts)  (opts: { tab: 'faq'|'notice'|'guide' etc })
     const onNavigate = (section, opts = {}) => {
-        // 부모 state 업데이트
         if (section === 'reward' && opts.tab) setRewardTab(opts.tab);
         if (section === 'support' && opts.tab) setSupportTab(opts.tab);
 
         setActiveSection(section);
-        // URL에 반영 (replace, 히스토리 과다 누적 방지)
+
         pushSectionToUrl(section, opts);
     };
 
-    // ----- auto-scroll when activeSection changes -----
     useEffect(() => {
         if (!activeSection) {
             containerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -139,6 +128,7 @@ const MyPage = () => {
 
     return (
         <section id="myPage" ref={containerRef}>
+            <CouponButton />
             <div className="inner">
                 <Profile activeSection={activeSection} onNavigate={onNavigate} />
 
