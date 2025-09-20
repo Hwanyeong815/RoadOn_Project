@@ -1,8 +1,7 @@
-import useCouponStore from '../../../store/couponStore';
 import GradeColumn from './GradeColumn';
 import './style.scss';
+import gradeData from '../../../api/gradeData';
 const Grade = () => {
-    const grades = useCouponStore((state) => state.grades);
     return (
         <div className="mypage-grade">
             <div className="mypage-title-wrap">
@@ -10,7 +9,7 @@ const Grade = () => {
             </div>
 
             <section className="mypage-grade-main-wrap">
-                {grades.map((g) => (
+                {gradeData.map((g) => (
                     <GradeColumn key={g.code} {...g} />
                 ))}
             </section>

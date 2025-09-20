@@ -1,14 +1,17 @@
+// src/components/myPage/Reward.jsx
 import React, { useEffect, useState } from 'react';
 import './style.scss';
 
 import TabButton from '../../ui/tabButton/TabButton';
 import Points from './Points';
 import Coupons from './Coupons';
+import useAuthStore from '../../../store/authStore';
 
-const Reward = ({ userName = '홍길동', balance = 0, items = [], defaultTab = 'coupons' }) => {
-    const [activeTab, setActiveTab] = useState(defaultTab); // 'coupons' | 'points'
+const Reward = ({ defaultTab = 'coupons' }) => {
+    const [activeTab, setActiveTab] = useState(defaultTab);
+    const currentUser = useAuthStore((s) => s.currentUser);
+    const userId = currentUser?.id;
 
-    // defaultTab prop이 바뀌면 반영
     useEffect(() => {
         setActiveTab(defaultTab);
     }, [defaultTab]);
@@ -31,8 +34,8 @@ const Reward = ({ userName = '홍길동', balance = 0, items = [], defaultTab = 
             </div>
 
             <div className="reward-main">
-                {activeTab === 'coupons' && <Coupons items={items} />}
-                {activeTab === 'points' && <Points userName={userName} balance={balance} />}
+                {activeTab === 'coupons' && <Coupons userId={userId} />}
+                {activeTab === 'points' && <Points userId={userId} />}
             </div>
         </div>
     );

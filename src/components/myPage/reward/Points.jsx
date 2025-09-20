@@ -1,12 +1,13 @@
-// Points.jsx
-import useCouponStore from '../../../store/couponStore';
+// src/components/myPage/Points.jsx
+import useRewardStore from '../../../store/rewardStore';
 import PointsItem from './PointsItem';
 
-const Points = () => {
-    const points = useCouponStore((s) => s.points);
+const Points = ({ userId }) => {
+    const getPoints = useRewardStore((s) => s.getPoints);
+    const points = getPoints(userId);
     const { userName, items } = points;
 
-    // balance = items 합계(적립 +, 사용 -)
+    // balance = items 합계
     const balance = items.reduce((sum, it) => sum + (Number(it.amount) || 0), 0);
 
     return (

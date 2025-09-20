@@ -1,12 +1,10 @@
 // src/components/airport/airportSearch/AirportBox.jsx
 import './style.scss';
 import { useNavigate } from 'react-router-dom';
-import WishButton from '../../ui/wishbutton/WishButton';
 import useWishStore from '../../../store/wishStore';
 
 const DEFAULT_FILTERS = Object.freeze({ mode: 'oneway', dates: [], segments: [] });
 
-// 항상 표시 가능한 SVG 폴백 (이미지 없을 때)
 const svgLogoFallback =
     'data:image/svg+xml;utf8,' +
     encodeURIComponent(
@@ -17,7 +15,6 @@ const svgLogoFallback =
     </svg>`
     );
 
-// 파일명만 들어오면 디렉토리를 붙여 만듭니다. 절대경로/루트 경로면 그대로 사용.
 const toPublic = (maybeName, base) => {
     if (!maybeName) return null;
     if (/^(https?:\/\/|\/\/|\/|data:)/i.test(maybeName)) return maybeName;
@@ -44,8 +41,6 @@ const fmt = (val) => {
 
 const AirportBox = ({ airportId, inWishList = false }) => {
     const navigate = useNavigate();
-
-    // ✅ selector는 원본만, 기본값은 상수
     const airports = useWishStore((s) => s.airports) ?? [];
     const storeFilters = useWishStore((s) => s.filters);
     const filters = storeFilters ?? DEFAULT_FILTERS;
@@ -56,7 +51,6 @@ const AirportBox = ({ airportId, inWishList = false }) => {
             <div className="airport-box-empty">항공권 정보를 찾을 수 없습니다.</div>
         );
 
-    // segments 안전 구성
     const mode = filters.mode || 'oneway';
     let segments = [];
     if (mode === 'roundtrip') {
@@ -107,14 +101,11 @@ const AirportBox = ({ airportId, inWishList = false }) => {
         navigate(`/payment`, { state: { productType: 'flight', airport, segments } });
     };
 
-    // ❌ 존재하지 않는 기본경로는 더 이상 사용하지 않음
-    // logo가 '파일명'이면 airline 폴더를 주로 사용한다고 가정 (필요시 base 바꿔주세요)
     const logoSrc =
         toPublic(airport.logo, '/images/airline') ||
         toPublic(airport.logo, '/images/airport') ||
         svgLogoFallback;
 
-    // timeline도 없을 수 있으니 SVG로 폴백
     const timelineFallback =
         'data:image/svg+xml;utf8,' +
         encodeURIComponent(
@@ -130,10 +121,6 @@ const AirportBox = ({ airportId, inWishList = false }) => {
             onClick={handleClick}
             style={{ cursor: 'pointer', position: 'relative' }}
         >
-            <div className="wish-overlay" onClick={(e) => e.stopPropagation()}>
-                <WishButton type="flight" id={airportId} data={airport} />
-            </div>
-
             {segments.map((seg, i) => (
                 <div className="flight-row" key={i}>
                     <div className="airline">

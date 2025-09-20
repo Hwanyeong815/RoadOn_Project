@@ -81,7 +81,7 @@ const TourBox = ({ packageId, inWishList = false }) => {
                     style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                 />
                 <div className="wish-overlay" onClick={(e) => e.stopPropagation()}>
-                    <WishButton type="tour" id={tour.id ?? slug} data={tour} />
+                    <WishButton type="tour" id={slug} data={tour} />
                 </div>
             </div>
 
