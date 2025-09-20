@@ -1,3 +1,6 @@
+import useTourStore from '../../../store/tourStore';
+import TourCon3Item from './tourCon/TourCon3Item';
+
 const arr = [
     {
         id: 1,
@@ -34,25 +37,16 @@ const arr = [
 ];
 
 const TourMainCon3 = () => {
+    const packages = useTourStore((state) => state.packages);
     return (
         <section className="tour-main-con tour-main-con3">
             <div className="inner">
                 <div className="head">
-                    <h2>인기 여행지의 패키지 둘러보기</h2>
+                    <h2>씬투어 패키지 둘러보기</h2>
                 </div>
                 <ul className="package-wrap">
-                    {arr.map((pack) => (
-                        <li key={pack.id}>
-                            <div className="img-wrap">
-                                <img src={pack.img} alt={pack.title} />
-                            </div>
-                            <div className="txt-wrap">
-                                <h2 className="title">{pack.title}</h2>
-                                <strong className="des">{pack.des}</strong>
-                                <p className="info">{pack.info}</p>
-                                <em className="price">{pack.price}</em>
-                            </div>
-                        </li>
+                    {packages.map((pack) => (
+                        <TourCon3Item pack={pack} id={pack.id} />
                     ))}
                 </ul>
             </div>

@@ -1,12 +1,17 @@
 @use '../../../styles/utils' as *;
 
 #TourMain {
+    padding-bottom: vw(100px);
     .tour-main-con {
         overflow-x: hidden;
         height: vw(1080px);
+
         position: relative;
         &1 {
-            background-color: $black;
+            // background-color: $black;
+            background-image: url('/images/tour/main/con1_back.png');
+            background-repeat: no-repeat;
+            background-size: cover;
             .head-txt-box h2,
             .head-txt-box p {
                 will-change: transform, opacity;
@@ -33,19 +38,18 @@
                 display: flex;
                 justify-content: center;
                 align-items: flex-end;
-                // gap: 10px;
                 margin-top: vw(150px);
-                perspective: 1200px; // 살짝 원근감
+                perspective: 1200px;
 
                 .img-wrap {
                     border-radius: 20px;
                     overflow: hidden;
-                    width: 290px;
-                    height: 300px; // 높이는 고정, transform으로만 연출
+                    width: vw(290px);
+                    height: vw(420px);
                     background-color: #fff;
                     position: relative;
                     transform-origin: bottom center;
-                    transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1), opacity 0.25s;
+                    transition: 0.35s;
                     will-change: transform;
 
                     img {
@@ -61,36 +65,54 @@
             }
         }
         &2 {
-            .inner {
-                overflow: visible; // 화살표는 안 쓰지만, 점/콘텐츠가 잘리는 경우 대비
-            }
-
             // background-repeat: no-repeat;
             background-size: cover;
             background-position: 0 0;
-            background-color: rgba(0, 0, 0, 0.6); // 어둡게
-            background-blend-mode: multiply;
+
+            .categorytabs-wrap {
+                padding-top: vw(155px);
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
+                align-items: end;
+                .more-btns {
+                    display: flex;
+                    align-items: center;
+                    @include font-16px-B;
+                    color: $mint;
+                    em {
+                        padding-top: vw(3px);
+                        padding-left: vw(5px);
+                    }
+                }
+            }
 
             .btns-wrap {
-                padding-top: vw(155px);
+                padding: 0;
                 display: flex;
-                justify-content: end;
+                justify-content: start;
                 gap: vw(20px);
 
                 .button {
                     width: vw(110px);
                     height: vw(44px);
+                    background-color: rgba($mint, 0.06);
+                    border: 2px solid $mint;
+                    color: $mint;
+
                     @include font-14px-B;
                     line-height: rem(22px);
-
+                    &.g,
                     &:hover {
-                        border: 2px solid $orange;
-                        line-height: 1.3;
+                        background-color: $mint;
+                        border: 2px solid $mint;
+                        color: $white;
                     }
                 }
             }
 
             .main-section-wrap {
+                cursor: pointer;
                 margin-top: vw(50px);
                 display: flex;
                 justify-content: space-between;
@@ -104,6 +126,7 @@
                     &-pagination {
                         bottom: vw(24px);
                         z-index: 3;
+                        display: none;
 
                         &-bullet {
                             width: vw(10px);
@@ -111,7 +134,7 @@
                             margin: 0 vw(6px) !important;
                             background: rgba(255, 255, 255, 0.4);
                             opacity: 1;
-                            transition: transform 0.2s ease, background-color 0.2s ease;
+                            transition: 0.2s ease;
 
                             &-active {
                                 background: #fff;
@@ -143,16 +166,16 @@
                     }
 
                     .icons-wrap {
-                        margin-top: vw(210px);
+                        margin-top: vw(40px);
                         display: flex;
-                        gap: vw(70px);
+                        gap: vw(40px);
                         color: $white;
 
                         .icon-box {
                             display: flex;
                             flex-direction: column;
                             align-items: center;
-                            gap: vw(10px);
+                            gap: vw(8px);
 
                             .img-wrap {
                                 width: vw(40px);
@@ -161,12 +184,17 @@
 
                                 img {
                                     width: 100%;
+                                    height: 100%;
+                                    object-fit: contain;
                                 }
                             }
 
                             p {
+                                margin: 0;
                                 @include font-16px-B;
+                                color: $white;
                                 text-align: center;
+                                white-space: nowrap;
                             }
                         }
                     }
@@ -217,48 +245,72 @@
                 }
             }
             .package-wrap {
-                display: flex;
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
                 gap: vw(60px);
                 justify-content: space-between;
                 li {
-                    width: vw(326px);
-                    height: vw(552px);
-                    border: vw(1px) solid $default;
+                    width: vw(333px);
+                    height: vw(500px);
+                    border: vw(1px) solid $greyscale-500;
                     overflow: hidden;
                     border-radius: vw(10px);
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-between;
+
                     .img-wrap {
                         width: 100%;
-                        height: vw(320px);
-
+                        height: vw(280px);
                         position: relative;
                         img {
-                            height: 100%;
-
+                            width: 100%;
                             position: absolute;
                             left: 50%;
                             top: 50%;
                             transform: translate(-50%, -50%);
                         }
                     }
-                    .txt-wrap {
-                        padding: vw(20px);
-                        display: flex;
-                        flex-direction: column;
-                        gap: vw(14px);
-                        .title {
-                            @include font-20px-B;
-
+                    .txt {
+                        &-wrap {
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: space-between;
+                        }
+                        &-title {
+                            @include font-20px-SB;
                             white-space: pre-line;
                             line-height: 1.4;
                         }
-                        .des {
+                        &-desc {
                             @include font-16px;
                         }
-                        .info {
-                            @include font-16px;
-                        }
-                        .price {
-                            @include font-14px-B;
+                        &-row {
+                            display: flex;
+                            justify-content: space-between;
+                            &1 {
+                                justify-content: start;
+                                gap: vw(5px);
+                                @include font-16px;
+                                span {
+                                    color: $greyscale-1100;
+                                    &:last-child {
+                                        color: $black;
+                                    }
+                                }
+                            }
+                            .txt-group {
+                                color: $greyscale-1000;
+                                &:last-child {
+                                    display: flex;
+                                    flex-direction: column;
+                                    align-items: end;
+                                }
+                                .price {
+                                    @include font-20px-B;
+                                    color: $default;
+                                }
+                            }
                         }
                     }
                 }

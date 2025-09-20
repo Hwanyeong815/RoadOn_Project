@@ -166,7 +166,7 @@ export default function TourMainCon1({
                 onMouseLeave={() => setHoverIndex(null)}
                 style={{ gap: 0 }}
             >
-                {arrTour.slice(0, 6).map((t, i) => {
+                {arrTour.map((t, i) => {
                     const s = scales[i];
                     const liftY = (s - 1) * 40;
                     const ml = i === 0 ? 0 : BASE_GAP + over(scales[i - 1]) + over(s);
