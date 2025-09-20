@@ -1,6 +1,5 @@
 import { BsTelephone } from 'react-icons/bs';
 import { MdOutlineEmail } from 'react-icons/md';
-import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import {
     Wifi,
     Breakfast,
@@ -18,6 +17,8 @@ import Policies from './Policies';
 import Location from './Location';
 import MiniReviewItem from './MiniReviewItem';
 import WishButton from '../../ui/wishbutton/WishButton';
+import { FaHeart, FaRegHeart } from 'react-icons/fa';
+// import { useRef, useState } from 'react';
 // import DetailBotReviewsItem from '../../tour/tourDetail/detailBottom/DetailBotReviewsItem';
 
 const DetailLeft = ({
@@ -31,7 +32,9 @@ const DetailLeft = ({
     handleRoomSelect,
     handleShowMore,
     averageRating,
-    miniReviews,
+    miniReviews, activeTab, handleScrollTo, buildingRef, roomOptionRef, hotelInfoRef,
+    locationRef,
+    reviewsRef,
 }) => {
     const serviceComponentMap = {
         '무료 와이파이': Wifi,
@@ -62,19 +65,15 @@ const DetailLeft = ({
                         </p>
                     </div>
                     <div className="more-btn">
-                        <img src="/images/icon/share.svg" alt="공유" />
+                        <img src="/images/icon/share.svg" className='share-btn' alt="공유" />
                         {/* <img src="/images/icon/like.svg" alt="찜하기" /> */}
-                        <div className="detail-heart">
-                            <div className="wish-overlay">
-                                <WishButton
-                                    type="hotel"
+                        <WishButton 
+                            type="hotel"
                                     id={hotel.id}
                                     data={hotel}
                                     filledIcon={FaHeart} // 눌렀을 때 빨간 하트
                                     emptyIcon={FaRegHeart} // 기본은 빈 하트
-                                />
-                            </div>
-                        </div>
+                        className='wish-hotel-btn'/>
                     </div>
                 </article>
                 <section className="detail-reviews" style={{ marginBottom: '20px' }}>
@@ -97,15 +96,40 @@ const DetailLeft = ({
             <section className="detail-data">
                 <section className="detail-data-tab">
                     <div className="detail-data-tab-btns-wrap">
-                        <button className="building on">시설/서비스</button>
-                        <button className="room-option">객실 선택</button>
-                        <button className="hotel-info">숙소 정보</button>
-                        <button className="location">위치</button>
-                        <button className="reviews">리뷰</button>
+                        <button
+                            className={activeTab === '시설/서비스' ? 'building on' : 'building'}
+                            onClick={() => handleScrollTo(buildingRef, '시설/서비스')}
+                        >
+                            시설/서비스
+                        </button>
+                        <button
+                            className={activeTab === '객실 선택' ? 'room-option on' : 'room-option'}
+                            onClick={() => handleScrollTo(roomOptionRef, '객실 선택')}
+                        >객실 선택
+                        </button>
+                        <button
+                            className={activeTab === '숙소 정보' ? 'hotel-info on' : 'hotel-info'}
+                            onClick={() => handleScrollTo(hotelInfoRef, '숙소 정보')} 
+                        >
+                       
+                            숙소 정보
+                        </button>
+                        <button
+                        className={activeTab === '위치' ? 'location on' : 'location'}
+                        onClick={() => handleScrollTo(locationRef, '위치')}
+                    >
+                            위치
+                        </button>
+                        <button
+                        className={activeTab === '리뷰' ? 'reviews on' : 'reviews'}
+                        onClick={() => handleScrollTo(reviewsRef, '리뷰')}
+                    >
+                            리뷰
+                        </button>
                     </div>
                 </section>
                 <div className="detail-contents">
-                    <div className="con con1 building">
+                    <div className="con con1 building" ref={buildingRef}>
                         <h2>시설/서비스</h2>
                         <ul className="services-list">
                             {hotel.service.map((serviceName, index) => {
@@ -123,7 +147,7 @@ const DetailLeft = ({
                     <div className="con advertise">
                         <img src="/images/hotels/detail/login_first.png" alt="login_first.png" />
                     </div>
-                    <div className="con con2 room-option-wrap">
+                    <div className="con con2 room-option-wrap" ref={roomOptionRef}>
                         <h2>객실 선택</h2>
                         <ul className="room-filter">
                             <li
@@ -161,7 +185,7 @@ const DetailLeft = ({
                             )}
                         </div>
                     </div>
-                    <div className="con con3 hotel-info-wrap">
+                    <div className="con con3 hotel-info-wrap" ref={hotelInfoRef}>
                         <h2>숙소 정보</h2>
                         <p>{hotel.about}</p>
                         <div className="contact">

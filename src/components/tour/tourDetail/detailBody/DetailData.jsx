@@ -2,11 +2,16 @@ import DetailCon2 from './detailData/DetailCon2';
 import DetailDataTab from './detailData/DetailDataTab';
 import './style.scss';
 
-const DetailData = ({tourData }) => {
+const DetailData = ({tourData, buildingRef, descriptionRef, locationRef, reviewsRef  }) => {
     return (
         <section className="detail-data">
-            <DetailDataTab />
-            <div className="con con1 building">
+            <DetailDataTab 
+                buildingRef={buildingRef} 
+                descriptionRef={descriptionRef} 
+                locationRef={locationRef} 
+                reviewsRef={reviewsRef}
+            />
+            <div className="con con1 building" ref={buildingRef}>   
                 <h2>시설/서비스</h2>
                 <ul className="service-wrap">
                     <li>
@@ -35,7 +40,7 @@ const DetailData = ({tourData }) => {
                 <img src="/images/tour/detail/advertise.png" alt="advertise.png" />
                 {/* 광고 배너 */}
             </div>
-            <div className="con con2 description">
+            <div className="con con2 description" ref={descriptionRef}>
                 <h2>여행 상세 정보</h2>
 
                 <DetailCon2 tourData={tourData} />

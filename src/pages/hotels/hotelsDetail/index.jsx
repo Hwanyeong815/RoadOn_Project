@@ -2,7 +2,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import '../style.scss';
 import useHotelStore from '../../../store/hotelStore';
 import options from '../../../api/hotelsRoomTypeData';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import DetailLeft from '../../../components/hotels/hotelsDetail/DetailLeft';
 import DetailRight from '../../../components/hotels/hotelsDetail/DetailRight';
 import DetailBottom from '../../../components/hotels/hotelsDetail/DetailBottom';
@@ -15,6 +15,15 @@ const HotelsDetail = () => {
     const getHotelReviews = useHotelStore((state) => state.getHotelReviews);
     const [isGalleryOpen, setIsGalleryOpen] = useState(false);
 
+    const buildingRef = useRef(null);
+    const roomOptionRef = useRef(null);
+    const hotelInfoRef = useRef(null);
+    const hotelPoliciesRef = useRef(null);
+
+    const [activeTab, setActiveTab] = useState('시설/서비스');
+    const locationRef = useRef(null);
+    const reviewsRef = useRef(null);
+
     // hotel이 없을 때 early return
     if (!hotel) {
         return (
@@ -24,6 +33,16 @@ const HotelsDetail = () => {
             </div>
         );
     }
+
+    const handleScrollTo = (ref, tabName) => {
+        setActiveTab(tabName);
+        if (ref && ref.current) {
+            window.scrollTo({
+                top: ref.current.offsetTop,
+                behavior: 'smooth',
+            });
+        }
+    };
 
     const allReviews = useHotelStore((state) => state.reviews);
     const hotelReviews = getHotelReviews(hotel.id, hotel.reviewCount);
@@ -128,10 +147,20 @@ const HotelsDetail = () => {
                         handleShowMore={handleShowMore}
                         averageRating={averageRating}
                         miniReviews={miniReviews}
+                        activeTab={activeTab}
+                        handleScrollTo={handleScrollTo}
+                        buildingRef={buildingRef}
+                        roomOptionRef={roomOptionRef}
+                        hotelInfoRef={hotelInfoRef}
+                        locationRef={locationRef}
+                        reviewsRef={reviewsRef}
                     />
                     <DetailRight hotel={hotel} selectedRoom={selectedRoom} />
                 </section>
-                <DetailBottom hotel={hotel} reviews={hotelReviews} />
+                <DetailBottom hotel={hotel} reviews={hotelReviews} activeTab={activeTab}
+                    handleScrollTo={handleScrollTo}
+                    locationRef={locationRef}
+                    reviewsRef={reviewsRef}/>
             </div>
         </main>
     );

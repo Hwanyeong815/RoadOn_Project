@@ -1,8 +1,8 @@
 import './style.scss';
 
-const DetailLocation = () => {
+const DetailLocation = ({locationRef}) => {
     return (
-        <section id="detail-loaction">
+        <section id="detail-location" ref={locationRef}>
             <h2 className="title">숙소 위치</h2>
             <div className="map"></div>
             <div className="address">

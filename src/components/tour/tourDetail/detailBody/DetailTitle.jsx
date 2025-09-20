@@ -3,6 +3,7 @@ import './style.scss';
 import DetailReviewItem from '../detailBottom/DetailReviewItem';
 import useTourStore from '../../../../store/tourStore';
 import MiniReviewItem from '../../../hotels/hotelsDetail/MiniReviewItem';
+import WishButton from '../../../ui/wishbutton/WishButton';
 
 const DetailTitle = ({ tourData }) => {
     const reviews = useTourStore((state) => state.reviews);
@@ -25,9 +26,10 @@ const DetailTitle = ({ tourData }) => {
                     </p>
                 </div>
                 <div className="more-btn-a">
-                    <img src="/images/icon/share.svg" alt="공유" />
-                    <img src="/images/icon/like.svg" alt="찜하기" />
-                </div>
+                        <img src="/images/icon/share.svg" className='share-btn' alt="공유" />
+                        {/* <img src="/images/icon/like.svg" alt="찜하기" /> */}
+                        <WishButton className='wish-hotel-btn'/>
+                    </div>
             </article>
             {/* <DetailBotReviewsItem tourData={tourData} /> */}
             {/* <DetailReviewItem review={reviews} /> */}
