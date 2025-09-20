@@ -252,7 +252,7 @@ const EditProfile = () => {
                         </div>
 
                         <div className="form-group gender">
-                            <div className="label">성별</div>
+                            {/* <div className="label">성별</div> */}
 
                             <div className="gender-group" role="radiogroup" aria-label="성별">
                                 <label

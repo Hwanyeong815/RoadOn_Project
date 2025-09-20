@@ -7,7 +7,6 @@ import Reward from '../../components/myPage/reward';
 import Support from '../../components/myPage/support';
 import WishList from '../../components/myPage/wishList';
 import './style.scss';
-import CouponButton from '../../components/ui/coupon/CouponButton';
 
 const SECTION_KEY = 'mypage_section';
 const SUPPORT_TAB_KEY = 'support_tab';
@@ -128,9 +127,6 @@ const MyPage = () => {
 
     return (
         <section id="myPage" ref={containerRef}>
-            <div className="coupon-wrap">
-                <CouponButton />
-            </div>
             <div className="inner">
                 <Profile activeSection={activeSection} onNavigate={onNavigate} />
 

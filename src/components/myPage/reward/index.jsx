@@ -6,6 +6,7 @@ import TabButton from '../../ui/tabButton/TabButton';
 import Points from './Points';
 import Coupons from './Coupons';
 import useAuthStore from '../../../store/authStore';
+import CouponButton from '../../ui/coupon/CouponButton';
 
 const Reward = ({ defaultTab = 'coupons' }) => {
     const [activeTab, setActiveTab] = useState(defaultTab);
@@ -19,6 +20,9 @@ const Reward = ({ defaultTab = 'coupons' }) => {
     return (
         <div id="reward">
             <h2 className="mypage-title">할인 혜택</h2>
+            {/* <div className="coupon-wrap">
+                <CouponButton />
+            </div> */}
 
             <div className="tab-button-wrap" role="tablist" aria-label="할인 혜택 탭">
                 <TabButton

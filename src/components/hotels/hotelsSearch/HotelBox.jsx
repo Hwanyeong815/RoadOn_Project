@@ -5,7 +5,6 @@ import WishButton from '../../ui/wishbutton/WishButton';
 import useWishStore from '../../../store/wishStore';
 
 const HotelBox = ({ hotelId, inWishList = false }) => {
-    // wishStore에서만 읽기
     const hotels = useWishStore((s) => s.hotels || []);
     const hotel = hotels.find((h) => String(h?.id) === String(hotelId));
 
@@ -17,10 +16,20 @@ const HotelBox = ({ hotelId, inWishList = false }) => {
         if (hotel.slug) navigate(`/hotels/${hotel.slug}`);
     };
 
-    // 기존 프로젝트에서 보이던 경로 유지
+    // 이미지 경로
     const imgSrc =
         (hotel?.image?.[0] && `/images/hotels/detail/hotelsList/${hotel.image[0]}`) ||
         '/images/hotels/default.png';
+
+    // ✅ 평균 평점: averageRating 없으면 rate 사용
+    const rawAvg = hotel?.averageRating ?? hotel?.rate; // ← 핵심
+    const averageRating =
+        rawAvg === undefined || rawAvg === null || rawAvg === ''
+            ? '0.0'
+            : Number(rawAvg).toFixed(1);
+
+    // ✅ 리뷰 수: 주어진 reviewCount 그대로 사용(없으면 0)
+    const reviewCount = Number(hotel?.reviewCount ?? 0);
 
     return (
         <div
@@ -51,11 +60,9 @@ const HotelBox = ({ hotelId, inWishList = false }) => {
                         </span>
                         <h4>{hotel.name}</h4>
                     </div>
-                    <div className="rate">
+                    <div className="rate" title={`${averageRating} (${reviewCount})`}>
                         <img src="/images/hotels/detail/icon/star_rate.svg" alt="별점" />
-                        <span>
-                            {hotel.averageRating ?? '0.0'} ({hotel.reviewCount ?? 0})
-                        </span>
+                        <span className="rate-text">{`${averageRating} (${reviewCount})`}</span>
                     </div>
                 </div>
 
