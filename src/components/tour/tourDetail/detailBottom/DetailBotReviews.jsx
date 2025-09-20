@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import DetailReviewItem from './DetailReviewItem';
 
-const DetailReviews = ({ reviews }) => {
+const DetailReviews = ({ reviews, reviewsRef }) => {
     const calculateAverageRating = (reviews) => {
         if (!reviews || reviews.length === 0) return 0;
 
@@ -49,7 +49,7 @@ const DetailReviews = ({ reviews }) => {
     };
     
     return (
-        <section id="detail-Bot-Reviews">
+        <section id="detail-Bot-Reviews" ref={reviewsRef }>
             <div className="reviews-wrap-head">
                 <h2 className="title">
                     방문자 리뷰

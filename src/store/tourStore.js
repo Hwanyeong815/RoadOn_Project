@@ -92,6 +92,22 @@ const useTourStore = create((set, get) => ({
     // 투어
     currentTour: null,
 
+    activeTab: '시설/서비스',
+
+// 탭을 설정하는 함수
+    setActiveTab: (tabName) => set({ activeTab: tabName }),
+
+    // 스크롤 이동을 처리하는 함수
+    handleScrollTo: (ref, tabName) => {
+        get().setActiveTab(tabName);
+        if (ref && ref.current) {
+            window.scrollTo({
+                top: ref.current.offsetTop - 120, 
+                behavior: 'smooth',
+            });
+        }
+    },
+
     // actions
     setCategory: (cat) => set({ activeCategory: cat, activeIndex: 0 }),
     setIndex: (idx) => set({ activeIndex: idx }),
@@ -141,6 +157,8 @@ const useTourStore = create((set, get) => ({
             uniqueId: `tour-mini-${tourId}-${review.id}-${index}`,
         }));
     },
+
+    
 }));
 
 export default useTourStore;

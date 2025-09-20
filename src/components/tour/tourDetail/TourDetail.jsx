@@ -3,7 +3,7 @@ import DetailBody from './DetailBody';
 import DetailBottom from './DetailBottom';
 import './style.scss';
 import useTourStore from '../../../store/tourStore';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 const TourDetail = () => {
     const { slug } = useParams();
@@ -14,6 +14,12 @@ const TourDetail = () => {
 
     const getTourHighRatedReviews = useTourStore((state) => state.getTourHighRatedReviews);
     const tourReviews = currentTour ? getTourHighRatedReviews(currentTour.id, 10) : [];
+
+     const buildingRef = useRef(null);
+    const descriptionRef = useRef(null);
+    const locationRef = useRef(null);
+    const reviewsRef = useRef(null);
+
 
     useEffect(() => {
         if (slug) {
@@ -42,8 +48,19 @@ const TourDetail = () => {
     return (
         <main id="TourDetail">
             <div className="inner">
-                <DetailBody tourData={currentTour} />
-                <DetailBottom tourData={currentTour} reviews={tourReviews} />
+                <DetailBody 
+                    tourData={currentTour} 
+                    buildingRef={buildingRef}
+                    descriptionRef={descriptionRef}
+                      locationRef={locationRef} 
+                reviewsRef={reviewsRef} 
+                />
+                <DetailBottom 
+                    tourData={currentTour} 
+                    reviews={tourReviews} 
+                    locationRef={locationRef}
+                    reviewsRef={reviewsRef}
+                />
             </div>
         </main>
     );

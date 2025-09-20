@@ -4,12 +4,12 @@ import DetailLocation from './detailBottom/DetailLocation';
 import DetailPromo from './detailBottom/DetailPromo';
 import './style.scss';
 
-const DetailBottom = () => {
+const DetailBottom = ({ reviews: initialReviews, locationRef, reviewsRef }) => {
     const reviews = useTourStore((state) => state.reviews);
     return (
         <section id="DetailBottom">
-            <DetailLocation />
-            <DetailBotReviews reviews={reviews} />
+           <DetailLocation locationRef={locationRef} />
+            <DetailBotReviews reviews={reviews} reviewsRef={reviewsRef} />
             <DetailPromo />
         </section>
     );
