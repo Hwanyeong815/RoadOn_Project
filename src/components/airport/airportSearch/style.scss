@@ -1,566 +1,566 @@
-@use "../../../styles/utils" as *;
+@use '../../../styles/utils' as *;
 
 // 왼쪽 영역 (필터)
 .airport {
-  width: 100%;
-  margin-top: vw(260px);
+    width: 100%;
+    margin-top: vw(260px);
 
-  .inner {
-    padding: 100px 0;
-    display: flex;
-    gap: 40px;
+    .inner {
+        padding: 100px 0;
+        display: flex;
+        gap: 40px;
 
-    .filter-wrap {
-      width: vw(300px);
+        .filter-wrap {
+            width: vw(300px);
 
-      .event-modal {
-        margin: 0 auto;
-        margin-bottom: vw(48px);
+            .event-modal {
+                margin: 0 auto;
+                margin-bottom: vw(48px);
 
-        .event-card {
-          width: vw(300px);
-          height: vw(140px);
-          border-radius: vw(12px);
-          padding: vw(20px);
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          background: #f4fbff;
+                .event-card {
+                    width: vw(300px);
+                    height: vw(140px);
+                    border-radius: vw(12px);
+                    padding: vw(20px);
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    background: #f4fbff;
 
-          .text-box {
-            display: flex;
-            justify-content: center;
-            align-items: center;
+                    .text-box {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
 
-            p {
-              @include font-16px;
-              color: $default;
+                        p {
+                            @include font-16px;
+                            color: $default;
+                        }
+                        img {
+                            width: vw(60px);
+                            margin: 0 vw(10px);
+                        }
+                    }
+                }
             }
-            img {
-              width: vw(60px);
-              margin: 0 vw(10px);
+
+            .swiper-button-prev,
+            .swiper-button-next {
+                color: transparent;
             }
-          }
+
+            .filter {
+                .filtering {
+                    margin-bottom: vw(48px);
+
+                    p {
+                        @include font-20px-M;
+                        margin-bottom: vw(24px);
+                    }
+
+                    ul {
+                        margin-left: vw(20px);
+
+                        li {
+                            @include font-16px;
+                            display: flex;
+                            align-items: center;
+                            gap: vw(12px);
+                            color: $default;
+
+                            span {
+                                width: vw(14px);
+                                height: vw(14px);
+                                display: inline-block;
+                                border: vw(1px) solid $default;
+                                border-radius: vw(3px);
+                            }
+                        }
+                    }
+                }
+            }
+
+            .type {
+                .type-title {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+
+                    .redo {
+                        color: $greyscale-1000;
+                        @include font-16px;
+                        cursor: pointer;
+                        display: flex;
+                        align-items: center;
+                        gap: vw(6px);
+                        margin-bottom: vw(24px);
+
+                        .refresh-icon {
+                            margin-top: vw(4px);
+                            @include font-16px;
+                        }
+
+                        &:hover {
+                            color: $mint;
+                        }
+                    }
+                }
+
+                ul {
+                    margin-left: vw(20px);
+                    display: flex;
+                    flex-direction: column;
+                    gap: vw(10px);
+
+                    input[type='checkbox'] {
+                        position: relative;
+                        appearance: none;
+                        -webkit-appearance: none;
+                        width: vw(18px);
+                        height: vw(18px);
+                        display: inline-block;
+                        border: vw(1px) solid #353535;
+                        border-radius: vw(3px);
+                        cursor: pointer;
+
+                        &:checked {
+                            background-color: $mint;
+                            border-color: $mint;
+                        }
+
+                        &:checked::after {
+                            content: '✔';
+                            position: absolute;
+                            top: 50%;
+                            left: 50%;
+                            transform: translate(-50%, -50%);
+                            color: $white;
+                            @include font-12px;
+                        }
+                    }
+
+                    strong {
+                        @include font-16px;
+                        color: $default;
+                    }
+                }
+            }
+
+            .star {
+                ul {
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: vw(12px);
+
+                    li {
+                        button {
+                            padding: vw(6px) vw(15px);
+                            box-sizing: border-box;
+                            background-color: $white;
+                            border-radius: vw(40px);
+                            border: 1px solid $greyscale-1000;
+                            cursor: pointer;
+                            color: $default;
+                            @include font-14px-M;
+
+                            &:hover {
+                                background-color: $greyscale-400;
+                            }
+
+                            &.active {
+                                background-color: $mint;
+                                border: none;
+                                color: $white;
+                            }
+                        }
+                    }
+                }
+            }
+
+            /* 가격 슬라이더 */
+            .price {
+                .price-slider {
+                    .ranges {
+                        position: relative;
+                        height: vw(30px);
+                        margin: 0 vw(6px) vw(10px);
+
+                        /* 회색 기본 바 */
+                        .base-track {
+                            position: absolute;
+                            top: 50%;
+                            left: 0;
+                            right: 0;
+                            transform: translateY(-50%);
+                            height: vw(4px);
+                            background: $greyscale-400;
+                            border-radius: vw(6px);
+                            z-index: 5;
+                            pointer-events: none;
+                        }
+
+                        input[type='range'] {
+                            position: absolute;
+                            left: 0;
+                            right: 0;
+                            top: vw(10px);
+                            transform: translateY(-50%);
+                            height: vw(18px);
+                            margin: 0;
+                            background: none;
+                            pointer-events: none;
+                            -webkit-appearance: none;
+                            z-index: 30;
+                        }
+
+                        input[type='range']:nth-of-type(2) {
+                            z-index: 40;
+                        }
+
+                        input[type='range']::-webkit-slider-runnable-track {
+                            height: vw(6px);
+                            background: transparent;
+                            border-radius: vw(6px);
+                            pointer-events: none;
+                        }
+
+                        input[type='range']::-moz-range-track {
+                            height: vw(6px);
+                            background: transparent;
+                            border-radius: vw(6px);
+                            pointer-events: none;
+                        }
+
+                        input[type='range']::-webkit-slider-thumb {
+                            -webkit-appearance: none;
+                            width: vw(18px);
+                            height: vw(18px);
+                            border-radius: 50%;
+                            background: $mint;
+                            border: 0;
+                            box-shadow: 0 0 0 vw(2px) $white;
+                            cursor: pointer;
+                            pointer-events: auto;
+                            margin-top: 0;
+                            position: relative;
+                        }
+
+                        input[type='range']::-moz-range-thumb {
+                            width: vw(18px);
+                            height: vw(18px);
+                            border-radius: 50%;
+                            background: $mint;
+                            border: 0;
+                            cursor: pointer;
+                            pointer-events: auto;
+                            margin: 0;
+                            position: relative;
+                        }
+
+                        /* 주황 선택 바 */
+                        .track-fill {
+                            position: absolute;
+                            top: 50%;
+                            transform: translateY(-50%);
+                            height: vw(4px);
+                            background: $mint;
+                            border-radius: vw(6px);
+                            z-index: 15;
+                            left: 0;
+                            right: 0;
+                            pointer-events: none;
+                        }
+
+                        .price-tooltip {
+                            position: absolute;
+                            bottom: vw(18px);
+                            transform: translateX(-50%);
+                            color: $greyscale-1000;
+                            padding: 6px 10px;
+                            border-radius: 6px;
+                            white-space: nowrap;
+                            z-index: 50;
+                            pointer-events: none;
+                        }
+                    }
+
+                    .desc {
+                        @include font-14px;
+                        color: $default;
+
+                        strong {
+                            color: $mint;
+                            @include font-16px-M;
+                        }
+                    }
+                }
+            }
+
+            .service {
+                ul {
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: vw(12px);
+
+                    li {
+                        padding: vw(6px) vw(15px);
+                        box-sizing: border-box;
+                        border-radius: vw(40px);
+                        border: 1px solid $greyscale-1000;
+                        cursor: pointer;
+
+                        &:hover {
+                            background-color: $greyscale-400;
+                        }
+                    }
+                }
+            }
+
+            .discount {
+                ul {
+                    margin-left: vw(20px);
+                    display: flex;
+                    flex-direction: column;
+                    gap: vw(10px);
+
+                    input[type='checkbox'] {
+                        position: relative;
+                        appearance: none;
+                        -webkit-appearance: none;
+                        width: vw(18px);
+                        height: vw(18px);
+                        display: inline-block;
+                        border: vw(1px) solid #353535;
+                        border-radius: vw(3px);
+                        cursor: pointer;
+
+                        &:checked {
+                            background-color: $mint;
+                            border-color: $mint;
+                        }
+
+                        &:checked::after {
+                            content: '✔';
+                            position: absolute;
+                            top: 50%;
+                            left: 50%;
+                            transform: translate(-50%, -50%);
+                            color: $white;
+                            @include font-12px;
+                        }
+                    }
+
+                    strong {
+                        @include font-16px;
+                        color: $default;
+                    }
+                }
+            }
+
+            .list-wrap {
+                width: 55.2083vw;
+
+                .list-box {
+                    display: flex;
+                    flex-direction: column;
+                    gap: vw(20px);
+                }
+            }
         }
-      }
-
-      .swiper-button-prev,
-      .swiper-button-next {
-        color: transparent;
-      }
-
-      .filter {
-        .filtering {
-          margin-bottom: vw(48px);
-
-          p {
-            @include font-20px-M;
-            margin-bottom: vw(24px);
-          }
-
-          ul {
-            margin-left: vw(20px);
-
-            li {
-              @include font-16px;
-              display: flex;
-              align-items: center;
-              gap: vw(12px);
-              color: $default;
-
-              span {
-                width: vw(14px);
-                height: vw(14px);
-                display: inline-block;
-                border: vw(1px) solid $default;
-                border-radius: vw(3px);
-              }
-            }
-          }
-        }
-      }
-
-      .type {
-        .type-title {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-
-          .redo {
-            color: $greyscale-1000;
-            @include font-16px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: vw(6px);
-            margin-bottom: vw(24px);
-
-            .refresh-icon {
-              margin-top: vw(4px);
-              @include font-16px;
-            }
-
-            &:hover {
-              color: $mint;
-            }
-          }
-        }
-
-        ul {
-          margin-left: vw(20px);
-          display: flex;
-          flex-direction: column;
-          gap: vw(10px);
-
-          input[type="checkbox"] {
-            position: relative;
-            appearance: none;
-            -webkit-appearance: none;
-            width: vw(18px);
-            height: vw(18px);
-            display: inline-block;
-            border: vw(1px) solid #353535;
-            border-radius: vw(3px);
-            cursor: pointer;
-
-            &:checked {
-              background-color: $mint;
-              border-color: $mint;
-            }
-
-            &:checked::after {
-              content: "✔";
-              position: absolute;
-              top: 50%;
-              left: 50%;
-              transform: translate(-50%, -50%);
-              color: $white;
-              @include font-12px;
-            }
-          }
-
-          strong {
-            @include font-16px;
-            color: $default;
-          }
-        }
-      }
-
-      .star {
-        ul {
-          display: flex;
-          flex-wrap: wrap;
-          gap: vw(12px);
-
-          li {
-            button {
-              padding: vw(6px) vw(15px);
-              box-sizing: border-box;
-              background-color: $white;
-              border-radius: vw(40px);
-              border: 1px solid $greyscale-1000;
-              cursor: pointer;
-              color: $default;
-              @include font-14px-M;
-
-              &:hover {
-                background-color: $greyscale-400;
-              }
-
-              &.active {
-                background-color: $mint;
-                border: none;
-                color: $white;
-              }
-            }
-          }
-        }
-      }
-
-      /* 가격 슬라이더 */
-      .price {
-        .price-slider {
-          .ranges {
-            position: relative;
-            height: vw(30px);
-            margin: 0 vw(6px) vw(10px);
-
-            /* 회색 기본 바 */
-            .base-track {
-              position: absolute;
-              top: 50%;
-              left: 0;
-              right: 0;
-              transform: translateY(-50%);
-              height: vw(4px);
-              background: $greyscale-400;
-              border-radius: vw(6px);
-              z-index: 5;
-              pointer-events: none;
-            }
-
-            input[type="range"] {
-              position: absolute;
-              left: 0;
-              right: 0;
-              top: vw(10px);
-              transform: translateY(-50%);
-              height: vw(18px);
-              margin: 0;
-              background: none;
-              pointer-events: none;
-              -webkit-appearance: none;
-              z-index: 30;
-            }
-
-            input[type="range"]:nth-of-type(2) {
-              z-index: 40;
-            }
-
-            input[type="range"]::-webkit-slider-runnable-track {
-              height: vw(6px);
-              background: transparent;
-              border-radius: vw(6px);
-              pointer-events: none;
-            }
-
-            input[type="range"]::-moz-range-track {
-              height: vw(6px);
-              background: transparent;
-              border-radius: vw(6px);
-              pointer-events: none;
-            }
-
-            input[type="range"]::-webkit-slider-thumb {
-              -webkit-appearance: none;
-              width: vw(18px);
-              height: vw(18px);
-              border-radius: 50%;
-              background: $mint;
-              border: 0;
-              box-shadow: 0 0 0 vw(2px) $white;
-              cursor: pointer;
-              pointer-events: auto;
-              margin-top: 0;
-              position: relative;
-            }
-
-            input[type="range"]::-moz-range-thumb {
-              width: vw(18px);
-              height: vw(18px);
-              border-radius: 50%;
-              background: $mint;
-              border: 0;
-              cursor: pointer;
-              pointer-events: auto;
-              margin: 0;
-              position: relative;
-            }
-
-            /* 주황 선택 바 */
-            .track-fill {
-              position: absolute;
-              top: 50%;
-              transform: translateY(-50%);
-              height: vw(4px);
-              background: $mint;
-              border-radius: vw(6px);
-              z-index: 15;
-              left: 0;
-              right: 0;
-              pointer-events: none;
-            }
-
-            .price-tooltip {
-              position: absolute;
-              bottom: vw(18px);
-              transform: translateX(-50%);
-              color: $greyscale-1000;
-              padding: 6px 10px;
-              border-radius: 6px;
-              white-space: nowrap;
-              z-index: 50;
-              pointer-events: none;
-            }
-          }
-
-          .desc {
-            @include font-14px;
-            color: $default;
-
-            strong {
-              color: $mint;
-              @include font-16px-M;
-            }
-          }
-        }
-      }
-
-      .service {
-        ul {
-          display: flex;
-          flex-wrap: wrap;
-          gap: vw(12px);
-
-          li {
-            padding: vw(6px) vw(15px);
-            box-sizing: border-box;
-            border-radius: vw(40px);
-            border: 1px solid $greyscale-1000;
-            cursor: pointer;
-
-            &:hover {
-              background-color: $greyscale-400;
-            }
-          }
-        }
-      }
-
-      .discount {
-        ul {
-          margin-left: vw(20px);
-          display: flex;
-          flex-direction: column;
-          gap: vw(10px);
-
-          input[type="checkbox"] {
-            position: relative;
-            appearance: none;
-            -webkit-appearance: none;
-            width: vw(18px);
-            height: vw(18px);
-            display: inline-block;
-            border: vw(1px) solid #353535;
-            border-radius: vw(3px);
-            cursor: pointer;
-
-            &:checked {
-              background-color: $mint;
-              border-color: $mint;
-            }
-
-            &:checked::after {
-              content: "✔";
-              position: absolute;
-              top: 50%;
-              left: 50%;
-              transform: translate(-50%, -50%);
-              color: $white;
-              @include font-12px;
-            }
-          }
-
-          strong {
-            @include font-16px;
-            color: $default;
-          }
-        }
-      }
-
-      .list-wrap {
-        width: 55.2083vw;
-
-        .list-box {
-          display: flex;
-          flex-direction: column;
-          gap: vw(20px);
-        }
-      }
     }
-  }
 }
 
 // 오른쪽 영역 (항공 리스트) - Search & Detail 공통
 .airport-box-list,
 .airport-detail-list {
-  .list-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: vw(20px);
-
-    h3 {
-      @include font-20px-M;
-    }
-
-    .custom-dropdown {
-      position: relative;
-      width: vw(140px);
-      cursor: pointer;
-
-      .dropdown-selected {
+    .list-header {
         display: flex;
+        justify-content: space-between;
         align-items: center;
-        justify-content: center;
-        height: vw(40px);
-        border-radius: vw(10px);
-        background-color: $greyscale-200;
-        color: $default;
-        @include font-16px-M;
+        margin-bottom: vw(20px);
 
-        .dropdown-icon {
-          margin-left: vw(6px);
-          transition: transform 0.2s ease;
-
-          &.open {
-            transform: rotate(180deg);
-          }
+        h3 {
+            @include font-20px-M;
         }
-      }
 
-      .dropdown-options {
-        position: absolute;
-        top: vw(45px);
-        left: 0;
-        width: 100%;
-        background: $white;
-        border: 1px solid $greyscale-400;
-        border-radius: vw(10px);
-        box-shadow: 0 vw(4px) vw(8px) rgba(0, 0, 0, 0.1);
-        z-index: 1000;
-        overflow: hidden;
+        .custom-dropdown {
+            position: relative;
+            width: vw(140px);
+            cursor: pointer;
 
-        li {
-          padding: vw(12px) 0;
-          text-align: center;
-          @include font-16px;
-          color: $default;
-          transition: background 0.2s ease;
+            .dropdown-selected {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: vw(40px);
+                border-radius: vw(10px);
+                background-color: $greyscale-200;
+                color: $default;
+                @include font-16px-M;
 
-          &:hover {
-            background: $greyscale-200;
-          }
+                .dropdown-icon {
+                    margin-left: vw(6px);
+                    transition: transform 0.2s ease;
 
-          &.selected {
-            font-weight: bold;
-            color: $mint;
-            background: rgba($mint, 0.1);
-          }
+                    &.open {
+                        transform: rotate(180deg);
+                    }
+                }
+            }
+
+            .dropdown-options {
+                position: absolute;
+                top: vw(45px);
+                left: 0;
+                width: 100%;
+                background: $white;
+                border: 1px solid $greyscale-400;
+                border-radius: vw(10px);
+                box-shadow: 0 vw(4px) vw(8px) rgba(0, 0, 0, 0.1);
+                z-index: 1000;
+                overflow: hidden;
+
+                li {
+                    padding: vw(12px) 0;
+                    text-align: center;
+                    @include font-16px;
+                    color: $default;
+                    transition: background 0.2s ease;
+
+                    &:hover {
+                        background: $greyscale-200;
+                    }
+
+                    &.selected {
+                        font-weight: bold;
+                        color: $mint;
+                        background: rgba($mint, 0.1);
+                    }
+                }
+            }
         }
-      }
     }
-  }
 }
 
 // 공통 항공권 카드
 .airport-box {
-  display: flex;
-  flex-direction: column;
-  border: 1px solid $greyscale-500;
-  border-radius: vw(15px);
-  background: #fff;
-  box-shadow: 0 vw(2px) vw(6px) rgba(0, 0, 0, 0.05);
-  margin-bottom: vw(20px);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  cursor: pointer;
-  width: vw(1050px);
+    display: flex;
+    flex-direction: column;
+    border: 1px solid $greyscale-500;
+    border-radius: vw(15px);
+    background: #fff;
+    width: vw(1050px);
+    box-shadow: 0 vw(2px) vw(6px) rgba(0, 0, 0, 0.05);
+    margin-bottom: vw(20px);
+    transition: 0.2s ease;
+    cursor: pointer;
 
-  &:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 vw(6px) vw(14px) rgba(0, 0, 0, 0.1);
-  }
-
-  .flight-row {
-    display: grid;
-    grid-template-columns: 1.2fr 1fr 1.5fr 1fr 1fr;
-    align-items: center;
-    padding: vw(30px) vw(40px);
-    border-bottom: 1px solid $greyscale-300;
-
-    &:last-child {
-      border-bottom: none;
+    &:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 vw(6px) vw(14px) rgba(0, 0, 0, 0.1);
     }
 
-    .airline {
-      display: flex;
-      align-items: center;
-      gap: vw(10px);
-
-      .flight-logo {
-        margin-right: vw(15px);
-        display: flex;
+    .flight-row {
+        display: grid;
+        grid-template-columns: 1.2fr 1fr 1.5fr 1fr 1fr;
         align-items: center;
-        justify-content: center;
-        background: #fff;
+        padding: vw(30px) vw(40px);
+        border-bottom: 1px solid $greyscale-300;
 
-        img {
-          width: vw(30px);
-          height: vw(30px);
-          border-radius: 50%;
-          border: 1px solid $greyscale-400;
+        &:last-child {
+            border-bottom: none;
         }
 
-        .placeholder {
-          width: vw(30px);
-          height: vw(30px);
-          border-radius: 50%;
-          background: $greyscale-200;
+        .airline {
+            display: flex;
+            align-items: center;
+            gap: vw(10px);
+
+            .flight-logo {
+                margin-right: vw(15px);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: #fff;
+
+                img {
+                    width: vw(30px);
+                    height: vw(30px);
+                    border-radius: 50%;
+                    border: 1px solid $greyscale-400;
+                }
+
+                .placeholder {
+                    width: vw(30px);
+                    height: vw(30px);
+                    border-radius: 50%;
+                    background: $greyscale-200;
+                }
+            }
+
+            .info {
+                display: flex;
+                flex-direction: column;
+
+                .name {
+                    @include font-20px;
+                    white-space: nowrap;
+                }
+
+                .code {
+                    @include font-16px;
+                    color: $greyscale-1000;
+                }
+            }
         }
-      }
 
-      .info {
-        display: flex;
-        flex-direction: column;
+        .departure,
+        .arrival {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
 
-        .name {
-          @include font-20px;
-          white-space: nowrap;
+            .date {
+                @include font-14px;
+                color: $greyscale-900;
+            }
+
+            .time {
+                @include font-22px;
+                color: $default;
+            }
+            .airport {
+                @include font-14px;
+                color: $greyscale-900;
+                text-align: center;
+                margin-top: vw(-2px);
+            }
         }
 
-        .code {
-          @include font-16px;
-          color: $greyscale-1000;
+        .airport-info {
+            text-align: center;
+
+            .duration {
+                @include font-18px;
+                color: $default;
+                margin-bottom: vw(4px);
+            }
+
+            .timeline-img {
+                width: vw(120px);
+                margin: vw(4px) auto;
+            }
+
+            .direct {
+                @include font-16px-M;
+                color: $orange;
+            }
         }
-      }
+
+        .price {
+            text-align: right;
+            @include font-22px;
+            color: $default;
+        }
     }
-
-    .departure,
-    .arrival {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-
-      .date {
-        @include font-14px;
-        color: $greyscale-900;
-      }
-
-      .time {
-        @include font-22px;
-        color: $default;
-      }
-      .airport {
-        @include font-14px;
-        color: $greyscale-900;
-        text-align: center;
-        margin-top: vw(-2px);
-      }
-    }
-
-    .airport-info {
-      text-align: center;
-
-      .duration {
-        @include font-18px;
-        color: $default;
-        margin-bottom: vw(4px);
-      }
-
-      .timeline-img {
-        width: vw(120px);
-        margin: vw(4px) auto;
-      }
-
-      .direct {
-        @include font-16px-M;
-        color: $orange;
-      }
-    }
-
-    .price {
-      text-align: right;
-      @include font-22px;
-      color: $default;
-    }
-  }
 }

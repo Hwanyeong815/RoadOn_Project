@@ -4,8 +4,7 @@ import { create } from 'zustand';
 const STORAGE_KEY = 'auth_store_test_v1';
 const generateId = () => `u_${Date.now()}_${Math.floor(Math.random() * 10000)}`;
 
-// === 테스트용 유저 (개발/테스트에서 바로 보이게 할 값) ===
-
+// === 테스트용 유저 ===
 const defaultTestUser = {
     id: 'u_test_1',
     username: 'honggildong',
@@ -21,8 +20,6 @@ const defaultTestUser = {
     grade: 'Family',
     roles: ['user'],
     createdAt: new Date().toISOString(),
-    couponCount: 13,
-    points: 250900,
     reserveCount: 0,
     wishlistCount: 0,
     password: 'password123',
@@ -68,13 +65,12 @@ const useAuthStore = create((set, get) => ({
     token: null,
     isLoggedIn: !!initial.currentUser,
 
-    // --- add user (password optional) ---
+    // add user
     addUser: (user) => {
         const u = {
             ...user,
             id: user.id || generateId(),
             createdAt: user.createdAt || new Date().toISOString(),
-            // password may be provided (plain text for test mode)
             password: user.password || undefined,
         };
         set((state) => ({ users: [...state.users, u] }));
@@ -82,14 +78,12 @@ const useAuthStore = create((set, get) => ({
         return u;
     },
 
-    // set current by id
     setCurrentById: (id) => {
         const u = get().users.find((x) => x.id === id) || null;
         set({ currentUser: u, isLoggedIn: !!u });
         saveToStorage(get);
     },
 
-    // set current user (if not present, push to users)
     setCurrent: (user) => {
         const u = user || null;
         if (u && !get().users.some((x) => x.id === u.id)) {
@@ -100,7 +94,6 @@ const useAuthStore = create((set, get) => ({
         saveToStorage(get);
     },
 
-    // update user
     updateUser: (id, patch) => {
         set((state) => {
             const users = state.users.map((u) => (u.id === id ? { ...u, ...patch } : u));
@@ -113,7 +106,6 @@ const useAuthStore = create((set, get) => ({
         saveToStorage(get);
     },
 
-    // remove user
     removeUser: (id) => {
         set((state) => {
             const users = state.users.filter((u) => u.id !== id);
@@ -124,13 +116,11 @@ const useAuthStore = create((set, get) => ({
         saveToStorage(get);
     },
 
-    // set token
     setToken: (token) => {
         set({ token });
         saveToStorage(get);
     },
 
-    // set summary (stored on user entry for dev convenience)
     setSummary: (partialSummary) => {
         set((state) => {
             const currentUser = state.currentUser
@@ -144,8 +134,6 @@ const useAuthStore = create((set, get) => ({
         saveToStorage(get);
     },
 
-    // --- password helpers (test mode only) ---
-    // set or change password for given user id
     setPassword: (id, plainPassword) => {
         set((state) => {
             const users = state.users.map((u) =>
@@ -160,8 +148,6 @@ const useAuthStore = create((set, get) => ({
         saveToStorage(get);
     },
 
-    // validate credentials: identifier (username or email), password
-    // returns the user object if match, otherwise null
     validateCredentials: (identifier, plainPassword) => {
         if (!identifier) return null;
         const idLower = String(identifier).trim().toLowerCase();
@@ -171,17 +157,14 @@ const useAuthStore = create((set, get) => ({
             return un === idLower || em === idLower;
         });
         if (!user) return null;
-        // for test mode we compare plain text (again: insecure for prod)
-        if ((user.password || '') === plainPassword) return user;
-        return null;
+        return (user.password || '') === plainPassword ? user : null;
     },
 
-    // clear all (and storage)
     clearAll: () => {
         set({ users: [], currentUser: null, token: null, isLoggedIn: false });
         try {
             localStorage.removeItem(STORAGE_KEY);
-        } catch (e) {
+        } catch {
             /* ignore */
         }
     },

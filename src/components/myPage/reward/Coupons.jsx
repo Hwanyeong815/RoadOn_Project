@@ -1,21 +1,20 @@
+// src/components/myPage/Coupons.jsx
 import React, { useMemo, useState } from 'react';
 import DropdownPill from '../../ui/dropdownPill/DropdownPill';
 import TabButton2 from '../../ui/tabButton/TabButton2';
 import CouponTicket from '../../ui/coupon/CouponTicket';
-import useCouponStore from '../../../store/couponStore';
+import useRewardStore from '../../../store/rewardStore';
 
 const TABS = ['전체', '숙소', '투어'];
 
-const Coupons = () => {
-    // store
-    const coupons = useCouponStore((state) => state.coupons) || [];
+const Coupons = ({ userId }) => {
+    const getCoupons = useRewardStore((s) => s.getCoupons);
+    const coupons = getCoupons(userId) || [];
 
-    // 탭/드롭다운 상태
     const [tab, setTab] = useState('전체');
-    const [status, setStatus] = useState('사용가능'); // '사용가능' | '사용완료'
-    const statusOptions = ['사용가능', '사용완료'];
+    const [status, setStatus] = useState('사용가능');
+    const statusOptions = ['전체', '사용가능', '사용완료'];
 
-    // 필터 함수: coupon.className 이 'c-hotel' / 'c-tour' 으로 들어온다고 가정
     const matchesTab = (coupon, currentTab) => {
         if (!coupon) return false;
         if (currentTab === '전체') return true;
@@ -25,17 +24,21 @@ const Coupons = () => {
     };
 
     const matchesStatus = (coupon, currentStatus) => {
-        // dropdown: '사용가능' -> disabled === false, '사용완료' -> disabled === true
         if (currentStatus === '전체') return true;
         if (currentStatus === '사용가능') return coupon.disabled === false;
         if (currentStatus === '사용완료') return coupon.disabled === true;
         return true;
     };
 
-    // 최종 필터링 (useMemo로 성능 보완)
+    // 최종 필터링
     const filteredCoupons = useMemo(() => {
         return coupons.filter((c) => matchesTab(c, tab) && matchesStatus(c, status));
     }, [coupons, tab, status]);
+
+    // ✅ 전체 개수 & 사용 가능 개수 계산
+    const totalCount = coupons.length;
+    const availableCount = coupons.filter((c) => !c.disabled).length;
+    const usedCount = coupons.filter((c) => c.disabled).length;
 
     return (
         <div className="coupons">
@@ -55,6 +58,13 @@ const Coupons = () => {
                     <DropdownPill value={status} onChange={setStatus} options={statusOptions} />
                 </div>
             </section>
+
+            {/* ✅ 쿠폰 개수 표시 */}
+            {/* <section className="coupons-summary">
+                <p>
+                    전체 {totalCount}개 · 사용가능 {availableCount}개 · 사용완료 {usedCount}개
+                </p>
+            </section> */}
 
             <section className="coupons-body">
                 {filteredCoupons.length > 0 ? (

@@ -1,397 +1,401 @@
-@use '../../../styles/utils' as *;
+@use "../../../styles/utils" as *;
 
 //Con 공통
 .airport-main-con2,
 .airport-main-con3,
 .airport-main-con4,
 .airport-main-con5 {
-    h3 {
-        @include font-28px-SB;
-        color: $default;
-        text-align: left;
-    }
-    h4 {
-        @include font-20px;
-        color: $greyscale-1100;
-        text-align: left;
-    }
-    h5 {
-        margin: 0;
-        padding: 0;
-        @include font-20px;
-        color: $greyscale-1100;
-    }
-    .promo-list {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        gap: vw(20px);
-        margin-top: vw(20px);
+  h3 {
+    @include font-28px-SB;
+    color: $default;
+    text-align: left;
+  }
+  h4 {
+    @include font-20px;
+    color: $greyscale-1100;
+    text-align: left;
+  }
+  h5 {
+    margin: 0;
+    padding: 0;
+    @include font-20px;
+    color: $greyscale-1100;
+  }
+  .promo-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: vw(20px);
+    margin-top: vw(20px);
 
-        .promo-card-con {
-            background: $white;
-            border-radius: vw(12px);
-            border: 1px solid $greyscale-500;
-            overflow: hidden;
-            box-shadow: 0 vw(4px) vw(8px) rgba(0, 0, 0, 0.05);
-            transition: transform 0.2s ease;
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
+    .promo-card-con {
+      background: $white;
+      border-radius: vw(12px);
+      border: 1px solid $greyscale-500;
+      overflow: hidden;
+      box-shadow: 0 vw(4px) vw(8px) rgba(0, 0, 0, 0.05);
+      transition: transform 0.2s ease;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
 
-            &:hover {
-                transform: translateY(-4px);
-                box-shadow: 0 vw(6px) vw(12px) rgba(0, 0, 0, 0.1);
-            }
+      &:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 vw(6px) vw(12px) rgba(0, 0, 0, 0.1);
+      }
 
-            img {
-                width: 100%;
-                height: vw(235px); // ✅ 이미지 높이 고정
-                object-fit: cover; // ✅ 비율 유지하면서 채움
-                display: block;
-            }
+      img {
+        width: 100%;
+        height: vw(235px);
+        object-fit: cover;
+        display: block;
+      }
 
-            .info {
-                padding: vw(18px);
-                flex-grow: 1; // ✅ 텍스트 영역 균등 분배
-            }
-        }
+      .info {
+        padding: vw(18px);
+        flex-grow: 1;
+      }
     }
+  }
 }
 
 //Con1
 .airport-main-con1 {
-    .visual-bg {
-        background-image: url('/images/airport/visual_bg.png');
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        width: 100%;
-        height: vw(550px);
-        position: relative;
-        top: vw(-600px);
-        z-index: -1;
-        display: flex;
-        justify-content: center;
-        align-items: flex-start;
+  .visual-bg {
+    background-image: url("/images/airport/visual_bg.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 100%;
+    height: vw(550px);
+    position: relative;
+    top: vw(-600px);
+    z-index: -1;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+  }
+  .inner {
+    position: relative;
+    position: absolute;
+    top: vw(88px);
+    z-index: 10;
+    width: 100%;
+    margin: auto 0;
+    .search-title {
+      padding-top: vw(100px);
+      text-align: center;
+      @include font-28px-M;
+      color: $white;
+      margin: vw(20px) 0;
     }
-    .inner {
-        position: relative;
-        position: absolute;
-        top: vw(88px);
-        z-index: 10;
-        width: 100%;
-        margin: auto 0;
-        .search-title {
-            padding-top: vw(100px);
-            text-align: center;
-            @include font-28px-M;
-            color: $white;
-            margin: vw(20px) 0;
-        }
-    }
+  }
 }
 
 //Con2
 .airport-main-con2 {
-    .inner {
-        h3 {
-            span {
-                color: $red;
-                margin-left: vw(6px);
-            }
-        }
-        h4 {
-            @include font-18px;
-            color: $greyscale-1000;
-            margin-bottom: vw(30px);
-        }
-        .promo-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: vw(20px);
-            justify-content: space-between;
-
-            .promo-card-con {
-                flex: 1 1 calc(25% - vw(20px));
-                max-width: calc(25% - vw(20px));
-                background: $white;
-                border-radius: vw(12px);
-                border: 1px solid $greyscale-500;
-                overflow: hidden;
-                box-shadow: 0 vw(4px) vw(8px) rgba(0, 0, 0, 0.05);
-                transition: transform 0.2s ease;
-                cursor: pointer;
-                display: flex;
-                flex-direction: column;
-
-                &:hover {
-                    transform: translateY(-4px);
-                    box-shadow: 0 vw(6px) vw(12px) rgba(0, 0, 0, 0.1);
-                }
-
-                img {
-                    width: 100%;
-                    height: vw(220px);
-                    object-fit: cover;
-                }
-
-                .info {
-                    padding: vw(18px);
-
-                    .type {
-                        color: $greyscale-900;
-                        margin-bottom: vw(4px);
-                    }
-                    .title {
-                        @include font-20px-SB;
-                        color: $default;
-                        margin-bottom: vw(6px);
-                    }
-
-                    .location {
-                        display: flex;
-                        align-items: center;
-                        @include font-14px;
-                        color: #646464;
-                        margin-top: vw(6px);
-
-                        .icon {
-                            margin-right: vw(6px);
-                            color: $greyscale-1100;
-                        }
-                    }
-
-                    .price-box {
-                        display: flex;
-                        align-items: center;
-                        gap: vw(8px);
-                        margin-top: vw(16px);
-
-                        .original {
-                            @include font-14px;
-                            color: $greyscale-700;
-                            text-decoration: line-through;
-                            margin-right: auto;
-                        }
-
-                        .discount {
-                            @include font-16px;
-                            color: $red;
-                        }
-
-                        .price {
-                            @include font-20px-B;
-                            color: $greyscale-1300;
-                        }
-
-                        span {
-                            @include font-14px;
-                            color: $greyscale-1100;
-                        }
-                    }
-                }
-            }
-        }
+  .inner {
+    h3 {
+      span {
+        color: $red;
+        margin-left: vw(6px);
+      }
     }
+    h4 {
+      @include font-18px;
+      color: $greyscale-1000;
+      margin-bottom: vw(30px);
+    }
+    .promo-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: vw(20px);
+      justify-content: space-between;
+
+      .promo-card-con {
+        flex: 1 1 calc(25% - vw(20px));
+        max-width: calc(25% - vw(20px));
+        background: $white;
+        border-radius: vw(12px);
+        border: 1px solid $greyscale-500;
+        overflow: hidden;
+        box-shadow: 0 vw(4px) vw(8px) rgba(0, 0, 0, 0.05);
+        transition: transform 0.2s ease;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+
+        &:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 vw(6px) vw(12px) rgba(0, 0, 0, 0.1);
+        }
+
+        img {
+          width: 100%;
+          height: vw(220px);
+          object-fit: cover;
+        }
+
+        .info {
+          padding: vw(18px);
+
+          .type {
+            color: $greyscale-900;
+            margin-bottom: vw(4px);
+          }
+          .title {
+            @include font-20px-SB;
+            color: $default;
+            margin-bottom: vw(6px);
+          }
+
+          .location {
+            display: flex;
+            align-items: center;
+            @include font-14px;
+            color: #646464;
+            margin-top: vw(6px);
+
+            .icon {
+              margin-right: vw(6px);
+              color: $greyscale-1100;
+            }
+          }
+
+          .price-box {
+            display: flex;
+            align-items: center;
+            gap: vw(8px);
+            margin-top: vw(16px);
+
+            .original {
+              @include font-14px;
+              color: $greyscale-700;
+              text-decoration: line-through;
+              margin-right: auto;
+            }
+
+            .discount {
+              @include font-16px;
+              color: $red;
+            }
+
+            .price {
+              @include font-20px-B;
+              color: $greyscale-1300;
+            }
+
+            span {
+              @include font-14px;
+              color: $greyscale-1100;
+            }
+          }
+        }
+      }
+    }
+  }
 }
 
 //Con3
 .airport-main-con3 {
-    margin-top: vw(100px);
+  margin-top: vw(100px);
 
-    .promo-list {
-        margin-top: vw(40px);
+  .promo-list {
+    margin-top: vw(40px);
+    display: flex;
+    flex-wrap: wrap;
+    gap: vw(20px);
+    justify-content: space-between;
+
+    .promo-card-con {
+      flex: 1 1 calc(25% - vw(20px));
+      max-width: calc(25% - vw(20px));
+      background: $white;
+      border-radius: vw(12px);
+      border: 1px solid #e1e1e1;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+
+      img {
+        width: 100%;
+        height: vw(220px);
+        object-fit: cover;
+        display: block;
+      }
+
+      .info {
+        padding: vw(18px);
+        flex-grow: 1;
+
+        .type {
+          @include font-14px;
+          color: $greyscale-1100;
+          display: block;
+
+          .icons {
+            margin-right: vw(6px);
+            @include font-14px;
+            color: $greyscale-1200;
+          }
+        }
+
+        .title {
+          @include font-20px-SB;
+          color: $default;
+          margin-bottom: vw(6px);
+        }
+      }
+
+      .details {
+        padding: vw(20px);
+        padding-top: 0;
         display: flex;
-        flex-wrap: wrap;
-        gap: vw(20px);
         justify-content: space-between;
 
-        .promo-card-con {
-            flex: 1 1 calc(25% - vw(20px));
-            max-width: calc(25% - vw(20px));
-            background: $white;
-            border-radius: vw(12px);
-            border: 1px solid #e1e1e1;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column; // ✅ 카드 정렬 보정
-
-            img {
-                width: 100%;
-                height: vw(220px); // ✅ 높이 고정
-                object-fit: cover;
-                display: block;
-            }
-
-            .info {
-                padding: vw(18px);
-                flex-grow: 1;
-
-                .type {
-                    @include font-14px;
-                    color: $greyscale-1100;
-                    display: block;
-
-                    .icons {
-                        margin-right: vw(6px);
-                        @include font-14px;
-                        color: $greyscale-1200;
-                    }
-                }
-
-                .title {
-                    @include font-20px-SB;
-                    color: $default;
-                    margin-bottom: vw(6px);
-                }
-            }
-
-            .details {
-                padding: vw(20px);
-                padding-top: 0;
-                display: flex;
-                justify-content: space-between;
-
-                .date-condi {
-                    flex-direction: column;
-                    display: flex;
-                    text-align: left;
-                    @include font-14px;
-                    color: #646464;
-                }
-                .price-box {
-                    display: flex;
-                    align-items: center;
-                    gap: vw(8px);
-                    margin-top: vw(22px);
-
-                    .price {
-                        position: relative;
-                        top: -4px;
-                        line-height: vw(20px);
-                        @include font-20px-B;
-                        color: $greyscale-1300;
-                    }
-                }
-            }
+        .date-condi {
+          flex-direction: column;
+          display: flex;
+          text-align: left;
+          @include font-14px;
+          color: #646464;
         }
+        .price-box {
+          display: flex;
+          align-items: center;
+          gap: vw(8px);
+          margin-top: vw(22px);
+
+          .price {
+            position: relative;
+            top: -4px;
+            line-height: vw(20px);
+            @include font-20px-B;
+            color: $greyscale-1300;
+          }
+        }
+      }
     }
+  }
 }
 
 //Con4
 .airport-main-con4 {
-    margin-top: vw(100px);
-    .inner {
-        h3 {
-            img {
-                width: vw(100px);
-            }
-        }
+  margin-top: vw(100px);
+  .inner {
+    h3 {
+      img {
+        width: vw(100px);
+      }
     }
+  }
 
-    .promo-list {
-        margin-top: vw(40px);
-        display: flex;
-        flex-wrap: wrap;
-        gap: vw(20px);
-        justify-content: space-between;
+  .promo-list {
+    margin-top: vw(40px);
+    display: flex;
+    flex-wrap: wrap;
+    gap: vw(20px);
+    justify-content: space-between;
 
-        .promo-card-con4 {
-            flex: 1 1 calc(25% - vw(20px));
-            max-width: calc(25% - vw(20px));
-            position: relative;
-            border-radius: vw(12px);
-            overflow: hidden;
-            cursor: pointer;
+    .promo-card-con4 {
+      flex: 1 1 calc(25% - vw(20px));
+      max-width: calc(25% - vw(20px));
+      position: relative;
+      border-radius: vw(12px);
+      overflow: hidden;
+      cursor: pointer;
 
-            img {
-                width: 100%;
-                height: vw(460px);
-                object-fit: cover;
-                display: block;
-                transition: transform 0.3s ease;
-            }
+      img {
+        width: 100%;
+        height: vw(460px);
+        object-fit: cover;
+        display: block;
+        transition: transform 0.3s ease;
+      }
 
-            &:hover img {
-                transform: scale(1.05);
-            }
+      &:hover img {
+        transform: scale(1.05);
+      }
 
-            .info {
-                position: absolute;
-                bottom: 0;
-                left: 0;
-                width: 100%;
-                padding: vw(20px);
-                color: $white;
-                background: linear-gradient(to top, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 100%);
+      .info {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        padding: vw(20px);
+        color: $white;
+        background: linear-gradient(
+          to top,
+          rgba(0, 0, 0, 0.6) 0%,
+          rgba(0, 0, 0, 0) 100%
+        );
 
-                .type {
-                    @include font-14px;
-                    opacity: 0.9;
-                    display: block;
-                    margin-bottom: vw(6px);
-                    color: $greyscale-100;
-                }
-                .title {
-                    @include font-20px;
-                    line-height: 1.4;
-                    margin-bottom: vw(6px);
-                    color: $white;
-                }
-
-                .desc {
-                    @include font-14px;
-                    margin-top: vw(6px);
-                    color: $greyscale-100;
-                }
-            }
+        .type {
+          @include font-14px;
+          opacity: 0.9;
+          display: block;
+          margin-bottom: vw(6px);
+          color: $greyscale-100;
         }
+        .title {
+          @include font-20px;
+          line-height: 1.4;
+          margin-bottom: vw(6px);
+          color: $white;
+        }
+
+        .desc {
+          @include font-14px;
+          margin-top: vw(6px);
+          color: $greyscale-100;
+        }
+      }
     }
+  }
 }
 
 //Con5
 .airport-main-con5 {
-    margin: vw(100px) 0 vw(208px) 0;
+  margin: vw(100px) 0 vw(208px) 0;
 
-    .promo-list {
-        margin-top: vw(40px);
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
+  .promo-list {
+    margin-top: vw(40px);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
 
-        .event {
-            width: vw(446px);
-            height: vw(160px);
-            display: flex;
-            flex-wrap: wrap;
-            background: $white;
-            border-radius: vw(12px);
-            overflow: hidden;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-            text-align: left;
-            align-items: center;
-            justify-content: center;
+    .event {
+      width: vw(446px);
+      height: vw(160px);
+      display: flex;
+      flex-wrap: wrap;
+      background: $white;
+      border-radius: vw(12px);
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+      text-align: left;
+      align-items: center;
+      justify-content: center;
 
-            &:hover {
-                transform: translateY(-4px);
-                box-shadow: 0 vw(6px) vw(12px) rgba(0, 0, 0, 0.1);
-            }
+      &:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 vw(6px) vw(12px) rgba(0, 0, 0, 0.1);
+      }
 
-            &.card1 {
-                background-color: #eaf7ff;
-            }
-            &.card2 {
-                background-color: #eaf7ff;
-            }
-            &.card3 {
-                background-color: #f3f5ff;
-            }
+      &.card1 {
+        background-color: #eaf7ff;
+      }
+      &.card2 {
+        background-color: #eaf7ff;
+      }
+      &.card3 {
+        background-color: #f3f5ff;
+      }
 
-            p {
-                @include font-20px-M;
-                margin-right: vw(40px);
-            }
-        }
+      p {
+        @include font-20px-M;
+        margin-right: vw(40px);
+      }
     }
+  }
 }

@@ -3,8 +3,6 @@
 // 기본 버튼 스타일
 .button {
     appearance: none;
-    // pointer-events: none;
-    // background: $header-bg;
     border-radius: vw(50px);
     border: 0;
     padding: rem(10px);
@@ -14,7 +12,7 @@
     &:hover {
         box-shadow: 0 0 vw(5px) vw(2px) rgba($default, 0.2);
         &:not(.g, .o) {
-            filter: brightness(0.9);
+            // filter: brightness(0.9);
         }
     }
     &.large {

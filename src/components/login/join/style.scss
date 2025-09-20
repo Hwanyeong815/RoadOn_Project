@@ -9,7 +9,7 @@
 
     &-master {
         &-label {
-            display: inline-flex;
+            display: block;
             align-items: center;
             gap: vw(8px);
             cursor: pointer;
@@ -18,34 +18,33 @@
 
     &-list {
         display: flex;
+        flex-direction: column;
         width: 100%;
         gap: vw(10px);
         justify-content: space-between;
-        // flex-direction: column; /* 리스트는 세로로 쌓이도록 */
     }
 
     &-item {
-        /* li에 .open 클래스가 붙는 구조를 전제로 스타일 제어합니다. */
         background: #fff;
         border-radius: 8px;
         padding: vw(12px);
         box-sizing: border-box;
     }
 
-    /* consent-row는 flex 자식의 텍스트가 말줄임되는 문제 방지 */
     &-row {
-        display: flex;
+        // display: flex;
         align-items: center;
         justify-content: center;
         width: max-content;
-        min-width: 0; /* flex 내부 텍스트가 잘리는 문제 해결 (very important) */
+        min-width: 0;
+        width: 100%;
         gap: vw(8px);
     }
 
     &-title {
         @include font-18px;
         color: $greyscale-900;
-        white-space: normal; /* 줄바꿈 허용 */
+        white-space: normal;
         overflow: visible;
         text-overflow: clip;
     }
@@ -56,32 +55,21 @@
         height: max-content;
         display: none;
 
-        /* 중요: 원래 너가 쓴 구조(.consent-content.open .consent-row ...)는
-           DOM에서 consent-row와 consent-content가 형제이므로 적용되지 않음.
-           그래서 .consent-item.open 기준으로 스타일을 적용해야 토글 버튼 회전이 됨. */
         &.open {
             display: block;
-            /* 여기 내부의 .consent-row 선택은 무의미(형제라서) — 대신 아래 .consent-item.open을 사용 */
         }
     }
 
-    /* ------------------------
-       핵심: .open 상태(=li.open)에 따른 시각 변화
-       (토글 아이콘 회전, 내용 보임 등)
-       ------------------------ */
-
-    /* 기존 구조 최대한 보존하면서 실제 DOM에 맞춰 아래 선택자 사용 */
     .consent-item {
         &.open {
             .consent-row {
                 .toggle-btn {
-                    transform: rotate(180deg); /* 토글 시 아이콘 회전 */
+                    transform: rotate(180deg);
                     p {
-                        transform: rotate(180deg); /* 토글 시 아이콘 회전 */
+                        transform: rotate(180deg);
                         transition: 200ms ease;
-                        display: inline-block; /* transform이 작동하려면 inline-block 권장 */
+                        display: inline-block;
                     }
-                    // background-color: red; /* 눌렀을 때 버튼 배경 예시 */
                 }
             }
 
@@ -92,7 +80,6 @@
             }
         }
 
-        /* 토글 버튼 기본 상태(안눌렸을때) */
         .toggle-btn {
             p {
                 transform: rotate(0deg);
@@ -108,14 +95,13 @@
         cursor: pointer;
     }
 
-    /* 간단: 체크 컬러만 바꿀 때 */
     input[type='checkbox'] {
         -webkit-appearance: none;
         appearance: none;
         width: 20px;
         height: 20px;
         border-radius: 5px;
-        border: 1px solid var(--orange, #ff7f50);
+        border: 1px solid $orange;
         background-color: #fff;
         box-sizing: border-box;
         display: inline-block;
@@ -124,7 +110,7 @@
 
         background-repeat: no-repeat;
         background-position: center;
-        background-size: 0 0; /* 기본 숨김 */
+        background-size: 0 0;
         transition: 100ms ease;
         -webkit-tap-highlight-color: transparent;
 
@@ -139,7 +125,6 @@
         }
     }
 
-    /* 체크아이콘: 인라인 SVG (주의: '#'은 '%23'로 인코딩해야 함) */
     input[type='checkbox'] {
         background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='9' height='6' viewBox='0 0 9 6' fill='none'><path fill-rule='evenodd' clip-rule='evenodd' d='M8.35126 0.271393C8.445 0.365157 8.49766 0.492311 8.49766 0.624893C8.49766 0.757475 8.445 0.884629 8.35126 0.978393L3.60126 5.72839C3.5075 5.82213 3.38034 5.87479 3.24776 5.87479C3.11518 5.87479 2.98803 5.82213 2.89426 5.72839L0.644262 3.47839C0.553183 3.38409 0.502786 3.25779 0.503925 3.12669C0.505064 2.99559 0.557649 2.87019 0.650353 2.77748C0.743057 2.68478 0.868463 2.6322 0.999562 2.63106C1.13066 2.62992 1.25696 2.68031 1.35126 2.77139L3.24776 4.66789L7.64426 0.271393C7.73803 0.177658 7.86518 0.125 7.99776 0.125C8.13034 0.125 8.2575 0.177658 8.35126 0.271393Z' fill='%23FF7F50'/></svg>");
     }

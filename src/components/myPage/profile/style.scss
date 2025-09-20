@@ -27,6 +27,7 @@
                 }
                 .profile-name-zone {
                     display: flex;
+
                     flex-direction: column;
                     justify-content: space-between;
                     width: vw(700px);
@@ -72,7 +73,8 @@
                 .profile-coupons-wrap {
                     width: vw(450px);
                     display: flex;
-                    justify-content: space-between;
+                    justify-content: flex-end;
+                    gap: vw(30px);
                     align-items: center;
                     .box {
                         width: vw(190px);
@@ -108,10 +110,6 @@
                                 }
                             }
                         }
-                        &-coupon {
-                        }
-                        &-points {
-                        }
                     }
                 }
             }
@@ -133,6 +131,9 @@
                 width: vw(460px);
                 padding: vw(30px);
                 box-sizing: border-box;
+                display: flex;
+                flex-direction: column;
+                gap: vw(15px);
                 .category {
                     &-title {
                         @include font-24px-B;
@@ -140,31 +141,21 @@
                     &-con {
                         display: flex;
                         flex-wrap: wrap;
-                        gap: vw(10px);
+                        column-gap: vw(10px);
+                        row-gap: vw(8px);
                         padding-right: vw(40px);
 
                         p {
                             cursor: pointer;
                             @include font-20px;
-                            color: #636363;
+                            color: $greyscale-1100;
                             padding-right: vw(10px);
                             position: relative;
+                            transition: 0.2ms;
                             &:hover {
-                                &::before {
-                                    transform: translateX(-50%) scaleX(1);
-                                }
+                                color: $mint;
                             }
-                            &::before {
-                                content: '';
-                                position: absolute;
-                                width: 100%;
-                                height: 5%;
-                                left: 50%;
-                                bottom: 0;
-                                transform: translateX(-50%) scaleX(0);
-                                background-color: $greyscale-600;
-                                transition: 0.3s;
-                            }
+
                             &::after {
                                 position: absolute;
                                 content: '';
@@ -183,12 +174,6 @@
                         }
                     }
                 }
-            }
-            &-reserve {
-            }
-            &-user {
-            }
-            &-support {
             }
         }
     }

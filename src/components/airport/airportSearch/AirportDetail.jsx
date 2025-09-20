@@ -1,115 +1,164 @@
-import React, { useRef, useState, useMemo } from 'react';
-import { useParams } from 'react-router-dom';
-import useAirportStore from '../../../store/airportStore';
-import AirportSearchBarList from '../../ui/AirportSearchBarList/AirportSearchBarList';
-import Filter from './Filter';
-import AirportBox from './AirportBox';
-import Pagination from '../../ui/pagination/Pagination';
-import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
-import './style.scss';
+import { create } from "zustand";
+import airportData from "../../../api/airportListData";
 
-const AirportDetail = () => {
-    const { slug } = useParams();
-    const filters = useAirportStore((s) => s.filters);
-    const airports = useAirportStore((s) => s.airportDetails);
-    const getFilteredAirportDetails = useAirportStore((s) => s.getFilteredAirportDetails);
+const allPrices = airportData.map((a) => a.price);
+const ABS_MIN_PRICE = Math.min(...allPrices);
+const ABS_MAX_PRICE = Math.max(...allPrices);
+const STEP = 1000;
 
-    const [sortType, setSortType] = useState('all');
-    const [isOpen, setIsOpen] = useState(false);
-    const [page, setPage] = useState(1);
-    const pageSize = 10;
-
-    const dropdownRef = useRef(null);
-
-    // slug 비교 시 normalize (대소문자 무시 + 공백 제거)
-    const normalizeSlug = (str) => str?.toString().trim().toLowerCase().replace(/\s+/g, '') || '';
-
-    // 필터 + slug 적용
-    const filteredAirports = useMemo(() => {
-        return getFilteredAirportDetails().filter(
-            (a) => normalizeSlug(a.slug) === normalizeSlug(slug)
-        );
-    }, [filters, airports, slug, getFilteredAirportDetails]);
-
-    // 정렬
-    let sortedAirports = [...filteredAirports];
-    if (sortType === 'low') {
-        sortedAirports.sort((a, b) => a.price - b.price);
-    } else if (sortType === 'high') {
-        sortedAirports.sort((a, b) => b.price - a.price);
-    }
-
-    const options = [
-        { value: 'all', label: '전체' },
-        { value: 'low', label: '낮은 가격순' },
-        { value: 'high', label: '높은 가격순' },
-    ];
-
-    const startIndex = (page - 1) * pageSize;
-    const currentAirports = sortedAirports.slice(startIndex, startIndex + pageSize);
-
-    return (
-        <main className="airport">
-            <AirportSearchBarList />
-            <div className="inner">
-                <Filter />
-                <div className="list-wrap airport-detail-list">
-                    <div className="list-header">
-                        <h3>총 {sortedAirports.length}개 항공권</h3>
-
-                        {/* 정렬 드롭다운 */}
-                        <div
-                            className={`custom-dropdown ${isOpen ? 'open' : ''}`}
-                            ref={dropdownRef}
-                            onClick={() => setIsOpen(!isOpen)}
-                            onMouseLeave={() => setIsOpen(false)}
-                        >
-                            <div className="dropdown-selected">
-                                {options.find((o) => o.value === sortType)?.label}
-                                {isOpen ? (
-                                    <IoIosArrowUp className="dropdown-icon open" />
-                                ) : (
-                                    <IoIosArrowDown className="dropdown-icon" />
-                                )}
-                            </div>
-                            {isOpen && (
-                                <ul className="dropdown-options">
-                                    {options.map((option) => (
-                                        <li
-                                            key={option.value}
-                                            className={sortType === option.value ? 'selected' : ''}
-                                            onClick={() => {
-                                                setSortType(option.value);
-                                                setIsOpen(false);
-                                                setPage(1);
-                                            }}
-                                        >
-                                            {option.label}
-                                        </li>
-                                    ))}
-                                </ul>
-                            )}
-                        </div>
-                    </div>
-
-                    <div className="list-box">
-                        {currentAirports.length > 0 ? (
-                            currentAirports.map((a) => <AirportBox key={a.id} airportId={a.id} />)
-                        ) : (
-                            <p className="no-result">조건에 맞는 항공권이 없습니다.</p>
-                        )}
-                    </div>
-
-                    <Pagination
-                        page={page}
-                        total={sortedAirports.length}
-                        pageSize={pageSize}
-                        onPageChange={setPage}
-                    />
-                </div>
-            </div>
-        </main>
-    );
+const airportAliasMap = {
+  김포: ["김포", "김포공항", "김포 국제공항", "GMP"],
+  인천: [
+    "인천",
+    "인천공항",
+    "인천 국제공항",
+    "인천 국제공항 - 터미널 2",
+    "ICN",
+  ],
+  제주: ["제주", "제주공항", "제주 국제공항", "CJU"],
+  방콕: ["방콕", "수완나품", "수완나품 국제공항", "BKK"],
+  싱가포르: ["싱가포르", "창이", "창이 국제공항", "SIN"],
+  다낭: ["다낭", "다낭 국제공항", "DAD"],
+  오사카: ["오사카", "간사이 국제공항", "KIX"],
+  괌: ["괌", "괌 국제공항", "GUM"],
+  후쿠오카: ["후쿠오카", "후쿠오카 국제공항", "FUK"],
+  코타키나발루: ["코타키나발루", "코타키나발루 국제공항", "BKI"],
+  나트랑: ["나트랑", "깜라인", "나트랑 깜라인 국제공항", "CXR"],
 };
 
-export default AirportDetail;
+const normalizeAirport = (name) => {
+  if (!name) return "";
+  const lower = name.trim().toLowerCase();
+  for (const [key, aliases] of Object.entries(airportAliasMap)) {
+    if (aliases.some((alias) => alias.toLowerCase().includes(lower))) {
+      return key;
+    }
+  }
+  return lower;
+};
+
+const useAirportStore = create((set, get) => ({
+  airports: airportData,
+  airportDetails: airportData,
+  priceMin: ABS_MIN_PRICE,
+  priceMax: ABS_MAX_PRICE,
+  STEP,
+
+  filters: {
+    mode: "roundtrip",
+    direct: null,
+    airline: [],
+    baggage: null,
+    priceRange: [ABS_MIN_PRICE, ABS_MAX_PRICE],
+    segments: [],
+    dates: [],
+    people: 1,
+    seat: "일반석",
+  },
+
+  setFilters: (patch) =>
+    set((state) => ({
+      filters: {
+        ...state.filters,
+        ...patch,
+      },
+    })),
+
+  setFilter: (patch) =>
+    set((state) => ({
+      filters: {
+        ...state.filters,
+        ...patch,
+      },
+    })),
+
+  setPriceRange: (min, max) =>
+    set((state) => ({
+      filters: {
+        ...state.filters,
+        priceRange: [min, max],
+      },
+    })),
+
+  resetFilter: () =>
+    set({
+      filters: {
+        mode: "roundtrip",
+        direct: null,
+        airline: [],
+        baggage: null,
+        priceRange: [ABS_MIN_PRICE, ABS_MAX_PRICE],
+        segments: [],
+        dates: [],
+        people: 1,
+        seat: "일반석",
+      },
+    }),
+
+  getAirportById: (id) => get().airports.find((a) => a.id === id),
+
+  // ✅ 메인 검색 필터
+  getFilteredAirports: () => {
+    const { airports, filters } = get();
+    const [minP, maxP] = filters.priceRange;
+
+    return airports.filter((a) => {
+      if (a.price < minP || a.price > maxP) return false;
+      if (filters.direct !== null && a.direct !== filters.direct) return false;
+      if (filters.airline.length > 0 && !filters.airline.includes(a.airline))
+        return false;
+      if (filters.baggage && a.baggage !== filters.baggage) return false;
+
+      if (filters.segments?.length > 0) {
+        const seg = filters.segments[0];
+        const userFrom = normalizeAirport(seg.from);
+        const userTo = normalizeAirport(seg.to);
+        const dataFrom = normalizeAirport(a.departureAirport);
+        const dataTo = normalizeAirport(a.arrivalAirport);
+
+        if (userFrom && userFrom !== dataFrom) return false;
+        if (userTo && userTo !== dataTo) return false;
+      }
+
+      return true;
+    });
+  },
+
+  // ✅ 상세 검색 필터 (좌석 + 인원 추가됨)
+  getFilteredAirportDetails: () => {
+    const { airportDetails, filters } = get();
+    const [minP, maxP] = filters.priceRange;
+
+    return airportDetails.filter((a) => {
+      if (a.price < minP || a.price > maxP) return false;
+      if (filters.direct !== null && a.direct !== filters.direct) return false;
+      if (filters.airline.length > 0 && !filters.airline.includes(a.airline))
+        return false;
+      if (filters.baggage && a.baggage !== filters.baggage) return false;
+
+      if (filters.segments?.length > 0) {
+        const seg = filters.segments[0];
+        const userFrom = normalizeAirport(seg.from);
+        const userTo = normalizeAirport(seg.to);
+        const dataFrom = normalizeAirport(a.departureAirport);
+        const dataTo = normalizeAirport(a.arrivalAirport);
+
+        if (userFrom && userFrom !== dataFrom) return false;
+        if (userTo && userTo !== dataTo) return false;
+      }
+
+      // ✅ 좌석 및 인원 조건
+      if (
+        !a.seatAvailability ||
+        !a.seatAvailability[filters.seat] ||
+        a.seatAvailability[filters.seat] < filters.people
+      ) {
+        return false;
+      }
+
+      return true;
+    });
+  },
+}));
+
+export default useAirportStore;

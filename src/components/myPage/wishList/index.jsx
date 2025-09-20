@@ -2,7 +2,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { usePagination } from '../../../store/paginationStore';
 import HotelBox from '../../hotels/hotelsSearch/HotelBox';
-import AirportBox from '../../airport/airportSearch/AirportBox';
 import TourBox from '../../tour/TourBox';
 import './style.scss';
 import { IoIosArrowForward } from 'react-icons/io';
@@ -10,7 +9,7 @@ import TabButton from '../../ui/tabButton/TabButton';
 import Pagination from '../../ui/pagination/Pagination';
 import useWishStore from '../../../store/wishStore';
 
-const TABS = ['전체', '국내 숙소', '해외 숙소', '체험·투어 입장권', '항공'];
+const TABS = ['전체', '국내 숙소', '해외 숙소', '체험·투어 입장권'];
 
 const KOREAN_REGIONS = [
     '서울',
@@ -39,11 +38,9 @@ const isDomesticHotel = (item) => {
 };
 
 const WishList = ({ preview = true, onMore = () => {}, previewCount = 2 }) => {
-    // store 구독 (items를 주 소스로 사용)
     const itemsFromStore = useWishStore((s) => s.items) ?? [];
     const itemsDetailed = useWishStore((s) => s.itemsDetailed) ?? [];
 
-    // store의 원본 items를 기반으로, itemsDetailed가 있다면 상세데이터를 매칭해서 병합
     const detailedMap = useMemo(() => {
         const m = new Map();
         (itemsDetailed || []).forEach((it) => {
@@ -54,24 +51,19 @@ const WishList = ({ preview = true, onMore = () => {}, previewCount = 2 }) => {
     }, [itemsDetailed]);
 
     const rawItems = useMemo(() => {
-        // itemsFromStore가 있으면(reactive) 이를 기준으로 상세데이터 병합
         if (Array.isArray(itemsFromStore) && itemsFromStore.length > 0) {
             return itemsFromStore.map((it) => {
                 const uid = it.uid || `${it.type}-${it.id}`;
                 const det = detailedMap.get(uid);
-                // 우선순위: detailed data의 data 필드 유지, 아니면 store에 있던 data
                 return {
                     uid,
                     type: (it.type || '').toString().toLowerCase(),
                     id: it.id,
                     data: det?.data ?? it.data ?? (det ? det.data : null),
-                    // 만약 detailed엔 추가 필드가 필요하면 합쳐서 반환할 수도 있습니다.
                     ...(det ? { _detailed: det } : {}),
                 };
             });
         }
-
-        // store에 항목이 없으면(초기상태 등) detailed를 보여주거나 빈 배열
         if (Array.isArray(itemsDetailed) && itemsDetailed.length > 0) {
             return itemsDetailed.map((it) => ({
                 uid: it.uid || `${it.type}-${it.id}`,
@@ -80,7 +72,6 @@ const WishList = ({ preview = true, onMore = () => {}, previewCount = 2 }) => {
                 data: it.data ?? null,
             }));
         }
-
         return [];
     }, [itemsFromStore, itemsDetailed, detailedMap]);
 
@@ -102,7 +93,6 @@ const WishList = ({ preview = true, onMore = () => {}, previewCount = 2 }) => {
             return rawItems.filter((it) => it.type === 'hotel' && !isDomesticHotel(it));
         if (activeTab === '체험·투어 입장권')
             return rawItems.filter((it) => it.type === 'package' || it.type === 'tour');
-        if (activeTab === '항공') return rawItems.filter((it) => it.type === 'flight');
         return rawItems;
     }, [rawItems, activeTab]);
 
@@ -121,11 +111,8 @@ const WishList = ({ preview = true, onMore = () => {}, previewCount = 2 }) => {
     }, [filtered, currentPage, currentPageSize]);
 
     const renderItem = (it) => {
-        // Box 내부에서 WishButton을 렌더하고 제어하도록 props 전달
         if (it.type === 'hotel')
             return <HotelBox key={it.uid} hotelId={it.id} inWishList data={it.data} />;
-        if (it.type === 'flight' || it.type === 'air' || it.type === 'airport')
-            return <AirportBox key={it.uid} airportId={it.id} inWishList data={it.data} />;
         if (it.type === 'package' || it.type === 'tour')
             return <TourBox key={it.uid} packageId={it.id} inWishList data={it.data} />;
         return (

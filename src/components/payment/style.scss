@@ -1,624 +1,765 @@
-@use '../../styles/utils' as *;
+@use "../../styles/utils" as *;
 
 .payment {
-    .inner {
-        display: flex;
-        gap: vw(54px);
-        box-sizing: border-box;
-        padding-bottom: vw(250px);
-    }
+  .inner {
+    display: flex;
+    gap: vw(54px);
+    box-sizing: border-box;
+    padding-bottom: vw(250px);
+  }
 }
 
 .payment-left {
-    border: vw(0.5px) solid $greyscale-600;
-    border-radius: vw(10px);
-    box-sizing: border-box;
-    padding: vw(40px);
-    width: vw(891px);
-    padding-bottom: vw(150px);
-    .pay-detail {
-        h3 {
-            @include font-24px-M;
-            margin-bottom: vw(50px);
-            display: flex;
-            align-items: center;
-            gap: vw(12px);
-        }
-
-        .pay-box-wrap {
-            display: flex;
-            flex-direction: column;
-            gap: vw(65px);
-            h4 {
-                @include font-20px-SB;
-                margin-bottom: vw(20px);
-            }
-            .flight-schedule {
-                display: flex;
-                flex-direction: column;
-                gap: vw(36px);
-                .depart-wrap {
-                    .depart-box {
-                        display: flex;
-                        align-items: center;
-                        gap: vw(20px);
-                        .depart {
-                            @include font-16px-M;
-                            box-sizing: border-box;
-                            padding: vw(6px) vw(8px);
-                            background-color: $foundation-orange-lighthover;
-                            border-radius: vw(5px);
-                        }
-                        .w-to-w {
-                            display: flex;
-                            gap: vw(25px);
-                            span {
-                                display: inline-block;
-                                &:nth-of-type(1) {
-                                }
-                                &:nth-of-type(2) {
-                                }
-                                img {
-                                }
-                            }
-                        }
-                    }
-                    .depart-info {
-                        width: vw(811px);
-                        height: vw(150px);
-                        border: 1px solid $greyscale-600;
-                        border-radius: vw(15px);
-                        box-sizing: border-box;
-                        // padding: vw(38.5px) vw(119px);
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        gap: vw(100px);
-                        .airline {
-                            display: flex;
-                            gap: vw(8px);
-                            .flight-logo {
-                                img {
-                                    width: vw(25px);
-                                    height: vw(25px);
-                                    border-radius: 50%;
-                                }
-                            }
-                            .info {
-                                .name {
-                                    @include font-16px-SB;
-                                }
-                                .code {
-                                    @include font-12px-SB;
-                                    color: $greyscale-1000;
-                                }
-                            }
-                        }
-                        .depart-arrive-wrap {
-                            display: flex;
-                            gap: vw(8px);
-                            text-align: center;
-                            justify-content: center;
-                            .time {
-                                display: flex;
-                                flex-direction: column;
-                                gap: vw(8px);
-                                .time-info {
-                                    display: flex;
-                                    flex-direction: column;
-                                    gap: vw(5px);
-                                    .dpt {
-                                        @include font-18px-M;
-                                    }
-                                    .dpa {
-                                        @include font-12px-SB;
-                                        color: $greyscale-1000;
-                                    }
-                                }
-                            }
-                            .flight-through {
-                                display: flex;
-                                flex-direction: column;
-                                .direct {
-                                    color: $orange;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            .pay-schedule {
-                .check-in-out {
-                    width: 100%;
-                    height: vw(124px);
-                    background-color: $greyscale-200;
-                    border-radius: vw(15px);
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    gap: vw(130px);
-                    text-align: center;
-                    .check-in,
-                    .check-out {
-                        p {
-                            @include font-16px-M;
-                            color: $mint;
-                        }
-                        strong {
-                            @include font-18px;
-                        }
-                    }
-                    .nights {
-                        p {
-                            box-sizing: border-box;
-                            padding: vw(10px) vw(12px);
-                            background-color: $white;
-                            border-radius: vw(40px);
-                        }
-                    }
-                }
-            }
-            .pay-party {
-                p {
-                    @include font-18px;
-                    color: $greyscale-1100;
-                }
-            }
-            .pay-resname {
-                p {
-                    span {
-                        @include font-18px;
-                        color: $greyscale-1100;
-                    }
-                }
-            }
-            .flight-resname {
-                p {
-                    display: flex;
-                    gap: vw(10px);
-                    input {
-                        width: vw(262px);
-                        height: vw(52px);
-                        gap: vw(10px);
-                        border-radius: vw(6px);
-                        border: 1px solid $greyscale-600;
-                        text-indent: vw(15px);
-                    }
-                }
-            }
-            .passenger-info {
-                .pass-head {
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    h4 {
-                    }
-                    span {
-                        @include font-16px;
-                        display: flex;
-                        gap: vw(8px);
-                        align-items: center;
-                    }
-                }
-            }
-            .pay-passport {
-                .eng-name {
-                    display: flex;
-                    gap: vw(10px);
-                    input {
-                        text-indent: vw(20px);
-                        padding: vw(16.5px) 0;
-                        box-sizing: border-box;
-                        width: vw(266px);
-                        height: vw(52px);
-                        border: vw(0.8px) solid $greyscale-600;
-                        border-radius: vw(6px);
-                        color: $greyscale-1200;
-                        @include font-16px;
-                        &:focus {
-                            outline: none;
-                        }
-                    }
-                }
-            }
-            .pay-request {
-                textarea {
-                    resize: none;
-                    width: vw(546px);
-                    height: vw(115px);
-                    border: vw(0.8px) solid $greyscale-600;
-                    border-radius: vw(6px);
-                    @include font-16px;
-                    color: $greyscale-1200;
-                    font-family: 'Suit';
-                    padding: vw(20px);
-                    &:focus {
-                        outline: none;
-                    }
-                }
-            }
-            .pay-coupon {
-                select {
-                    width: vw(546px);
-                    height: vw(52px);
-                    border: 0.8px solid $greyscale-600;
-                    border-radius: vw(6px);
-                    box-sizing: border-box;
-                    padding: vw(16px) vw(30px);
-                    option {
-                        @include font-16px;
-                        span {
-                            color: $orange;
-                        }
-                    }
-                }
-            }
-            .pay-point {
-                input {
-                    width: vw(426px);
-                    height: vw(52px);
-                    border: 0.8px solid $greyscale-600;
-                    border-radius: vw(6px);
-                    margin-right: vw(10px);
-                    &:focus {
-                        outline: none;
-                    }
-                }
-                button {
-                    width: vw(110px);
-                    height: vw(52px);
-                    border-radius: vw(6px);
-                    background-color: $foundation-mint-lighthover;
-                    border: none;
-                    color: $greyscale-1200;
-                    @include font-16px;
-                    &:hover {
-                        background-color: $foundation-mint-lightactive;
-                    }
-                }
-            }
-            .pay-method {
-                h5 {
-                    @include font-16px-M;
-                    margin-right: vw(45px);
-                }
-                ul {
-                }
-                .payments {
-                    display: flex;
-                    gap: vw(15px);
-                    margin-bottom: vw(30px);
-                    li {
-                        width: vw(190px);
-                        height: vw(120px);
-                        border-radius: vw(6px);
-                        border: 0.8px solid $greyscale-600;
-                        position: relative;
-                        font-size: vw(36px);
-                        text-align: center;
-                        &:first-child {
-                            display: flex;
-                            flex-direction: column;
-                            justify-content: center;
-                            align-items: center;
-                            gap: vw(2px);
-                        }
-                        span {
-                            display: block;
-                            @include font-14px-M;
-                        }
-                        img {
-                            position: absolute;
-                            top: 50%;
-                            left: 50%;
-                            transform: translate(-50%, -50%);
-                        }
-                    }
-                }
-                .card-types {
-                    display: flex;
-                    margin-bottom: vw(10px);
-                    align-items: center;
-                    ul {
-                        width: vw(338px);
-                        height: vw(52px);
-                        border-radius: vw(6px);
-                        border: 0.8px solid $greyscale-600;
-                    }
-                }
-                .installment {
-                    display: flex;
-                    align-items: center;
-                    ul {
-                        width: vw(170px);
-                        height: vw(52px);
-                        border-radius: vw(6px);
-                        border: 0.8px solid $greyscale-600;
-                    }
-                }
-                .pay-default {
-                    margin-top: vw(30px);
-                    span {
-                        width: vw(12px);
-                        height: vw(12px);
-                        display: inline-block;
-                        margin-right: vw(15px);
-                        border: 1px solid $default;
-                    }
-                    p {
-                        display: inline-block;
-                    }
-                }
-            }
-        }
+  border: vw(0.5px) solid $greyscale-600;
+  border-radius: vw(10px);
+  box-sizing: border-box;
+  padding: vw(40px);
+  width: vw(891px);
+  padding-bottom: vw(150px);
+  .pay-detail {
+    h3 {
+      @include font-24px-M;
+      margin-bottom: vw(50px);
+      display: flex;
+      align-items: center;
+      gap: vw(12px);
     }
-}
 
-.payment-right {
-    border: vw(0.5px) solid $greyscale-600;
-    border-radius: vw(10px);
-    box-sizing: border-box;
-    padding: vw(50px) vw(30px);
-    width: vw(455px);
-    height: vw(660px);
-    .res-title {
-        display: flex;
-        gap: vw(25px);
-        align-items: center;
-        margin-bottom: vw(45px);
-        .ht-img {
-            width: vw(110px);
-            height: vw(100px);
-            border-radius: vw(4px);
-            overflow: hidden;
-            img {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-            }
-        }
-        .text {
-            span {
-                display: block;
-                &:nth-child(1) {
-                    @include font-14px;
-                    color: $greyscale-1000;
-                }
-                &:nth-child(2) {
-                    @include font-20px-M;
-                }
-                &:nth-child(3) {
-                    @include font-16px;
-                }
-            }
-        }
-    }
-    .res-prices {
-        box-sizing: border-box;
-        padding: vw(28px) vw(22px);
-        background-color: $greyscale-200;
-        border-radius: vw(15px);
+    .pay-box-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: vw(65px);
+      h4 {
+        @include font-20px-SB;
+        margin-bottom: vw(20px);
+      }
+      .flight-schedule {
         display: flex;
         flex-direction: column;
-        gap: vw(25px);
-        height: vw(281px);
-        .price {
+        gap: vw(36px);
+        .depart-wrap {
+          .depart-box {
             display: flex;
-            flex-direction: column;
-            gap: vw(6px);
-            li {
-                display: flex;
-                justify-content: space-between;
-                &:first-child {
-                    b {
-                        @include font-18px-M;
-                    }
-                }
-                span {
-                    @include font-14px;
-                    color: $greyscale-1000;
-                }
+            align-items: center;
+            gap: vw(20px);
+            .depart {
+              @include font-16px-M;
+              box-sizing: border-box;
+              padding: vw(6px) vw(8px);
+              background-color: $foundation-orange-lighthover;
+              border-radius: vw(5px);
             }
-        }
-        p {
+            .w-to-w {
+              display: flex;
+              gap: vw(25px);
+              span {
+                display: inline-block;
+                &:nth-of-type(1) {
+                }
+                &:nth-of-type(2) {
+                }
+                img {
+                }
+              }
+            }
+          }
+          .depart-info {
+            width: vw(811px);
+            height: vw(150px);
+            border: 1px solid $greyscale-600;
+            border-radius: vw(15px);
+            box-sizing: border-box;
+            // padding: vw(38.5px) vw(119px);
             display: flex;
-            justify-content: space-between;
-            position: relative;
-            margin-top: vw(16px);
-            &::before {
-                content: '';
-                width: vw(351px);
-                height: vw(1px);
-                background-color: $greyscale-600;
-                position: absolute;
-                top: vw(-60px);
+            align-items: center;
+            justify-content: center;
+            gap: vw(100px);
+            .airline {
+              display: flex;
+              gap: vw(8px);
+              .flight-logo {
+                img {
+                  width: vw(25px);
+                  height: vw(25px);
+                  border-radius: 50%;
+                }
+              }
+              .info {
+                .name {
+                  @include font-16px-SB;
+                }
+                .code {
+                  @include font-12px-SB;
+                  color: $greyscale-1000;
+                }
+              }
+            }
+            .depart-arrive-wrap {
+              display: flex;
+              gap: vw(8px);
+              text-align: center;
+              justify-content: center;
+              .time {
+                display: flex;
+                flex-direction: column;
+                gap: vw(8px);
+                .time-info {
+                  display: flex;
+                  flex-direction: column;
+                  gap: vw(5px);
+                  .dpt {
+                    @include font-18px-M;
+                  }
+                  .dpa {
+                    @include font-12px-SB;
+                    color: $greyscale-1000;
+                  }
+                }
+              }
+              .flight-through {
+                display: flex;
+                flex-direction: column;
+                .direct {
+                  color: $orange;
+                }
+              }
+            }
+          }
+        }
+      }
+      .pay-schedule {
+        .check-in-out {
+          width: 100%;
+          height: vw(124px);
+          background-color: $greyscale-200;
+          border-radius: vw(15px);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: vw(130px);
+          text-align: center;
+          .check-in,
+          .check-out {
+            p {
+              @include font-16px-M;
+              color: $mint;
             }
             strong {
-                @include font-20px-M;
+              @include font-18px;
             }
+          }
+          .nights {
+            p {
+              box-sizing: border-box;
+              padding: vw(10px) vw(12px);
+              background-color: $white;
+              border-radius: vw(40px);
+            }
+          }
         }
-    }
-    .assent {
-        @include font-16px;
-        margin-top: vw(25px);
-        margin-bottom: vw(25px);
-        span {
+      }
+      .pay-party {
+        p {
+          @include font-18px;
+          color: $greyscale-1100;
+        }
+      }
+      .pay-resname {
+        p {
+          span {
+            @include font-18px;
+            color: $greyscale-1100;
+          }
+        }
+      }
+      .flight-resname {
+        p {
+          display: flex;
+          gap: vw(10px);
+          input {
+            width: vw(262px);
+            height: vw(52px);
+            gap: vw(10px);
+            border-radius: vw(6px);
+            border: 1px solid $greyscale-600;
+            text-indent: vw(15px);
+          }
+        }
+      }
+
+      // 탑승객 점보
+      .passenger-info {
+        .pass-head {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          span {
+            @include font-16px;
+            display: flex;
+            gap: vw(8px);
+            align-items: center;
+          }
+        }
+        .eng-name,
+        .pass-ide {
+          display: flex;
+          gap: vw(10px);
+          padding-bottom: vw(10px);
+          p {
+            display: flex;
+            gap: vw(10px);
+            input {
+              width: vw(400px);
+              height: vw(52px);
+              gap: vw(10px);
+              border-radius: vw(6px);
+              border: 1px solid $greyscale-600;
+              text-indent: vw(15px);
+            }
+          }
+        }
+        .select-wrap {
+          position: relative;
+          display: inline-block;
+          width: vw(266px);
+          .nationality-country {
+            width: vw(262px);
+            height: vw(52px);
+            gap: vw(10px);
+            border-radius: vw(6px);
+            border: 1px solid $greyscale-600;
+            text-indent: vw(15px);
+            color: $greyscale-1100;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+          }
+          .icon {
+            position: absolute;
+            right: vw(15px);
+            top: 50%;
+            transform: translateY(-50%);
+            @include font-18px;
+            color: $greyscale-900;
+            pointer-events: none;
+          }
+        }
+        .gender-group {
+          display: flex;
+          border: vw(1px) solid #ccc;
+          border-radius: vw(8px);
+          overflow: hidden;
+          label {
+            flex: 1;
+            text-align: center;
+            // padding: vw(10px) 0;
+            cursor: pointer;
+            background: #f9f9f9;
+            color: #333;
+            transition: 0.2s;
+            width: vw(110px);
+            height: vw(52px);
+            line-height: vw(52px);
+            input {
+              display: none;
+            }
+            &:hover {
+              background: $greyscale-500;
+            }
+            &.active {
+              background: $greyscale-1000;
+              color: #fff;
+              font-weight: 700;
+            }
+            &:not(:last-child) {
+              border-right: vw(1px) solid #ccc;
+            }
+          }
+        }
+      }
+
+      //여권정보
+      .passport-info {
+        .pass-head {
+          display: flex;
+          justify-content: space-between;
+          span {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: vw(8px);
+            padding: 0;
+          }
+        }
+        .eng-name,
+        .pass-ide {
+          display: flex;
+          gap: vw(10px);
+          padding-bottom: vw(10px);
+          p {
+            display: flex;
+            gap: vw(10px);
+            input {
+              width: vw(400px);
+              height: vw(52px);
+              gap: vw(10px);
+              border-radius: vw(6px);
+              border: 1px solid $greyscale-600;
+              text-indent: vw(15px);
+            }
+          }
+        }
+      }
+      .select-wrap {
+        position: relative;
+        display: inline-block;
+        width: vw(266px);
+        .nationality-country {
+          width: vw(262px);
+          height: vw(52px);
+          gap: vw(10px);
+          border-radius: vw(6px);
+          border: 1px solid $greyscale-600;
+          text-indent: vw(15px);
+          color: $greyscale-1100;
+          appearance: none;
+          -webkit-appearance: none;
+          -moz-appearance: none;
+        }
+        .icon {
+          position: absolute;
+          right: vw(15px);
+          top: 50%;
+          transform: translateY(-50%);
+          @include font-18px;
+          color: $greyscale-900;
+          pointer-events: none;
+        }
+      }
+
+      .pay-request {
+        textarea {
+          resize: none;
+          width: vw(546px);
+          height: vw(115px);
+          border: vw(0.8px) solid $greyscale-600;
+          border-radius: vw(6px);
+          @include font-16px;
+          color: $greyscale-1200;
+          font-family: "Suit";
+          padding: vw(20px);
+          &:focus {
+            outline: none;
+          }
+        }
+      }
+      .pay-coupon {
+        .select-wrap {
+          position: relative;
+          display: inline-block;
+          width: vw(546px);
+          select {
+            width: 100%;
+            height: vw(52px);
+            border: 0.8px solid $greyscale-600;
+            color: $greyscale-1100;
+            border-radius: vw(6px);
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            padding: 0;
+            padding: vw(15px);
+            option {
+              @include font-16px;
+              color: $greyscale-1100;
+              span {
+                color: $orange;
+              }
+            }
+          }
+          .icon {
+            position: absolute;
+            right: vw(15px);
+            top: 50%;
+            transform: translateY(-50%);
+            @include font-18px;
+            color: $greyscale-900;
+            pointer-events: none;
+          }
+          option {
+            @include font-16px;
+            span {
+              color: $orange;
+            }
+          }
+        }
+      }
+      .pay-point {
+        input {
+          width: vw(426px);
+          height: vw(52px);
+          border: 0.8px solid $greyscale-600;
+          border-radius: vw(6px);
+          margin-right: vw(10px);
+          &:focus {
+            outline: none;
+          }
+        }
+        button {
+          width: vw(110px);
+          height: vw(52px);
+          border-radius: vw(6px);
+          background-color: $foundation-mint-lighthover;
+          border: none;
+          color: $greyscale-1200;
+          @include font-16px;
+          &:hover {
+            background-color: $foundation-mint-lightactive;
+          }
+        }
+      }
+      .pay-method {
+        h5 {
+          @include font-16px-M;
+          margin-right: vw(45px);
+        }
+        ul {
+        }
+        .payments {
+          display: flex;
+          gap: vw(15px);
+          margin-bottom: vw(30px);
+          li {
+            width: vw(190px);
+            height: vw(120px);
+            border-radius: vw(6px);
+            border: 0.8px solid $greyscale-600;
+            position: relative;
+            font-size: vw(36px);
+            text-align: center;
+            &:first-child {
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              align-items: center;
+              gap: vw(2px);
+            }
+            span {
+              display: block;
+              @include font-14px-M;
+            }
+            img {
+              position: absolute;
+              top: 50%;
+              left: 50%;
+              transform: translate(-50%, -50%);
+            }
+          }
+        }
+        .card-types {
+          display: flex;
+          margin-bottom: vw(10px);
+          align-items: center;
+          ul {
+            width: vw(338px);
+            height: vw(52px);
+            border-radius: vw(6px);
+            border: 0.8px solid $greyscale-600;
+          }
+        }
+        .installment {
+          display: flex;
+          align-items: center;
+          ul {
+            width: vw(170px);
+            height: vw(52px);
+            border-radius: vw(6px);
+            border: 0.8px solid $greyscale-600;
+          }
+        }
+        .pay-default {
+          margin-top: vw(30px);
+          span {
             width: vw(12px);
             height: vw(12px);
             display: inline-block;
-            border: 1px solid $default;
             margin-right: vw(15px);
+            border: 1px solid $default;
+          }
+          p {
+            display: inline-block;
+          }
         }
+      }
     }
-    button {
-        width: vw(395px);
-        height: vw(52px);
-        background-color: $orange;
-        color: $white;
+  }
+}
+
+.payment-right {
+  border: vw(0.5px) solid $greyscale-600;
+  border-radius: vw(10px);
+  box-sizing: border-box;
+  padding: vw(50px) vw(30px);
+  width: vw(455px);
+  height: vw(660px);
+  .res-title {
+    display: flex;
+    gap: vw(25px);
+    align-items: center;
+    margin-bottom: vw(45px);
+    .ht-img {
+      width: vw(110px);
+      height: vw(100px);
+      border-radius: vw(4px);
+      overflow: hidden;
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+    .text {
+      span {
+        display: block;
+        &:nth-child(1) {
+          @include font-14px;
+          color: $greyscale-1000;
+        }
+        &:nth-child(2) {
+          @include font-20px-M;
+        }
+        &:nth-child(3) {
+          @include font-16px;
+        }
+      }
+    }
+  }
+  .res-prices {
+    box-sizing: border-box;
+    padding: vw(28px) vw(22px);
+    background-color: $greyscale-200;
+    border-radius: vw(15px);
+    display: flex;
+    flex-direction: column;
+    gap: vw(25px);
+    height: vw(281px);
+    .price {
+      display: flex;
+      flex-direction: column;
+      gap: vw(6px);
+      li {
         display: flex;
-        justify-content: center;
-        align-items: center;
-        border-radius: vw(8px);
-        @include font-20px-M;
-        border: none;
-        &:hover {
-            background-color: $foundation-orange-normalhover;
+        justify-content: space-between;
+        &:first-child {
+          b {
+            @include font-18px-M;
+          }
         }
+        span {
+          @include font-14px;
+          color: $greyscale-1000;
+        }
+      }
     }
+    p {
+      display: flex;
+      justify-content: space-between;
+      position: relative;
+      margin-top: vw(16px);
+      &::before {
+        content: "";
+        width: vw(351px);
+        height: vw(1px);
+        background-color: $greyscale-600;
+        position: absolute;
+        top: vw(-60px);
+      }
+      strong {
+        @include font-20px-M;
+      }
+    }
+  }
+  .assent {
+    @include font-16px;
+    margin-top: vw(25px);
+    margin-bottom: vw(25px);
+    span {
+      width: vw(12px);
+      height: vw(12px);
+      display: inline-block;
+      border: 1px solid $default;
+      margin-right: vw(15px);
+    }
+  }
+  button {
+    width: vw(395px);
+    height: vw(52px);
+    background-color: $orange;
+    color: $white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: vw(8px);
+    @include font-20px-M;
+    border: none;
+    &:hover {
+      background-color: $foundation-orange-normalhover;
+    }
+  }
 }
 
 .hotel-pay-completed {
-    .inner {
-        display: flex;
-    }
+  .inner {
+    display: flex;
+  }
 }
 
 .detail-right {
-    width: vw(455px);
-    height: vw(477px);
-    .detail-side {
-        width: 100%;
-        height: vw(460px);
-        border-radius: vw(15px);
-        background-color: grey;
-        padding: vw(40px) vw(30px);
-        border: 1px solid $greyscale-500;
-        background-color: $white;
-        position: sticky;
-        top: vw(30px);
-        .per-day {
-            @include font-20px-M;
-            margin-bottom: vw(24px);
-            span {
-                @include font-16px;
-                color: $greyscale-900;
-            }
-        }
-        .box {
-            &-thum {
-                width: vw(60px);
-                height: vw(55px);
-                background-color: red;
-                img {
-                }
-            }
-            &-head {
-                display: flex;
-                gap: vw(25px);
-                margin-bottom: vw(24px);
-                strong {
-                    @include font-20px-M;
-                }
-                .box-thum {
-                    width: vw(60px);
-                    height: vw(55px);
-                    overflow: hidden;
-                    border-radius: vw(4px);
-                    img {
-                        width: 100%;
-                        height: 100%;
-                        object-fit: cover;
-                    }
-                }
-                .box-select {
-                    strong {
-                        display: block;
-                    }
-                    .party {
-                        color: $greyscale-900;
-                        margin-top: vw(4px);
-                        display: block;
-                    }
-                }
-            }
-
-            &-option {
-                height: vw(190px);
-                margin-bottom: vw(10px);
-                background-color: #f5f5f5;
-
-                border-radius: vw(15px);
-                padding: vw(22px);
-                display: flex;
-                flex-direction: column;
-                justify-content: space-between;
-                // .people,
-                // .peop-wrap,
-                // .total-wrap {
-                //     display: flex;
-                //     justify-content: space-between;
-                // }
-                // .people {
-                //     .peop-wrap {
-                //         width: vw(150px);
-                //         .type {
-                //         }
-                //         .price {
-                //         }
-                //     }
-                //     .step {
-                //         .button {
-                //             background-color: transparent;
-                //             &.minus {
-                //             }
-                //             &.plus {
-                //             }
-                //         }
-                //     }
-                // }
-                // .total-wrap {
-                //     padding: vw(15px) 0;
-                //     strong {
-                //         @include font-20px-B;
-                //     }
-                //     em {
-                //         @include font-24px;
-                //     }
-                // }
-                .res-prices {
-                    .total {
-                        color: $greyscale-900;
-                        display: flex;
-                        flex-direction: column;
-                        gap: vw(5px);
-                        li {
-                            display: flex;
-                            justify-content: space-between;
-                        }
-                    }
-                    .total-wrap {
-                        display: flex;
-                        justify-content: space-between;
-                        margin-top: vw(35px);
-                        position: relative;
-                        &::before {
-                            content: '';
-                            display: block;
-                            background-color: $greyscale-600;
-                            width: vw(350px);
-                            height: vw(1px);
-                            position: absolute;
-                            top: vw(-80px);
-                        }
-                        strong {
-                        }
-                        em {
-                            @include font-24px;
-                        }
-                    }
-                }
-            }
-        }
-        .btn-wrap {
-            button {
-                margin-top: vw(20px);
-                @include font-20px;
-                height: vw(52px);
-                &.reserve {
-                    width: 100%;
-                    border-radius: vw(8px);
-                }
-            }
-        }
+  width: vw(455px);
+  height: vw(477px);
+  .detail-side {
+    width: 100%;
+    height: vw(460px);
+    border-radius: vw(15px);
+    background-color: grey;
+    padding: vw(40px) vw(30px);
+    border: 1px solid $greyscale-500;
+    background-color: $white;
+    position: sticky;
+    top: vw(30px);
+    .per-day {
+      @include font-20px-M;
+      margin-bottom: vw(24px);
+      span {
+        @include font-16px;
+        color: $greyscale-900;
+      }
     }
+    .box {
+      &-thum {
+        width: vw(60px);
+        height: vw(55px);
+        background-color: red;
+        img {
+        }
+      }
+      &-head {
+        display: flex;
+        gap: vw(25px);
+        margin-bottom: vw(24px);
+        strong {
+          @include font-20px-M;
+        }
+        .box-thum {
+          width: vw(60px);
+          height: vw(55px);
+          overflow: hidden;
+          border-radius: vw(4px);
+          img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+          }
+        }
+        .box-select {
+          strong {
+            display: block;
+          }
+          .party {
+            color: $greyscale-900;
+            margin-top: vw(4px);
+            display: block;
+          }
+        }
+      }
+
+      &-option {
+        height: vw(190px);
+        margin-bottom: vw(10px);
+        background-color: #f5f5f5;
+
+        border-radius: vw(15px);
+        padding: vw(22px);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        // .people,
+        // .peop-wrap,
+        // .total-wrap {
+        //     display: flex;
+        //     justify-content: space-between;
+        // }
+        // .people {
+        //     .peop-wrap {
+        //         width: vw(150px);
+        //         .type {
+        //         }
+        //         .price {
+        //         }
+        //     }
+        //     .step {
+        //         .button {
+        //             background-color: transparent;
+        //             &.minus {
+        //             }
+        //             &.plus {
+        //             }
+        //         }
+        //     }
+        // }
+        // .total-wrap {
+        //     padding: vw(15px) 0;
+        //     strong {
+        //         @include font-20px-B;
+        //     }
+        //     em {
+        //         @include font-24px;
+        //     }
+        // }
+        .res-prices {
+          .total {
+            color: $greyscale-900;
+            display: flex;
+            flex-direction: column;
+            gap: vw(5px);
+            li {
+              display: flex;
+              justify-content: space-between;
+            }
+          }
+          .total-wrap {
+            display: flex;
+            justify-content: space-between;
+            margin-top: vw(35px);
+            position: relative;
+            &::before {
+              content: "";
+              display: block;
+              background-color: $greyscale-600;
+              width: vw(350px);
+              height: vw(1px);
+              position: absolute;
+              top: vw(-80px);
+            }
+            strong {
+            }
+            em {
+              @include font-24px;
+            }
+          }
+        }
+      }
+    }
+    .btn-wrap {
+      button {
+        margin-top: vw(20px);
+        @include font-20px;
+        height: vw(52px);
+        &.reserve {
+          width: 100%;
+          border-radius: vw(8px);
+        }
+      }
+    }
+  }
 }

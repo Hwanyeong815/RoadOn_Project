@@ -1,21 +1,31 @@
 @use '../../../styles/utils/' as *;
 
 .tab-button {
+    &-wrap,
+    &-wrap2 {
+        margin-top: vw(50px);
+    }
     min-width: vw(180px);
     height: vw(50px);
-
     box-sizing: border-box;
     @include font-20px-M;
+    @include circle;
     margin-right: vw(30px);
-    background-color: $greyscale-200;
+    background-color: $white;
+    transition: 0.3s ease;
+    border: 1px solid $mint;
+
     &:hover {
-        background-color: $greyscale-400;
+        background-color: $mint;
+        color: $white;
     }
     &:last-child {
         margin-right: 0;
     }
     &.g {
         @include font-20px-B;
+        background-color: $mint;
+        color: $white;
     }
     &-2 {
         @include font-16px-B;
@@ -28,25 +38,23 @@
         &:not(:last-child) {
             margin-right: vw(15px);
         }
-        &::after {
-            position: absolute;
-            content: '';
-            background-color: $greyscale-1100;
-            width: 0%;
-            height: vw(2px);
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            transition: 0.3s;
-        }
+
         &.on {
+            color: $mint;
             &::after {
+                position: absolute;
+                content: '';
+                background-color: $greyscale-1100;
                 width: 100%;
+                height: vw(2px);
+                bottom: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                transition: 0.3s;
             }
         }
         &:hover {
-            background-color: $greyscale-200;
-
+            color: $mint;
             &::after {
                 width: 100%;
             }

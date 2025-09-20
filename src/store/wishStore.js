@@ -6,7 +6,7 @@ import packagesData from '../api/packagesData';
 
 const STORAGE_KEY = 'app:wishlist_v1';
 
-// --- 개발용 샘플(시드) 데이터: 국내숙소, 해외숙소, 항공, 패키지, 투어 ---
+// --- 개발용 샘플 데이터 ---
 const SAMPLE_ITEMS = [
     {
         uid: 'hotel-2',
@@ -30,33 +30,11 @@ const SAMPLE_ITEMS = [
             slug: 'mandarin-oriental-bangkok',
         },
     },
-    {
-        uid: 'flight-3',
-        type: 'flight',
-        id: 3,
-        data: {
-            airline: '대한항공',
-            flightNo: 'KE5182',
-            departure: '김포',
-            arrival: '창이(싱가포르)',
-            price: 151468,
-        },
-    },
-    {
-        uid: 'package-hometown-chachacha-tour',
-        type: 'package',
-        id: 'hometown-chachacha-tour',
-        data: {
-            title: '갯마을 차차차 촬영지 성지순례 패키지',
-            duration: '2박 3일',
-            adult_fee: 390000,
-        },
-    },
-    // 추가: tour 타입 예시
+
     {
         uid: 'tour-younskitchen2-tenerife',
         type: 'tour',
-        id: 'younskitchen2-tenerife',
+        id: 'younskitchen2-tenerife', // slug 기반 id
         data: {
             title: '윤식당 스페인 투어',
             subtitle: '스페인 가라치코 3박 4일',
@@ -72,9 +50,8 @@ const loadFromStorage = () => {
     try {
         const raw = localStorage.getItem(STORAGE_KEY);
         if (!raw) {
-            // **개발용 시드 반환** — 운영 시에는 빈 배열([])로 바꾸세요.
             return SAMPLE_ITEMS.map((it) => {
-                const uid = it.uid || `${it.type}-${it.id}`;
+                const uid = it.uid || `${it.type}-${it.id ?? it.slug}`;
                 return { ...it, uid };
             });
         }
@@ -93,7 +70,6 @@ const saveToStorage = (items) => {
     }
 };
 
-// helper: find functions (support id number or slug string)
 const findHotel = (idOrSlug) => {
     if (idOrSlug == null) return null;
     const asNum = Number(idOrSlug);
@@ -123,7 +99,6 @@ const findPackage = (idOrSlug) => {
     return packagesData.find((p) => p.slug === idOrSlug || String(p.id) === String(idOrSlug));
 };
 
-// hydrate: items -> itemsDetailed (data merged)
 const hydrateItemsDetailed = (items) => {
     return items.map((it) => {
         const type = (it.type || '').toString().toLowerCase();
@@ -132,51 +107,45 @@ const hydrateItemsDetailed = (items) => {
         try {
             if (!data) {
                 if (type === 'hotel') {
-                    data = findHotel(it.id) || null;
+                    data = findHotel(it.id ?? it.slug) || null;
                 } else if (type === 'flight' || type === 'air' || type === 'airport') {
-                    data = findFlight(it.id) || null;
+                    data = findFlight(it.id ?? it.slug) || null;
                 } else if (type === 'package' || type === 'tour') {
-                    data = findPackage(it.id) || null;
+                    data = findPackage(it.id ?? it.slug) || null;
                 }
             }
         } catch (e) {
             console.warn('hydrateItemsDetailed error for item', it, e);
         }
 
-        const uid = it.uid || `${type}-${it.id}`;
+        const uid = it.uid || `${type}-${it.id ?? it.slug}`;
         return { ...it, uid, type, data };
     });
 };
 
 const useWishStore = create((set, get) => {
-    // 초기 items 로드 (raw)
     const initialItems = loadFromStorage();
-    // 초기 detailed 계산
     const initialItemsDetailed = hydrateItemsDetailed(initialItems);
 
     return {
-        // persisted items
         items: initialItems,
-        // hydrated convenience list
         itemsDetailed: initialItemsDetailed,
 
-        // --- 추가: 원본 데이터 레퍼런스 (UI에서 바로 참조 가능하도록) ---
         hotels: hotelsListData,
         airports: airportListData,
         packages: packagesData,
 
-        // --- 편의 조회 함수 (읽기 전용, 상태 변경 없음) ---
         getHotelById: (idOrSlug) => findHotel(idOrSlug),
         getAirportById: (id) => findFlight(id),
         getPackageById: (idOrSlug) => findPackage(idOrSlug),
 
-        // actions
         add: (item) => {
             const type = (item.type || '').toString().toLowerCase();
-            const id = item.id;
+            const id = item.id ?? item.slug;
             const uid = item.uid || `${type}-${id}`;
             const exists = get().items.some(
-                (it) => it.uid === uid || (it.type === type && String(it.id) === String(id))
+                (it) =>
+                    it.uid === uid || (it.type === type && String(it.id ?? it.slug) === String(id))
             );
             if (exists) return;
             const next = [...get().items, { uid, type, id, data: item.data ?? null }];
@@ -184,11 +153,13 @@ const useWishStore = create((set, get) => {
             saveToStorage(next);
         },
 
-        remove: (type, id) => {
+        remove: (type, idOrSlug) => {
             const t = (type || '').toString().toLowerCase();
+            const id = idOrSlug;
             const uid = `${t}-${id}`;
             const next = get().items.filter(
-                (it) => it.uid !== uid && !(it.type === t && String(it.id) === String(id))
+                (it) =>
+                    it.uid !== uid && !(it.type === t && String(it.id ?? it.slug) === String(id))
             );
             set({ items: next, itemsDetailed: hydrateItemsDetailed(next) });
             saveToStorage(next);
@@ -196,14 +167,19 @@ const useWishStore = create((set, get) => {
 
         toggle: (item) => {
             const type = (item.type || '').toString().toLowerCase();
-            const id = item.id;
+            const id = item.id ?? item.slug;
             const uid = item.uid || `${type}-${id}`;
             const exists = get().items.some(
-                (it) => it.uid === uid || (it.type === type && String(it.id) === String(id))
+                (it) =>
+                    it.uid === uid || (it.type === type && String(it.id ?? it.slug) === String(id))
             );
             if (exists) {
                 const next = get().items.filter(
-                    (it) => !(it.uid === uid || (it.type === type && String(it.id) === String(id)))
+                    (it) =>
+                        !(
+                            it.uid === uid ||
+                            (it.type === type && String(it.id ?? it.slug) === String(id))
+                        )
                 );
                 set({ items: next, itemsDetailed: hydrateItemsDetailed(next) });
                 saveToStorage(next);
@@ -214,32 +190,14 @@ const useWishStore = create((set, get) => {
             }
         },
 
-        isSaved: (type, id) => {
+        isSaved: (type, idOrSlug) => {
             const t = (type || '').toString().toLowerCase();
+            const id = idOrSlug;
             return get().items.some(
-                (it) => (it.type === t && String(it.id) === String(id)) || it.uid === `${t}-${id}`
+                (it) =>
+                    (it.type === t && String(it.id ?? it.slug) === String(id)) ||
+                    it.uid === `${t}-${id}`
             );
-        },
-
-        clearAll: () => {
-            set({ items: [], itemsDetailed: [] });
-            saveToStorage([]);
-        },
-
-        resetToSeed: () => {
-            const seed = SAMPLE_ITEMS.map((it) => {
-                const uid = it.uid || `${it.type}-${it.id}`;
-                const type = (it.type || '').toString().toLowerCase();
-                return { ...it, uid, type };
-            });
-            set({ items: seed, itemsDetailed: hydrateItemsDetailed(seed) });
-            saveToStorage(seed);
-        },
-
-        // 수동으로 외부에서 hydrate/refresh 하고 싶을 때 호출 가능
-        refreshDetailed: () => {
-            const cur = get().items || [];
-            set({ itemsDetailed: hydrateItemsDetailed(cur) });
         },
     };
 });

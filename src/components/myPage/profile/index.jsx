@@ -1,12 +1,15 @@
 // src/components/myPage/profile.jsx
 import './style.scss';
 import { IoIosArrowForward } from 'react-icons/io';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import useAuthStore from '../../../store/authStore';
+import useRewardStore from '../../../store/rewardStore';
 
 const Profile = ({ activeSection = null, onNavigate = () => {} }) => {
     const navigate = useNavigate();
+    const location = useLocation();
     const currentUser = useAuthStore((s) => s.currentUser);
+    const { getCoupons, getPoints } = useRewardStore();
 
     const handleKey = (e, target, opts = {}) => {
         if (e.key === 'Enter' || e.key === ' ') {
@@ -23,12 +26,10 @@ const Profile = ({ activeSection = null, onNavigate = () => {} }) => {
         }
     };
 
-    // 변경: /mypage/editProfile 로 SPA 네비게이션
     const goEditProfile = () => {
         if (currentUser) {
-            navigate('/editProfile'); // 최종: /editProfile 로 이동
+            navigate('/editProfile');
         } else {
-            // SPA 방식으로 로그인 후 되돌아올 수 있게 state 전달
             navigate('/login', { state: { from: location } });
         }
     };
@@ -42,8 +43,17 @@ const Profile = ({ activeSection = null, onNavigate = () => {} }) => {
 
     const displayName = currentUser?.nameKo || currentUser?.username || '게스트';
     const avatarSrc = currentUser?.avatar || 'images/myPage/profile-img.png';
-    const couponCount = currentUser?.couponCount ?? 0;
-    const points = currentUser?.points ?? 0;
+
+    // ✅ 쿠폰/포인트 연동
+    const couponCount = currentUser
+        ? getCoupons(currentUser.id).filter((c) => !c.disabled).length
+        : 0;
+
+    const userPoints = currentUser ? getPoints(currentUser.id) : { items: [] };
+    const points = userPoints.items
+        ? userPoints.items.reduce((sum, it) => sum + (Number(it.amount) || 0), 0)
+        : 0;
+
     const gradeLabel = currentUser?.grade ?? 'Guest';
     const gradeInitial = (gradeLabel && String(gradeLabel)[0]) || 'G';
 
@@ -201,18 +211,12 @@ const Profile = ({ activeSection = null, onNavigate = () => {} }) => {
                             찜 목록
                         </p>
 
-                        {/* /mypage/editProfile 로 이동 */}
                         <p
                             className="menu-item none-line"
                             role="button"
                             tabIndex={0}
                             onClick={goEditProfile}
-                            onKeyDown={(e) => {
-                                if (e.key === 'Enter' || e.key === ' ') {
-                                    e.preventDefault();
-                                    goEditProfile();
-                                }
-                            }}
+                            onKeyDown={handleKeyEditProfile}
                         >
                             회원 정보 변경
                         </p>
