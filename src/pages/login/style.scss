@@ -100,7 +100,7 @@
             &.phoneAuth {
                 button {
                     @include font-24px;
-                    min-width: vw(220px);
+                    min-width: vw(250px);
                     height: vw(52px);
                     border-radius: vw(10px);
                     color: $white;
@@ -116,8 +116,7 @@
                     white-space: nowrap;
                 }
                 button {
-                    color: $greyscale-1000;
-                    background-color: $greyscale-700;
+                    background-color: $greyscale-900;
                 }
             }
 
@@ -125,7 +124,7 @@
                 align-items: flex-start;
 
                 button {
-                    background-color: $mint;
+                    background-color: $foundation-mint-normalactive;
                 }
             }
 
@@ -205,7 +204,6 @@
 
             button {
                 @include font-20px;
-                line-height: 0.5;
 
                 &.back {
                     color: $greyscale-1000;
@@ -221,7 +219,6 @@
         margin-top: vw(6px);
         font-size: vw(12px);
         line-height: 1.4;
-        color: $red;
 
         &.error {
             color: $red;
@@ -289,6 +286,235 @@
 
             &:not(:last-child) {
                 border-right: vw(1px) solid #ccc;
+            }
+        }
+    }
+}
+
+#login {
+    background-color: #333;
+    position: relative;
+    height: vw(1480px);
+    padding: 200px;
+    &::before,
+    &::after {
+        content: '';
+        position: absolute;
+        inset: 0; /* top:0; right:0; bottom:0; left:0 */
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        transition: opacity 420ms ease;
+        z-index: 0;
+        pointer-events: none;
+    }
+
+    &::before {
+        background-image: var(--bg-left);
+        opacity: 1;
+    }
+
+    /* right image (hidden by default) */
+    &::after {
+        background-image: var(--bg-right);
+        opacity: 0;
+    }
+
+    /* when register mode -> fade to right image */
+    &.is-register {
+        &::before {
+            opacity: 0;
+        }
+        &::after {
+            opacity: 1;
+        }
+    }
+
+    /* ensure inner content sits above backgrounds */
+    .inner,
+    .login-wrap,
+    .login-wrap .login-group {
+        position: relative;
+        z-index: 2; /* content above background pseudo elements */
+    }
+
+    .login {
+        &-wrap {
+            position: relative;
+            width: vw(1200px);
+            height: vw(590px);
+            display: flex; // 좌우 2분할
+            flex-direction: row;
+            align-items: center;
+            border-radius: vw(20px);
+            overflow: hidden;
+
+            /* 슬라이더(흰 카드) — 패널 뒤 (z-index:0) */
+            .slider {
+                position: absolute;
+                inset: 0 auto 0 0; // top:0; left:0; height:100%
+                width: calc(50% - 1px);
+                height: 100%;
+                background: #fff;
+                border-radius: vw(20px);
+                box-shadow: 0 vw(8px) vw(24px) rgba(0, 0, 0, 0.16);
+                transition: transform 0.55s cubic-bezier(0.2, 0.8, 0.2, 1);
+                z-index: 0; // ★ 뒤로
+                pointer-events: none;
+            }
+
+            &.is-login {
+                .slider {
+                    transform: translateX(0%);
+                }
+            }
+            &.is-register {
+                .slider {
+                    transform: translateX(100%);
+                }
+            }
+        }
+
+        &-group {
+            position: relative;
+            z-index: 1; // ★ 패널을 앞으로
+            flex: 0 0 50%;
+            width: 50%;
+            height: vw(530px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: vw(20px);
+            align-items: center;
+            background-color: rgba($white, 0.5);
+
+            /* 기본 숨김 요소 */
+            .login-group-title {
+                display: none;
+                @include font-28px-EB;
+            }
+            .login-group-subtitle {
+                display: block;
+            }
+
+            .login-sns-icons {
+                &-wrap {
+                    cursor: pointer;
+                    display: none;
+                    gap: vw(20px);
+                }
+                &-item {
+                    width: vw(50px);
+                    height: vw(50px);
+                    position: relative;
+                    background-color: $greyscale-200;
+                    @include circle;
+                    img {
+                        position: absolute;
+                        left: 50%;
+                        top: 50%;
+
+                        transform: translate(-50%, -50%);
+                    }
+                }
+            }
+
+            &.left {
+                padding: vw(90px) vw(50px);
+                border-radius: vw(20px) 0 0 vw(20px);
+
+                .login-group-form input {
+                    display: none;
+                }
+                .button-login {
+                    border: 1px solid $greyscale-400;
+                    background: transparent;
+                    color: $white;
+                    width: vw(380px);
+                    margin: auto;
+                }
+                .login-group-find {
+                    display: none;
+                }
+            }
+
+            &.right {
+                padding: vw(90px) 0;
+                border-radius: 0 vw(20px) vw(20px) 0;
+
+                .button-login {
+                    border: 1px solid $greyscale-400;
+                    background: transparent;
+                    color: $white;
+                    width: vw(380px);
+                }
+            }
+
+            /* 활성 상태 공통 */
+            &.on {
+                border-radius: vw(20px);
+
+                .login-sns-icons-wrap {
+                    display: flex;
+                }
+                .login-group-subtitle {
+                    display: none;
+                }
+                &.left {
+                    .login-group-title {
+                        display: block;
+                    }
+                    .login-group-form input {
+                        display: block;
+                    }
+                    .login-group-find {
+                        display: block;
+                    }
+                    .button-login {
+                        background: $mint;
+                        border: none;
+                        color: #fff;
+                    }
+                }
+
+                &.right {
+                    justify-content: start;
+                    gap: vw(30px);
+                    .login-group-title {
+                        display: block;
+                    }
+                    .button-login {
+                        background: $orange;
+                        border: none;
+                        color: #fff;
+                    }
+                    .login-sns-icons-wrap {
+                        margin-top: vw(30px);
+                    }
+                }
+            }
+
+            &-form {
+                width: vw(520px);
+                max-width: 100%;
+                margin: 0 auto;
+                display: flex;
+                flex-direction: column;
+                gap: vw(14px);
+
+                input {
+                    height: vw(50px);
+                    padding: 0 vw(16px);
+                    border: 1px solid $greyscale-400;
+                    border-radius: vw(8px);
+                }
+            }
+
+            .button-login {
+                width: 100%;
+                height: vw(50px);
+                border-radius: vw(25px);
+                font-weight: 700;
             }
         }
     }

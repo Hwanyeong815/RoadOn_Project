@@ -1,163 +1,160 @@
 // src/pages/Login.jsx
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import './style.scss';
-import { Link, useNavigate } from 'react-router-dom';
-import useAuthStore from '../../store/authStore'; // 경로 프로젝트에 맞게 조정
+import { useNavigate } from 'react-router-dom';
+import useAuthStore from '../../store/authStore';
 
 const Login = () => {
-    const [mode, setMode] = useState('login'); // 'login' 또는 'register'
-    const [identifier, setIdentifier] = useState(''); // 아이디 또는 이메일
+    const [mode, setMode] = useState('login'); // 'login' | 'register'
+    const [identifier, setIdentifier] = useState('');
     const [password, setPassword] = useState('');
-    const [error, setError] = useState(null);
+    const [err, setErr] = useState('');
     const [loading, setLoading] = useState(false);
 
     const validate = useAuthStore((s) => s.validateCredentials);
     const setCurrent = useAuthStore((s) => s.setCurrent);
-
     const navigate = useNavigate();
 
-    const handleLogin = (e) => {
-        e.preventDefault();
-        setError(null);
+    // form ref so we can trigger submit programmatically
+    const formRef = useRef(null);
 
-        if (!identifier.trim()) {
-            setError('아이디(또는 이메일)를 입력하세요.');
-            return;
-        }
-        if (!password) {
-            setError('비밀번호를 입력하세요.');
-            return;
-        }
+    const handleSubmit = async (e) => {
+        if (e && e.preventDefault) e.preventDefault();
+        setErr('');
+        if (!identifier.trim()) return setErr('아이디(또는 이메일)를 입력하세요.');
+        if (!password) return setErr('비밀번호를 입력하세요.');
 
         setLoading(true);
         try {
-            // validateCredentials는 store에서 동기적으로 검사하도록 구현되어 있음 (테스트 모드)
             const user = validate(identifier, password);
-            if (!user) {
-                setError('계정이 없거나 비밀번호가 일치하지 않습니다.');
-                setLoading(false);
-                return;
-            }
-            // 로그인 성공: 현재 사용자로 설정하고 마이페이지로 이동
+            if (!user) return setErr('계정이 없거나 비밀번호가 일치하지 않습니다.');
             setCurrent(user);
             navigate('/mypage');
-        } catch (err) {
-            console.error(err);
-            setError('로그인 중 오류가 발생했습니다.');
+        } catch {
+            setErr('로그인 중 오류가 발생했습니다.');
         } finally {
             setLoading(false);
         }
     };
 
+    // 오른쪽 버튼: 1번 클릭 → 슬라이드, 2번 클릭 → /join 이동
+    const handleGoRegister = () => {
+        if (mode !== 'register') {
+            setMode('register');
+            return;
+        }
+        navigate('/join');
+    };
+
+    // 왼쪽 버튼: 첫 클릭이면 패널 활성화, 활성 상태면 폼 submit
+    const handleLoginButton = () => {
+        if (mode !== 'login') {
+            setMode('login');
+            return;
+        }
+        // active 상태면 폼 제출 (requestSubmit 지원 브라우저 대상)
+        formRef.current?.requestSubmit?.() ??
+            formRef.current?.dispatchEvent(new Event('submit', { cancelable: true }));
+    };
+    const bgVars = {
+        '--bg-left': `url('/images/login/bg-left.png')`,
+        '--bg-right': `url('/images/login/bg-right.png')`,
+    };
     return (
-        <div id="loginStyle">
-            <p></p>
-            <div className="veen">
-                {/* 로그인 버튼 */}
-                <div className="login-btn splits">
-                    <button
-                        className={mode === 'login' ? 'active' : ''}
-                        onClick={() => setMode('login')}
-                        type="button"
+        <div id="login" className={mode === 'register' ? 'is-register' : 'is-login'} style={bgVars}>
+            <div className="inner">
+                <div className={`login-wrap ${mode === 'register' ? 'is-register' : 'is-login'}`}>
+                    {/* 슬라이더(흰 카드) */}
+                    <div className="slider" aria-hidden="true" />
+
+                    {/* 왼쪽: 로그인 */}
+                    <div
+                        className={`login-group left ${mode === 'login' ? 'on' : ''}`}
+                        aria-live="polite"
                     >
-                        로그인
-                    </button>
-                </div>
+                        <h2 className="login-group-title">회원 로그인</h2>
+                        <h2 className="login-group-subtitle">계정이 있으신가요?</h2>
 
-                {/* 회원가입 버튼 */}
-                <div className="rgstr-btn splits">
-                    <button
-                        className={mode === 'register' ? 'active' : ''}
-                        onClick={() => setMode('register')}
-                        type="button"
-                    >
-                        회원가입
-                    </button>
-                </div>
-
-                {/* 로그인 / 회원가입 폼 */}
-                <div className={`wrapper ${mode === 'register' ? 'move' : ''}`}>
-                    {/* 로그인 */}
-                    <form id="login" onSubmit={handleLogin}>
-                        <h3>회원 로그인</h3>
-
-                        <div className="mail">
+                        <form
+                            className="login-group-form"
+                            onSubmit={handleSubmit}
+                            ref={formRef}
+                            aria-disabled={mode !== 'login'}
+                        >
                             <input
                                 type="text"
-                                required
+                                className="id"
+                                placeholder="아이디 또는 이메일"
                                 value={identifier}
                                 onChange={(e) => setIdentifier(e.target.value)}
-                                placeholder="hong@example.com"
-                                aria-label="아이디 또는 이메일"
+                                autoComplete="username"
+                                disabled={mode !== 'login'}
+                                aria-disabled={mode !== 'login'}
                             />
-                            <label>아이디 또는 이메일</label>
-                        </div>
-
-                        <div className="passwd">
                             <input
                                 type="password"
-                                required
+                                className="password"
+                                placeholder="비밀번호"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                placeholder="password123"
-                                aria-label="비밀번호"
+                                autoComplete="current-password"
+                                disabled={mode !== 'login'}
+                                aria-disabled={mode !== 'login'}
                             />
-                            <label>비밀번호</label>
-                        </div>
 
-                        {/* 에러 메시지 */}
-                        {error && (
-                            <p className="error" style={{ color: '#d9534f' }}>
-                                {error}
-                            </p>
-                        )}
-
-                        <div className="submit">
-                            <button type="submit" className="dark" disabled={loading}>
-                                {loading ? '로딩...' : '로그인'}
+                            {/* 버튼은 항상 클릭 가능하지만 내부 로직이 처리함 */}
+                            <button
+                                className="button g middle button-login"
+                                type="button"
+                                onClick={handleLoginButton}
+                                aria-pressed={mode === 'login'}
+                            >
+                                {loading ? '로그인 중…' : '로그인'}
                             </button>
-                        </div>
+                        </form>
 
-                        <div className="lost">
-                            <p>아이디 찾기</p>
-                            <p>비밀번호 찾기</p>
-                        </div>
+                        {err && <p className="help-text error">{err}</p>}
 
-                        <div className="apps">
-                            <p>
-                                <img src="images/login/google.png" alt="google login" />
-                            </p>
-                            <p>
-                                <img src="images/login/kakao.png" alt="kakao login" />
-                            </p>
-                            <p>
-                                <img src="images/login/apple.png" alt="apple login" />
-                            </p>
-                        </div>
-                    </form>
+                        <div className="login-group-find">아이디 찾기 ｜ 비밀번호 찾기</div>
 
-                    {/* 회원가입 */}
-                    <form id="register" onSubmit={(e) => e.preventDefault()}>
-                        <h3>회원가입</h3>
-                        <div className="submit">
-                            <Link to="/join">
-                                <button type="button" className="dark">
-                                    통합회원가입 하기
-                                </button>
-                            </Link>
+                        <div className="login-sns-icons-wrap" aria-hidden={mode !== 'login'}>
+                            <div className="login-sns-icons-item">
+                                <img src="/images/icon/google.svg" alt="google" />
+                            </div>
+                            <div className="login-sns-icons-item">
+                                <img src="/images/icon/kakao.svg" alt="kakao" />
+                            </div>
+                            <div className="login-sns-icons-item">
+                                <img src="/images/icon/apple.svg" alt="apple" />
+                            </div>
                         </div>
-                        <div className="apps">
-                            <p>
-                                <img src="images/login/google.png" alt="google" />
-                            </p>
-                            <p>
-                                <img src="images/login/kakao.png" alt="kakao" />
-                            </p>
-                            <p>
-                                <img src="images/login/apple.png" alt="apple" />
-                            </p>
+                    </div>
+
+                    {/* 오른쪽: 회원가입 */}
+                    <div className={`login-group right ${mode === 'register' ? 'on' : ''}`}>
+                        <h2 className="login-group-title">회원 가입</h2>
+                        <h2 className="login-group-subtitle">계정이 없으신가요?</h2>
+
+                        <button
+                            className="button o large button-login"
+                            type="button"
+                            onClick={handleGoRegister}
+                        >
+                            통합회원가입 하기
+                        </button>
+
+                        <div className="login-sns-icons-wrap" aria-hidden={mode !== 'register'}>
+                            <div className="login-sns-icons-item">
+                                <img src="/images/icon/google.svg" alt="google" />
+                            </div>
+                            <div className="login-sns-icons-item">
+                                <img src="/images/icon/kakao.svg" alt="kakao" />
+                            </div>
+                            <div className="login-sns-icons-item">
+                                <img src="/images/icon/apple.svg" alt="apple" />
+                            </div>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
