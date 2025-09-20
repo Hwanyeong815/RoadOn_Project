@@ -124,7 +124,7 @@
                 align-items: flex-start;
 
                 button {
-                    background-color: $foundation-mint-normalactive;
+                    background-color: $mint;
                 }
             }
 
@@ -204,6 +204,7 @@
 
             button {
                 @include font-20px;
+                line-height: 0.5;
 
                 &.back {
                     color: $greyscale-1000;
