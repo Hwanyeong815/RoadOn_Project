@@ -73,7 +73,12 @@ const NavBar = () => {
                     <li>
                         {currentUser && (
                             // 로그아웃은 버튼으로 처리: onClick에서 store 정리 후 navigate
-                            <Link type="button" className="logout-button" onClick={handleLogout}>
+                            <Link
+                                to="/logout"
+                                type="button"
+                                className="logout-button"
+                                onClick={handleLogout}
+                            >
                                 로그아웃
                             </Link>
                         )}

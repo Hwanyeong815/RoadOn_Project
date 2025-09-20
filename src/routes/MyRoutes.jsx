@@ -22,20 +22,21 @@ import AirportDetail from '../components/airport/airportSearch/AirportDetail';
 import ScrollToTop from '../common/ScrollToTop';
 import EditProfile from '../components/login/editProfile';
 import TourPaymentLeft from '../components/payment/TourPaymentLeft';
+import Logout from '../components/logout';
 
 export const MyRoutes = () => {
     return (
         <BrowserRouter>
             <ScrollToTop />
             <Routes>
+                {/* 랜딩은 별도 경로 */}
                 <Route path="/landing" element={<Landing />} />
+
                 <Route element={<Layout />}>
                     <Route index element={<Home />} />
-                    <Route path="payment" element={<Payment />} />/
+                    <Route path="payment" element={<Payment />} />
                     {/*Route path="payment/completed" element={<PayCompleted />} />*/}
-                    {/*  */}
                     <Route path="payment/tour" element={<TourPaymentLeft />} />
-                    {/* 임시 */}
                     <Route path="hotels">
                         <Route index element={<Hotels />} />
                         <Route path="search" element={<HotelsSearch />} />
@@ -53,6 +54,8 @@ export const MyRoutes = () => {
                     <Route path="myPage" element={<MyPage />} />
                     <Route path="login" element={<Login />} />
                     <Route path="Join" element={<Join />} />
+                    <Route path="logout" element={<Logout />} />
+
                     <Route path="editProfile" element={<EditProfile />} />
                     <Route path="*" element={<NotFiles />} />
                 </Route>
