@@ -9,8 +9,6 @@ const Profile = ({ activeSection = null, onNavigate = () => {} }) => {
     const navigate = useNavigate();
     const location = useLocation();
     const currentUser = useAuthStore((s) => s.currentUser);
-
-    // ✅ reward store 연동
     const { getCoupons, getPoints } = useRewardStore();
 
     const handleKey = (e, target, opts = {}) => {

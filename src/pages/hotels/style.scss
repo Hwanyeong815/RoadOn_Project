@@ -236,6 +236,7 @@
                         }
                         .more-btn {
                             display: flex;
+                            justify-content: flex-end;
                             gap: vw(15px);
                             margin-top: vw(22px);
                             img {

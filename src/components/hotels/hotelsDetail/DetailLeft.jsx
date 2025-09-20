@@ -1,5 +1,6 @@
 import { BsTelephone } from 'react-icons/bs';
 import { MdOutlineEmail } from 'react-icons/md';
+import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import {
     Wifi,
     Breakfast,
@@ -16,6 +17,7 @@ import RoomOption from './RoomOption';
 import Policies from './Policies';
 import Location from './Location';
 import MiniReviewItem from './MiniReviewItem';
+import WishButton from '../../ui/wishbutton/WishButton';
 // import DetailBotReviewsItem from '../../tour/tourDetail/detailBottom/DetailBotReviewsItem';
 
 const DetailLeft = ({
@@ -61,7 +63,18 @@ const DetailLeft = ({
                     </div>
                     <div className="more-btn">
                         <img src="/images/icon/share.svg" alt="공유" />
-                        <img src="/images/icon/like.svg" alt="찜하기" />
+                        {/* <img src="/images/icon/like.svg" alt="찜하기" /> */}
+                        <div className="detail-heart">
+                            <div className="wish-overlay">
+                                <WishButton
+                                    type="hotel"
+                                    id={hotel.id}
+                                    data={hotel}
+                                    filledIcon={FaHeart} // 눌렀을 때 빨간 하트
+                                    emptyIcon={FaRegHeart} // 기본은 빈 하트
+                                />
+                            </div>
+                        </div>
                     </div>
                 </article>
                 <section className="detail-reviews" style={{ marginBottom: '20px' }}>

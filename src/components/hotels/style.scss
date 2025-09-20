@@ -29,7 +29,14 @@
             gap: vw(40px);
             padding: vw(20px) vw(24px);
             box-sizing: border-box;
+            box-shadow: 0 vw(2px) vw(6px) rgba(0, 0, 0, 0.05);
+            transition: 0.2s ease;
             cursor: pointer;
+
+            &:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 vw(6px) vw(14px) rgba(0, 0, 0, 0.1);
+            }
             .hotel-image {
                 width: vw(290px);
                 height: vw(240px);

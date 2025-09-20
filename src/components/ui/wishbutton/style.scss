@@ -1,8 +1,5 @@
 @use '../../../styles/utils/' as *;
 // src/components/ui/wishButton/style.scss
-// 임시 스타일 — 필요시 프로젝트 변수/토큰으로 교체하세요.
-
-/* Container when used as overlay inside a card */
 
 .wish-overlay {
     position: absolute;
@@ -20,39 +17,24 @@
         right: vw(8px);
     }
 }
-.airport-box {
-    position: relative;
-    .wish-overlay {
-        top: vw(8px);
-        left: vw(8px);
-    }
-}
-
 /* Button */
 .wish-button {
-    --size: 36px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: var(--size);
-    height: var(--size);
-    border-radius: 50%;
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    background-color: var(--wish-bg, rgba(255, 255, 255, 0.95));
-    color: var(--wish-color, #333);
-    font-size: 18px;
-    line-height: 1;
+    width: var(36px);
+    height: var(36px);
+    border-radius: vw(5px);
+    border: 1px solid $greyscale-1000;
+    font-size: rem(20px);
     cursor: pointer;
-    padding: 0;
-    transition: transform 120ms ease, box-shadow 120ms ease, background-color 120ms ease;
-    -webkit-tap-highlight-color: transparent;
-
-    /* 아이콘(텍스트) 가운데 정렬 */
+    // padding: 0;
+    padding: vw(5px);
+    transition: 120ms ease;
     text-align: center;
     user-select: none;
-
-    /* 작은 그림자 */
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+    background-color: $greyscale-400;
 
     &:hover {
         transform: scale(1.06);
@@ -64,26 +46,21 @@
 
     &:focus {
         outline: none;
-        box-shadow: 0 0 0 3px rgba(255, 165, 0, 0.18); /* focus ring — 색상 조정 */
+        box-shadow: 0 0 0 3px rgba(255, 165, 0, 0.18);
     }
 
     &.is-wished {
         background-color: var(--wish-active-bg, #fff0f0);
-        color: var(--wish-active-color, #ff4d4d);
+        color: $orange;
         border-color: rgba(255, 77, 77, 0.18);
     }
 
-    /* 이미지 대신 svg 사용 시 svg 사이즈 맞춤 */
-    svg {
-        width: 18px;
-        height: 18px;
-        display: block;
+    .not {
+        color: $white;
     }
 }
 
-/* 텍스트 기반 하트(대체) 형태일 때 약간 스타일 보정 */
 .wish-button.is-wished {
-    /* 강조 애니메이션 (간단) */
     animation: pop 220ms ease;
 }
 
@@ -101,7 +78,6 @@
     }
 }
 
-/* 반응형 축소 (카드가 작을 때) */
 @media (max-width: 480px) {
     .wish-button {
         --size: 30px;
@@ -118,11 +94,27 @@
     }
 }
 
-/* disabled 상태 (스토어 비활성 등) */
 .wish-button[disabled],
 .wish-button.is-disabled {
     opacity: 0.6;
     cursor: not-allowed;
     transform: none;
     box-shadow: none;
+}
+.detail-heart {
+    .wish-overlay {
+        position: relative;
+        height: vw(50px);
+        width: vw(50px);
+        .wish-button {
+            background-color: $greyscale-300;
+            width: 100%;
+            height: 100%;
+            @include circle;
+            border: none;
+            .not {
+                color: $greyscale-1000; // 어두운 테두리색
+            }
+        }
+    }
 }
