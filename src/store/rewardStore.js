@@ -1,15 +1,133 @@
 // src/store/rewardStore.js
 import { create } from 'zustand';
-import couponData from '../api/couponData';
 import pointData from '../api/pointData';
 
+/** 테스트용 쿠폰 풀 (API 미사용) */
+const TEST_COUPON_POOL = [
+    {
+        id: 1,
+        className: 'c-tour',
+        label: '투어쿠폰',
+        amount: 10000,
+        condition: '3만원 이상 투어 예약 시',
+        period: '2025-09-01 ~ 2025-09-10',
+        disabled: false,
+    },
+    {
+        id: 2,
+        className: 'c-tour',
+        label: '투어쿠폰',
+        amount: 15000,
+        condition: '5만원 이상 투어 결제 시',
+        period: '2025-09-05 ~ 2025-09-15',
+        disabled: true,
+    },
+    {
+        id: 3,
+        className: 'c-tour',
+        label: '투어쿠폰',
+        amount: 20000,
+        condition: '7만원 이상 투어 예약 시',
+        period: '2025-09-10 ~ 2025-09-20',
+        disabled: false,
+    },
+    {
+        id: 4,
+        className: 'c-tour',
+        label: '투어쿠폰',
+        amount: 30000,
+        condition: '10만원 이상 투어 결제 시',
+        period: '2025-09-12 ~ 2025-09-25',
+        disabled: false,
+    },
+    {
+        id: 5,
+        className: 'c-tour',
+        label: '투어쿠폰',
+        amount: 5000,
+        condition: '1만원 이상 투어 예약 시',
+        period: '2025-09-15 ~ 2025-09-30',
+        disabled: true,
+    },
+
+    {
+        id: 6,
+        className: 'c-hotel',
+        label: '숙소쿠폰',
+        amount: 20000,
+        condition: '7만원 이상 숙소 예약 시',
+        period: '2025-09-01 ~ 2025-09-12',
+        disabled: false,
+    },
+    {
+        id: 7,
+        className: 'c-hotel',
+        label: '숙소쿠폰',
+        amount: 30000,
+        condition: '10만원 이상 숙소 예약 시',
+        period: '2025-09-05 ~ 2025-09-20',
+        disabled: true,
+    },
+    {
+        id: 8,
+        className: 'c-hotel',
+        label: '숙소쿠폰',
+        amount: 40000,
+        condition: '15만원 이상 숙소 예약 시',
+        period: '2025-09-07 ~ 2025-09-25',
+        disabled: false,
+    },
+    {
+        id: 9,
+        className: 'c-hotel',
+        label: '숙소쿠폰',
+        amount: 50000,
+        condition: '20만원 이상 숙소 결제 시',
+        period: '2025-09-10 ~ 2025-09-30',
+        disabled: false,
+    },
+    {
+        id: 10,
+        className: 'c-hotel',
+        label: '숙소쿠폰',
+        amount: 10000,
+        condition: '2만원 이상 숙소 예약 시',
+        period: '2025-09-15 ~ 2025-09-28',
+        disabled: true,
+    },
+
+    {
+        id: 11,
+        className: 'c-tour',
+        label: '투어쿠폰',
+        amount: 25000,
+        condition: '9만원 이상 투어 결제 시',
+        period: '2025-09-18 ~ 2025-10-01',
+        disabled: false,
+    },
+    {
+        id: 12,
+        className: 'c-hotel',
+        label: '숙소쿠폰',
+        amount: 35000,
+        condition: '12만원 이상 숙소 예약 시',
+        period: '2025-09-20 ~ 2025-10-05',
+        disabled: true,
+    },
+];
+
+const STARTER_COUPONS = [
+    TEST_COUPON_POOL.find((c) => c.id === 1), // 투어 1만원
+    TEST_COUPON_POOL.find((c) => c.id === 6), // 숙소 2만원
+].filter(Boolean);
+
 const useRewardStore = create((set, get) => ({
+    /** 초기 상태: u_test_1 유저가 쿠폰 '약간' 보유한 상태로 시작 */
     rewardByUser: {
-        // 예시 기본 유저
         u_test_1: {
-            coupons: [...couponData],
+            coupons: [...STARTER_COUPONS], // ← 초기 보유 쿠폰 2장
             points: pointData, // { userName, items: [...] }
-            claimed: { welcomePack: false }, // ✅ 쿠폰팩 발급 여부
+            claimed: { welcomePack: false }, // 웰컴팩(5장) 수령 여부
         },
     },
 
@@ -38,7 +156,7 @@ const useRewardStore = create((set, get) => ({
             };
         }),
 
-    // ✅ 쿠폰팩(5장) 1회만 발급
+    /** 웰컴팩(기본 5장) 1회만 발급 */
     claimWelcomePack: (userId, count = 5) => {
         const state = get();
         const userReward = state.rewardByUser[userId] || {
@@ -47,22 +165,22 @@ const useRewardStore = create((set, get) => ({
             claimed: { welcomePack: false },
         };
 
-        // 이미 발급했다면 차단
         if (userReward.claimed?.welcomePack) {
             return { ok: false, reason: 'already-claimed' };
         }
 
-        // 이미 가진 쿠폰 제외하고 5장 뽑기 (기본은 앞에서부터)
         const ownedIds = new Set((userReward.coupons || []).map((c) => String(c.id)));
-        const candidates = couponData.filter((c) => !ownedIds.has(String(c.id)));
-        const pack = candidates.slice(0, count);
+        const candidates = TEST_COUPON_POOL.filter((c) => !ownedIds.has(String(c.id)));
+        const pack = candidates.slice(0, count).map((c) => ({
+            ...c,
+            note: 'WELCOME 기념 발급',
+            source: 'welcome',
+        }));
 
-        // 발급할 쿠폰이 없을 때
         if (!pack.length) {
             return { ok: false, reason: 'no-coupons-left' };
         }
 
-        // 적용
         set((prev) => {
             const prevUser = prev.rewardByUser[userId] || {
                 coupons: [],
@@ -104,7 +222,7 @@ const useRewardStore = create((set, get) => ({
             };
         }),
 
-    // ✅ 쿠폰 사용 → 포인트 적립 동시 처리
+    // 쿠폰 사용 → 포인트 적립
     useCouponAndAddPoints: (userId, coupon) =>
         set((state) => {
             const userReward = state.rewardByUser[userId];
@@ -127,6 +245,50 @@ const useRewardStore = create((set, get) => ({
                 rewardByUser: {
                     ...state.rewardByUser,
                     [userId]: { ...userReward, coupons, points },
+                },
+            };
+        }),
+
+    // --- 테스트/리셋용 ---
+    resetCoupons: (userId) =>
+        set((state) => {
+            const userReward = state.rewardByUser[userId];
+            if (!userReward) return {};
+            return {
+                rewardByUser: {
+                    ...state.rewardByUser,
+                    [userId]: { ...userReward, coupons: [] },
+                },
+            };
+        }),
+
+    resetWelcomePackClaim: (userId) =>
+        set((state) => {
+            const userReward = state.rewardByUser[userId];
+            if (!userReward) return {};
+            return {
+                rewardByUser: {
+                    ...state.rewardByUser,
+                    [userId]: {
+                        ...userReward,
+                        claimed: { ...(userReward.claimed || {}), welcomePack: false },
+                    },
+                },
+            };
+        }),
+
+    resetRewards: (userId) =>
+        set((state) => {
+            const userReward = state.rewardByUser[userId];
+            if (!userReward) return {};
+            return {
+                rewardByUser: {
+                    ...state.rewardByUser,
+                    [userId]: {
+                        ...userReward,
+                        coupons: [],
+                        claimed: { ...(userReward.claimed || {}), welcomePack: false },
+                    },
                 },
             };
         }),

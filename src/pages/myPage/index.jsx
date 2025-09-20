@@ -128,7 +128,9 @@ const MyPage = () => {
 
     return (
         <section id="myPage" ref={containerRef}>
-            <CouponButton />
+            <div className="coupon-wrap">
+                <CouponButton />
+            </div>
             <div className="inner">
                 <Profile activeSection={activeSection} onNavigate={onNavigate} />
 
