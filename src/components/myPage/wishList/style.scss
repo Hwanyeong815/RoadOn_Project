@@ -102,5 +102,10 @@
         }
     }
     .hotel-box {
+        &:hover {
+            transform: translateY(-5%);
+            transition: 0.2s;
+            box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.2);
+        }
     }
 }

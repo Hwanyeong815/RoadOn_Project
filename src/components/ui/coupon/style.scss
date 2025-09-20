@@ -81,3 +81,15 @@
         }
     }
 }
+
+.coupon-button-wrap {
+    margin: 20px 0;
+
+    .coupon-btn {
+        width: vw(180px);
+        height: vw(45px);
+        padding: 10px 16px;
+        cursor: pointer;
+        @include font-20px;
+    }
+}

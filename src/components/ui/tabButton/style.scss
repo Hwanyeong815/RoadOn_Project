@@ -1,8 +1,7 @@
 @use '../../../styles/utils/' as *;
 
 .tab-button {
-    &-wrap,
-    &-wrap2 {
+    &-wrap {
         margin-top: vw(50px);
     }
     min-width: vw(180px);
@@ -44,7 +43,7 @@
             &::after {
                 position: absolute;
                 content: '';
-                background-color: $greyscale-1100;
+                background-color: $mint;
                 width: 100%;
                 height: vw(2px);
                 bottom: 0;

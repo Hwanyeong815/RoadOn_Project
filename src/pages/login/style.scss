@@ -100,7 +100,7 @@
             &.phoneAuth {
                 button {
                     @include font-24px;
-                    min-width: vw(250px);
+                    min-width: vw(220px);
                     height: vw(52px);
                     border-radius: vw(10px);
                     color: $white;
@@ -116,7 +116,8 @@
                     white-space: nowrap;
                 }
                 button {
-                    background-color: $greyscale-900;
+                    color: $greyscale-1000;
+                    background-color: $greyscale-700;
                 }
             }
 
@@ -220,6 +221,7 @@
         margin-top: vw(6px);
         font-size: vw(12px);
         line-height: 1.4;
+        color: $red;
 
         &.error {
             color: $red;

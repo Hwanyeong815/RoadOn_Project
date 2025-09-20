@@ -6,13 +6,14 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import useTourStore, { CATEGORY_LABELS } from '../../../store/tourStore';
 import { useNavigate } from 'react-router-dom';
+import { IoIosArrowForward } from 'react-icons/io';
 
 const CategoryTabs = ({ active, onChange }) => (
     <div className="btns-wrap">
         {CATEGORY_LABELS.map((c) => (
             <button
                 key={c}
-                className={`button ${active === c ? 'o' : ''}`}
+                className={`button ${active === c ? 'g' : ''}`}
                 onClick={() => onChange(c)}
                 type="button"
             >
@@ -22,30 +23,7 @@ const CategoryTabs = ({ active, onChange }) => (
     </div>
 );
 
-// 아이콘 매핑 (키가 없을 경우 ticket로 폴백)
-const ICONS = {
-    calendar: '/images/icon/icon-calender.png',
-    airplane: '/images/icon/icon-plane.png',
-    plane: '/images/icon/icon-plane.png',
-    hotel: '/images/icon/icon-suitcase.png',
-    suitcase: '/images/icon/icon-suitcase.png',
-    price: '/images/icon/icon-dollar.png',
-    dollar: '/images/icon/icon-dollar.png',
-    ticket: '/images/icon/icon-checklist.png',
-    shopping: '/images/icon/icon-checklist.png',
-    food: '/images/icon/icon-checklist.png',
-    night: '/images/icon/icon-checklist.png',
-    boat: '/images/icon/icon-checklist.png',
-    camera: '/images/icon/icon-checklist.png',
-    music: '/images/icon/icon-checklist.png',
-    walk: '/images/icon/icon-checklist.png',
-    cafe: '/images/icon/icon-checklist.png',
-    map: '/images/icon/icon-checklist.png',
-    bus: '/images/icon/icon-checklist.png',
-};
-
-/** 카테고리 자동 순환 훅 */
-function useAutoRotateCategories(enabled = true, intervalMs = 8000) {
+function useAutoRotateCategories(enabled = true, intervalMs = 10000) {
     const activeCategory = useTourStore((s) => s.activeCategory);
     const setCategory = useTourStore((s) => s.setCategory);
     const timerRef = useRef(null);
@@ -65,16 +43,14 @@ function useAutoRotateCategories(enabled = true, intervalMs = 8000) {
 export default function TourMainCon2({
     initialCategory = '예능',
     initialIndex = 0,
-    initialTourId, // (숫자) 스토어에서 매핑된 tourId 사용 가능
+    initialTourId,
     autoRotateCategories = true,
     categoryIntervalMs = 8000,
     slideDelayMs = 3500,
 }) {
     const swiperRef = useRef(null);
-
     const navigate = useNavigate();
 
-    // Zustand
     const activeCategory = useTourStore((s) => s.activeCategory);
     const activeIndex = useTourStore((s) => s.activeIndex);
     const tours = useTourStore((s) => s.tours);
@@ -82,16 +58,12 @@ export default function TourMainCon2({
     const setCategory = useTourStore((s) => s.setCategory);
     const setIndex = useTourStore((s) => s.setIndex);
 
-    // 카테고리 자동 순환
     useAutoRotateCategories(autoRotateCategories, categoryIntervalMs);
 
-    // 현재 카테고리의 유효 슬라이드
     const slides = useMemo(() => {
-        const arr = tours.filter((t) => !excludedIds.has(t.id) && t.category === activeCategory);
-        return arr;
+        return tours.filter((t) => !excludedIds.has(t.id) && t.category === activeCategory);
     }, [tours, excludedIds, activeCategory]);
 
-    // activeIndex가 슬라이드 길이를 벗어나면 클램프
     useEffect(() => {
         if (!slides.length) {
             if (activeIndex !== 0) setIndex(0);
@@ -103,11 +75,9 @@ export default function TourMainCon2({
         }
     }, [slides.length, activeIndex, setIndex]);
 
-    // 초기 설정 (카테고리/슬라이드 동기화)
     useEffect(() => {
         setCategory(initialCategory);
 
-        // 숫자형 tourId로 직접 이동
         if (initialTourId != null) {
             const target = tours.find((t) => t.tourId === initialTourId && !excludedIds.has(t.id));
             if (target) {
@@ -121,25 +91,21 @@ export default function TourMainCon2({
                     setIndex(to);
                     swiperRef.current?.swiper?.slideTo(to, 0);
                 }, 0);
-                // eslint-disable-next-line react-hooks/exhaustive-deps
                 return;
             }
         }
 
-        // fallback: index로 이동
         setTimeout(() => {
             const to = Math.max(0, Math.min(initialIndex, Math.max(0, slides.length - 1)));
             setIndex(to);
             swiperRef.current?.swiper?.slideTo(to, 0);
         }, 0);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const handleSlideChange = (sw) => setIndex(sw.activeIndex);
 
     const handleCategoryChange = (cat) => {
         setCategory(cat);
-        // 카테고리 바뀌면 첫 슬라이드로
         requestAnimationFrame(() => {
             swiperRef.current?.swiper?.slideTo(0, 0);
             setIndex(0);
@@ -160,16 +126,22 @@ export default function TourMainCon2({
             }}
         >
             <div className="inner">
-                <CategoryTabs active={activeCategory} onChange={handleCategoryChange} />
-
-                {/* 빈 상태 가드 */}
+                <div className="categorytabs-wrap">
+                    <CategoryTabs active={activeCategory} onChange={handleCategoryChange} />
+                    <div className="more-btns">
+                        자세히보기
+                        <em>
+                            <IoIosArrowForward />
+                        </em>
+                    </div>
+                </div>
                 {!slides.length ? (
                     <div className="main-section-wrap empty">
                         <p>해당 카테고리에 표시할 투어가 없습니다.</p>
                     </div>
                 ) : (
                     <Swiper
-                        key={activeCategory} // 카테고리 바뀔 때 Swiper 재초기화
+                        key={activeCategory}
                         ref={swiperRef}
                         className="main-section-wrap"
                         modules={[Pagination, Autoplay]}
@@ -197,18 +169,65 @@ export default function TourMainCon2({
                                             <p>“{item.description}”</p>
                                         </div>
 
+                                        {/* ✅ 아이콘 5개 고정 */}
                                         <div className="icons-wrap">
-                                            {(item.benefits || []).slice(0, 5).map((b, i) => (
-                                                <div className="icon-box" key={`${item.id}-b-${i}`}>
+                                            {item.duration && (
+                                                <div className="icon-box">
                                                     <b className="img-wrap">
                                                         <img
-                                                            src={ICONS[b?.icon] || ICONS.ticket}
-                                                            alt={b?.icon || 'benefit'}
+                                                            src="/images/icon/icon-calender.png"
+                                                            alt="기간"
                                                         />
                                                     </b>
-                                                    <p>{b?.text}</p>
+                                                    <p>{item.duration}</p>
                                                 </div>
-                                            ))}
+                                            )}
+                                            {item.flight && (
+                                                <div className="icon-box">
+                                                    <b className="img-wrap">
+                                                        <img
+                                                            src="/images/icon/airport.png"
+                                                            alt="항공"
+                                                        />
+                                                    </b>
+                                                    <p>{item.flight}</p>
+                                                </div>
+                                            )}
+                                            {item.shopping && (
+                                                <div className="icon-box">
+                                                    <b className="img-wrap">
+                                                        <img
+                                                            src="/images/icon/icon-suitcase.png"
+                                                            alt="쇼핑"
+                                                        />
+                                                    </b>
+                                                    <p>{item.shopping}</p>
+                                                </div>
+                                            )}
+                                            {item.guide_fee && (
+                                                <div className="icon-box">
+                                                    <b className="img-wrap">
+                                                        <img
+                                                            src="/images/icon/icon-dollar.png"
+                                                            alt="가이드비"
+                                                        />
+                                                    </b>
+                                                    <p>가이드 {item.guide_fee}</p>
+                                                </div>
+                                            )}
+                                            {item.optional != null && (
+                                                <div className="icon-box">
+                                                    <b className="img-wrap">
+                                                        <img
+                                                            src="/images/icon/icon-flag.png"
+                                                            alt="선택관광"
+                                                        />
+                                                    </b>
+                                                    <p>
+                                                        {item.optional ? '선택 관광' : '포함 일정'}
+                                                    </p>
+                                                </div>
+                                            )}
                                         </div>
                                     </section>
 
@@ -222,19 +241,6 @@ export default function TourMainCon2({
                         ))}
                     </Swiper>
                 )}
-
-                <div className="more-wrap">
-                    <button
-                        className="button more o"
-                        type="button"
-                        onClick={() => {
-                            if (!current) return;
-                            navigate(`/tour/${current.slug || current.id}`);
-                        }}
-                    >
-                        자세히 보기
-                    </button>
-                </div>
             </div>
         </section>
     );

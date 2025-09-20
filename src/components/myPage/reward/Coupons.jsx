@@ -8,8 +8,8 @@ import useRewardStore from '../../../store/rewardStore';
 const TABS = ['전체', '숙소', '투어'];
 
 const Coupons = ({ userId }) => {
-    const getCoupons = useRewardStore((s) => s.getCoupons);
-    const coupons = getCoupons(userId) || [];
+    // ❗ 함수(getCoupons) 대신, 상태 슬라이스를 직접 구독
+    const coupons = useRewardStore((s) => s.rewardByUser[userId]?.coupons || []);
 
     const [tab, setTab] = useState('전체');
     const [status, setStatus] = useState('사용가능');
@@ -30,12 +30,10 @@ const Coupons = ({ userId }) => {
         return true;
     };
 
-    // 최종 필터링
     const filteredCoupons = useMemo(() => {
         return coupons.filter((c) => matchesTab(c, tab) && matchesStatus(c, status));
     }, [coupons, tab, status]);
 
-    // ✅ 전체 개수 & 사용 가능 개수 계산
     const totalCount = coupons.length;
     const availableCount = coupons.filter((c) => !c.disabled).length;
     const usedCount = coupons.filter((c) => c.disabled).length;
@@ -58,13 +56,6 @@ const Coupons = ({ userId }) => {
                     <DropdownPill value={status} onChange={setStatus} options={statusOptions} />
                 </div>
             </section>
-
-            {/* ✅ 쿠폰 개수 표시 */}
-            {/* <section className="coupons-summary">
-                <p>
-                    전체 {totalCount}개 · 사용가능 {availableCount}개 · 사용완료 {usedCount}개
-                </p>
-            </section> */}
 
             <section className="coupons-body">
                 {filteredCoupons.length > 0 ? (

@@ -6,7 +6,6 @@ import TourMainCon3 from './TourMainCon3';
 const TourMain = () => {
     return (
         <main id="TourMain">
-            {/* 원하는 페이지에서 */}
             <TourMainCon1
                 titleInitPx={250}
                 titleInitColor="#ffb703"

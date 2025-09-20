@@ -291,7 +291,7 @@ const Join = () => {
                         </div>
 
                         <div className="form-group gender">
-                            <div className="label">성별</div>
+                            {/* <div className="label">성별</div> */}
                             <div className="gender-group">
                                 <label className={gender === 'male' ? 'active' : ''}>
                                     <input

@@ -125,7 +125,7 @@ const Reserve = ({ preview = true, previewCount = 2, onMore = () => {}, items = 
                 ) : null}
             </div>
 
-            <div className="tab-button-wrap2" aria-hidden={false}>
+            <div className="tab-button-wrap" aria-hidden={false}>
                 {TABS.map((label) => (
                     <TabButton
                         key={label}

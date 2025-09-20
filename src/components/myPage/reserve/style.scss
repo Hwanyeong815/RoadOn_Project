@@ -1,8 +1,7 @@
 @use '../../../styles/utils/' as *;
 
 #reserve {
-    .tab-button-wrap2 {
-        // margin-top: vw(73px);
+    .tab-button-wrap {
         margin-bottom: vw(115px);
     }
     .mypage-title {
@@ -10,7 +9,7 @@
     }
     .reserve-table {
         &-wrap {
-            margin-top: vw(50px);
+            // margin-top: vw(50px);
             colgroup {
                 col {
                     &:nth-child(1) {
