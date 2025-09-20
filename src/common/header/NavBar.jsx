@@ -32,57 +32,51 @@ const NavBar = () => {
                 <ul className="nav-menu">
                     <li>
                         <Link to="/hotels">
-                            <img src="/images/icon/hotel.png" alt="hotel" />
+                            <img src="/images/icon/hotel-g.svg" alt="hotel" />
                             숙소
                         </Link>
                     </li>
                     <li>
                         <Link to="/tour" className="tour">
-                            <img src="/images/icon/tour.png" alt="tour" />
+                            <img src="/images/icon/tour-g.svg" alt="tour" />
                             씬투어
                         </Link>
                     </li>
                     <li>
                         <Link to="/airport">
-                            <img src="/images/icon/airport.png" alt="air" />
+                            <img src="/images/icon/airport-g.svg" alt="air" />
                             항공
                         </Link>
                     </li>
                 </ul>
 
                 <ul className="my-menu">
-                    <li>
-                        {currentUser ? (
-                            <Link to="/myPage" className="profile-link">
-                                <span>{displayName}</span>님 환영합니다
-                            </Link>
-                        ) : (
-                            <Link to="/login">
-                                <img src="/images/icon/human.png" alt="human" />
-                                로그인
-                            </Link>
-                        )}
-                    </li>
-
-                    {!currentUser && (
-                        <li>
-                            <Link to="/join">회원가입</Link>
-                        </li>
+                    {currentUser ? (
+                        <>
+                            <li>
+                                <Link to="/myPage" className="profile-link">
+                                    <span>{displayName}</span>님 환영합니다
+                                </Link>
+                                <Link
+                                    to="/logout"
+                                    type="button"
+                                    className="logout-button"
+                                    onClick={handleLogout}
+                                >
+                                    로그아웃
+                                </Link>
+                            </li>
+                        </>
+                    ) : (
+                        <>
+                            <li className="none-line">
+                                <Link to="/login">
+                                    <img src="/images/icon/human.png" alt="human" />
+                                    로그인 ｜ 회원가입
+                                </Link>
+                            </li>
+                        </>
                     )}
-
-                    <li>
-                        {currentUser && (
-                            // 로그아웃은 버튼으로 처리: onClick에서 store 정리 후 navigate
-                            <Link
-                                to="/logout"
-                                type="button"
-                                className="logout-button"
-                                onClick={handleLogout}
-                            >
-                                로그아웃
-                            </Link>
-                        )}
-                    </li>
                 </ul>
             </nav>
         </>
