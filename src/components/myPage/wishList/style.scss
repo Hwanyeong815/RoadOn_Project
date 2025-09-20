@@ -18,9 +18,7 @@
                 flex-direction: column;
                 gap: vw(20px);
                 .hotel-box {
-                    // width: vw(1060px);
                     width: 100%;
-                    height: vw(280px);
                     border: vw(1px) solid $greyscale-600;
                     border-radius: vw(10px);
                     display: flex;
@@ -55,7 +53,6 @@
                                     color: $greyscale-1100;
                                     @include font-18px-M;
                                     display: block;
-                                    // margin-bottom: vw(6px);
                                 }
                                 h4 {
                                     @include font-24px-M;
@@ -105,7 +102,7 @@
         &:hover {
             transform: translateY(-5%);
             transition: 0.2s;
-            box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.2);
+            box-shadow: 0 vw(4px) vw(10px) 0 rgba(0, 0, 0, 0.1);
         }
     }
 }
