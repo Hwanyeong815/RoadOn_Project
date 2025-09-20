@@ -1,5 +1,4 @@
 // src/api/packagesData.js
-
 export default [
     // 1. 드라마 - 갯마을 차차차
     {
@@ -20,12 +19,16 @@ export default [
         slug: 'hometown-chachacha-tour',
         date: '상시출발',
         duration: '2박 3일',
+        nights: 2,
+        days: 3,
         flight: 'KTX 왕복',
         shopping: '자유쇼핑 가능',
         guide_fee: '포함',
         optional: false,
         adult_fee: 390000,
         child_fee: 350000,
+        // ✅ 오늘 기준으로 매일 출발
+        schedule: { freq: 'DAILY' },
     },
 
     // 2. 예능 - 윤식당
@@ -47,12 +50,15 @@ export default [
         slug: 'younskitchen2-tenerife',
         date: '출발일 지정',
         duration: '3박 4일',
+        nights: 3,
+        days: 4,
         flight: '대한항공 직항',
         shopping: '현지 자유시간 포함',
         guide_fee: '포함',
         optional: true,
         adult_fee: 1390000,
         child_fee: 1200000,
+        // 필요 시 departures: ['2025-11-05','2025-11-12'] 같이 고정일을 넣어도 됩니다.
     },
 
     // 3. 드라마 - 폭싹 속았수다
@@ -74,12 +80,16 @@ export default [
         slug: 'when-life-gives-you-tangerines',
         date: '상시출발',
         duration: '2박 3일',
+        nights: 2,
+        days: 3,
         flight: '김포-제주 왕복',
         shopping: '자유쇼핑 가능',
         guide_fee: '포함',
         optional: false,
         adult_fee: 420000,
         child_fee: 380000,
+        // ✅ 오늘 기준으로 매일 출발
+        schedule: { freq: 'DAILY' },
     },
 
     // 4. 영화 - 범죄도시4
@@ -102,12 +112,15 @@ export default [
         slug: 'crimecity4-bohol-tour',
         date: '출발일 지정',
         duration: '3박 5일',
+        nights: 3,
+        days: 5,
         flight: '대한항공',
         shopping: '쇼핑 3회 포함',
         guide_fee: '$60',
         optional: true,
         adult_fee: 1590000,
         child_fee: 1390000,
+        // 필요 시 schedule 또는 departures를 추가
     },
 
     // 5. K-POP - BTS
@@ -129,6 +142,8 @@ export default [
         slug: 'bts-yet-to-come-tour',
         date: '일정 고정 (1~6명)',
         duration: '2박 3일',
+        nights: 2,
+        days: 3,
         flight: 'KTX/항공',
         shopping: '자유 쇼핑 가능',
         guide_fee: '포함',
@@ -156,6 +171,8 @@ export default [
         slug: 'blackpink-worldtour-seoul',
         date: '일정 고정 (1~6명)',
         duration: '2박 3일',
+        nights: 2,
+        days: 3,
         flight: '서울 집결',
         shopping: '굿즈샵 포함',
         guide_fee: '포함',
@@ -183,6 +200,8 @@ export default [
         slug: 'seojin-mexico-bacalar',
         date: '출발일 지정',
         duration: '3박 4일',
+        nights: 3,
+        days: 4,
         flight: '대한항공 + 멕시코 국내선',
         shopping: '현지 마켓 투어 포함',
         guide_fee: '포함',
@@ -210,11 +229,15 @@ export default [
         slug: 'harbin-film-tour',
         date: '매주 월요일 출발',
         duration: '3박 4일',
+        nights: 3,
+        days: 4,
         flight: '대한항공 직항',
         shopping: '자유 쇼핑 가능',
         guide_fee: '포함',
         optional: false,
         adult_fee: 1290000,
         child_fee: 1090000,
+        // ✅ 오늘 기준 매주 월요일 출발
+        schedule: { freq: 'WEEKLY', byWeekday: ['MO'] },
     },
 ];

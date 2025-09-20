@@ -1,0 +1,55 @@
+@use '../../styles/utils/' as *;
+
+.logout-done {
+    text-align: center;
+    padding: vw(150px) 0;
+
+    &__icon {
+        width: vw(40px);
+        height: vw(40px);
+        margin: 24px auto;
+        margin-bottom: 0;
+    }
+
+    &__title {
+        margin-top: vw(10px);
+        @include font-32px-B;
+    }
+
+    &__desc {
+        margin-top: vw(30px);
+        font-size: 22px;
+        color: #a3a3a8;
+        @include font-28px;
+    }
+
+    &__actions {
+        display: flex;
+        gap: vw(20px);
+        justify-content: center;
+        margin-top: vw(70px);
+
+        .button {
+            min-width: vw(250px);
+            height: vw(45px);
+            @include font-20px;
+            border: 1px solid $greyscale-1200;
+            cursor: pointer;
+            transition: 0.4s ease;
+            line-height: 50%;
+            &.g {
+                border: 1px solid $mint;
+            }
+            &-outline {
+                background-color: $white;
+                &:hover {
+                    border-color: #b7bac2;
+                }
+                &:focus-visible {
+                    outline: 2px solid #b7bac2;
+                    outline-offset: 2px;
+                }
+            }
+        }
+    }
+}
