@@ -100,7 +100,7 @@ export default function TourMainCon2({
             setIndex(to);
             swiperRef.current?.swiper?.slideTo(to, 0);
         }, 0);
-    }, []);
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     const handleSlideChange = (sw) => setIndex(sw.activeIndex);
 
@@ -111,6 +111,25 @@ export default function TourMainCon2({
             setIndex(0);
         });
     };
+
+    // ====== 상세로 이동 helpers ======
+    const goDetailByItem = (item) => {
+        if (!item) return;
+        navigate(`/tour/${item.slug ?? item.id}`);
+    };
+
+    const handleMoreClick = () => {
+        const item = slides[activeIndex];
+        goDetailByItem(item);
+    };
+
+    const handleSlideClick = (item) => {
+        // 드래그 중에는 클릭 네비게이션 방지
+        const sw = swiperRef.current?.swiper;
+        if (sw && sw.allowClick === false) return;
+        goDetailByItem(item);
+    };
+    // ================================
 
     const current = slides[activeIndex];
     const bgUrl = current?.backgroundImg || '';
@@ -128,119 +147,119 @@ export default function TourMainCon2({
             <div className="inner">
                 <div className="categorytabs-wrap">
                     <CategoryTabs active={activeCategory} onChange={handleCategoryChange} />
-                    <div className="more-btns">
+                    <div
+                        className="more-btns"
+                        role="button"
+                        tabIndex={0}
+                        onClick={handleMoreClick}
+                        onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && handleMoreClick()}
+                        style={{ cursor: 'pointer' }}
+                    >
                         자세히보기
                         <em>
                             <IoIosArrowForward />
                         </em>
                     </div>
                 </div>
-                {!slides.length ? (
-                    <div className="main-section-wrap empty">
-                        <p>해당 카테고리에 표시할 투어가 없습니다.</p>
-                    </div>
-                ) : (
-                    <Swiper
-                        key={activeCategory}
-                        ref={swiperRef}
-                        className="main-section-wrap"
-                        modules={[Pagination, Autoplay]}
-                        pagination={{ clickable: true }}
-                        autoplay={
-                            enableLoop
-                                ? {
-                                      delay: slideDelayMs,
-                                      disableOnInteraction: false,
-                                      pauseOnMouseEnter: true,
-                                  }
-                                : false
-                        }
-                        loop={enableLoop}
-                        onSlideChange={handleSlideChange}
-                        speed={550}
-                    >
-                        {slides.map((item) => (
-                            <SwiperSlide key={item.id}>
-                                <article className="main-section-wrap">
-                                    <section className="title-section">
-                                        <div className="txt-box">
-                                            <strong>{item.title}</strong>
-                                            <h3>{item.subtitle}</h3>
-                                            <p>“{item.description}”</p>
-                                        </div>
 
-                                        {/* ✅ 아이콘 5개 고정 */}
-                                        <div className="icons-wrap">
-                                            {item.duration && (
-                                                <div className="icon-box">
-                                                    <b className="img-wrap">
-                                                        <img
-                                                            src="/images/icon/icon-calender.png"
-                                                            alt="기간"
-                                                        />
-                                                    </b>
-                                                    <p>{item.duration}</p>
-                                                </div>
-                                            )}
-                                            {item.flight && (
-                                                <div className="icon-box">
-                                                    <b className="img-wrap">
-                                                        <img
-                                                            src="/images/icon/airport.png"
-                                                            alt="항공"
-                                                        />
-                                                    </b>
-                                                    <p>{item.flight}</p>
-                                                </div>
-                                            )}
-                                            {item.shopping && (
-                                                <div className="icon-box">
-                                                    <b className="img-wrap">
-                                                        <img
-                                                            src="/images/icon/icon-suitcase.png"
-                                                            alt="쇼핑"
-                                                        />
-                                                    </b>
-                                                    <p>{item.shopping}</p>
-                                                </div>
-                                            )}
-                                            {item.guide_fee && (
-                                                <div className="icon-box">
-                                                    <b className="img-wrap">
-                                                        <img
-                                                            src="/images/icon/icon-dollar.png"
-                                                            alt="가이드비"
-                                                        />
-                                                    </b>
-                                                    <p>가이드 {item.guide_fee}</p>
-                                                </div>
-                                            )}
-                                            {item.optional != null && (
-                                                <div className="icon-box">
-                                                    <b className="img-wrap">
-                                                        <img
-                                                            src="/images/icon/icon-flag.png"
-                                                            alt="선택관광"
-                                                        />
-                                                    </b>
-                                                    <p>
-                                                        {item.optional ? '선택 관광' : '포함 일정'}
-                                                    </p>
-                                                </div>
-                                            )}
-                                        </div>
-                                    </section>
+                <Swiper
+                    key={activeCategory}
+                    ref={swiperRef}
+                    className="main-section-wrap"
+                    modules={[Pagination, Autoplay]}
+                    pagination={{ clickable: true }}
+                    autoplay={
+                        enableLoop
+                            ? {
+                                  delay: slideDelayMs,
+                                  disableOnInteraction: false,
+                                  pauseOnMouseEnter: true,
+                              }
+                            : false
+                    }
+                    loop={enableLoop}
+                    onSlideChange={handleSlideChange}
+                    speed={550}
+                >
+                    {slides.map((item) => (
+                        <SwiperSlide key={item.id} onClick={() => handleSlideClick(item)}>
+                            <article className="main-section-wrap" style={{ cursor: 'pointer' }}>
+                                <section className="title-section">
+                                    <div className="txt-box">
+                                        <strong>{item.title}</strong>
+                                        <h3>{item.subtitle}</h3>
+                                        <p>“{item.description}”</p>
+                                    </div>
 
-                                    <section className="img-section">
-                                        <div className="img-wrap">
-                                            <img src={item.posterImg} alt={item.slug || item.id} />
-                                        </div>
-                                    </section>
-                                </article>
-                            </SwiperSlide>
-                        ))}
-                    </Swiper>
-                )}
+                                    {/* ✅ 아이콘 5개 고정 */}
+                                    <div className="icons-wrap">
+                                        {item.duration && (
+                                            <div className="icon-box">
+                                                <b className="img-wrap">
+                                                    <img
+                                                        src="/images/icon/icon-calender.png"
+                                                        alt="기간"
+                                                    />
+                                                </b>
+                                                <p>{item.duration}</p>
+                                            </div>
+                                        )}
+                                        {item.flight && (
+                                            <div className="icon-box">
+                                                <b className="img-wrap">
+                                                    <img
+                                                        src="/images/icon/airport.png"
+                                                        alt="항공"
+                                                    />
+                                                </b>
+                                                <p>{item.flight}</p>
+                                            </div>
+                                        )}
+                                        {item.shopping && (
+                                            <div className="icon-box">
+                                                <b className="img-wrap">
+                                                    <img
+                                                        src="/images/icon/icon-suitcase.png"
+                                                        alt="쇼핑"
+                                                    />
+                                                </b>
+                                                <p>{item.shopping}</p>
+                                            </div>
+                                        )}
+                                        {item.guide_fee && (
+                                            <div className="icon-box">
+                                                <b className="img-wrap">
+                                                    <img
+                                                        src="/images/icon/icon-dollar.png"
+                                                        alt="가이드비"
+                                                    />
+                                                </b>
+                                                <p>가이드 {item.guide_fee}</p>
+                                            </div>
+                                        )}
+                                        {item.optional != null && (
+                                            <div className="icon-box">
+                                                <b className="img-wrap">
+                                                    <img
+                                                        src="/images/icon/icon-flag.png"
+                                                        alt="선택관광"
+                                                    />
+                                                </b>
+                                                <p>{item.optional ? '선택 관광' : '포함 일정'}</p>
+                                            </div>
+                                        )}
+                                    </div>
+                                </section>
+
+                                <section className="img-section">
+                                    <div className="img-wrap">
+                                        <img src={item.posterImg} alt={item.slug || item.id} />
+                                    </div>
+                                </section>
+                            </article>
+                        </SwiperSlide>
+                    ))}
+                </Swiper>
             </div>
         </section>
     );

@@ -1,5 +1,4 @@
 // src/pages/Test.jsx
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { openSwal, toast, openAndNavigate } from '../../ui/swal/presets'; // 경로 맞춤
 

@@ -86,7 +86,6 @@ const Header = () => {
                             data-current-src="/images/ci.png"
                             width="140"
                             height="auto"
-                            style={{ opacity: 1, transition: 'opacity 0.14s ease' }}
                         />
                     </Link>
                 </h1>

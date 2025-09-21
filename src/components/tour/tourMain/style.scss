@@ -1,10 +1,12 @@
 @use '../../../styles/utils' as *;
 
 #TourMain {
-    padding-bottom: vw(100px);
+    // padding-bottom: vw(100px);
+    margin-bottom: vw(100px);
     .tour-main-con {
         overflow-x: hidden;
-        height: vw(1080px);
+        // min-height: 100vh;
+        height: vw(1180px);
 
         position: relative;
         &1 {
@@ -21,16 +23,21 @@
                 text-align: center;
                 color: $white;
                 h2 {
-                    font-size: rem(50px);
-                    line-height: 1.6;
-                    font-weight: 700;
+                    font-size: rem(60px);
+                    line-height: 1.2;
+                    font-weight: 400;
                     margin-bottom: vw(20px);
                     span {
-                        color: $orange;
+                        font-weight: 600;
+                        -webkit-text-stroke-width: 1px;
+                        -webkit-text-stroke-color: $orange;
+                        color: rgba(255, 127, 80, 0.1);
                     }
                 }
                 p {
-                    @include font-24px-M;
+                    @include font-20px-M;
+                    color: $greyscale-900;
+                    opacity: 0.5;
                 }
             }
             .body-slide {
@@ -76,6 +83,7 @@
                 justify-content: space-between;
                 align-items: end;
                 .more-btns {
+                    cursor: pointer;
                     display: flex;
                     align-items: center;
                     @include font-16px-B;
@@ -142,8 +150,6 @@
                             }
                         }
                     }
-
-                    /* 🚫 네비게이션(좌우 화살표) 미사용 → 관련 스타일 제거 */
                 }
 
                 .title-section {
@@ -235,81 +241,87 @@
         }
 
         &3 {
+            height: vw(1500px);
             .head {
                 padding-top: vw(200px);
                 padding-bottom: vw(70px);
                 font-size: rem(40px);
                 font-weight: 700;
-
-                h2 {
-                }
             }
             .package-wrap {
                 display: grid;
                 grid-template-columns: repeat(4, 1fr);
-                gap: vw(60px);
-                justify-content: space-between;
+                row-gap: vw(80px);
+                column-gap: vw(22px);
+
                 li {
-                    width: vw(333px);
-                    height: vw(500px);
-                    border: vw(1px) solid $greyscale-500;
+                    cursor: pointer;
+                    width: vw(326px);
+                    height: vw(552px);
+                    border: vw(1px) solid $greyscale-400;
                     overflow: hidden;
                     border-radius: vw(10px);
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: space-between;
-
+                    &:hover {
+                        transform: translateY(-2%);
+                        transition: 0.2s;
+                        box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.2);
+                    }
                     .img-wrap {
                         width: 100%;
-                        height: vw(280px);
+                        height: vw(320px);
+
                         position: relative;
                         img {
-                            width: 100%;
+                            height: 100%;
+
                             position: absolute;
                             left: 50%;
                             top: 50%;
                             transform: translate(-50%, -50%);
                         }
                     }
-                    .txt {
-                        &-wrap {
-                            display: flex;
-                            flex-direction: column;
-                            justify-content: space-between;
-                        }
-                        &-title {
-                            @include font-20px-SB;
+                    .txt-wrap {
+                        padding: vw(20px);
+                        display: flex;
+                        flex-direction: column;
+                        gap: vw(14px);
+                        .txt-title {
+                            @include font-20px-B;
                             white-space: pre-line;
                             line-height: 1.4;
                         }
-                        &-desc {
-                            @include font-16px;
-                        }
-                        &-row {
+                        .txt-row {
                             display: flex;
-                            justify-content: space-between;
                             &1 {
-                                justify-content: start;
-                                gap: vw(5px);
-                                @include font-16px;
                                 span {
-                                    color: $greyscale-1100;
-                                    &:last-child {
-                                        color: $black;
+                                    &:first-child {
+                                        color: $greyscale-1100;
+                                        margin-right: vw(4px);
                                     }
                                 }
                             }
-                            .txt-group {
-                                color: $greyscale-1000;
-                                &:last-child {
-                                    display: flex;
-                                    flex-direction: column;
-                                    align-items: end;
-                                }
-                                .price {
-                                    @include font-20px-B;
-                                    color: $default;
-                                }
+                            &4 {
+                                justify-content: space-between;
+                                align-items: end;
+                            }
+                        }
+                        .des {
+                            @include font-16px;
+                        }
+                        .info {
+                            @include font-16px;
+                        }
+                        .price {
+                            @include font-14px-B;
+                        }
+                        .txt-group {
+                            &:last-child {
+                                display: flex;
+                                flex-direction: column;
+                                align-items: end;
+                            }
+                            .price {
+                                @include font-20px-B;
                             }
                         }
                     }

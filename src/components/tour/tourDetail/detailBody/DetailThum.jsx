@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import './style.scss';
 import GalleryModal from '../../../hotels/hotelsDetail/GalleryModal';
 
