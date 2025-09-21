@@ -7,6 +7,8 @@ import {
     Login,
     Payment,
     // PayCompleted, 미완
+    PaymentSuccess,
+    PaymentFail,
     HotelsDetail,
     HotelsSearch,
     Tour,
@@ -35,8 +37,11 @@ export const MyRoutes = () => {
 
                 <Route element={<Layout />}>
                     <Route index element={<Home />} />
-                    <Route path="payment" element={<Payment />} />
-                    {/*Route path="payment/completed" element={<PayCompleted />} />*/}
+                    <Route path="payment">
+                        <Route index element={<Payment />} />
+                        <Route path="success" element={<PaymentSuccess />} />
+                        <Route path="fail" element={<PaymentFail />} />
+                    </Route>
                     <Route path="payment/tour" element={<TourPaymentLeft />} />
                     <Route path="hotels">
                         <Route index element={<Hotels />} />

@@ -425,6 +425,14 @@
                             left: 50%;
                             transform: translate(-50%, -50%);
                         }
+                        &:hover {
+                            // border: $mint !important;
+                        }
+                        &.selected {
+                            border-color: $mint;
+                            background-color: rgba($mint, 0.1); 
+                            color: $mint;
+        }
                     }
                 }
                 .card-types {
@@ -840,7 +848,7 @@ strong {
     background-color: $white;
     border: 1px solid $greyscale-400;
     border-radius: vw(10px);
-    z-index: 9999;
+    z-index: 99999;
     .gallery-content {
         background: white;
         border-radius: 12px;
