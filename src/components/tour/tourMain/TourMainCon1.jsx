@@ -14,7 +14,6 @@ const arrTour = [
     { id: 8, img: '/images/tour/main/con1_08.png', alt: 'con8' },
 ];
 
-// 카드 레이아웃 계산(기존)
 const W = 290,
     BASE_GAP = 16,
     MAX_SCALE = 1.25;
@@ -28,13 +27,17 @@ export default function TourMainCon1({
     subInitColor = '#ffffff',
     hold = 0.35,
     speed = 0.9,
-    titleInitWeight = 700, // ✅ h2 초기 굵기
-    titleFinalWeight = null, // ✅ h2 최종 굵기(null이면 CSS의 최종값 읽어서 사용)
+    titleInitWeight = 700,
+    titleFinalWeight = null,
+    titleHoldSec = 3, // 제목/서브/슬라이드 노출 후 헤더까지 대기
+    subDelaySec = 0.3, // 제목 후 서브텍스트 딜레이
+    slideAppearAfterSec = 0.2, // 서브텍스트 후 슬라이드 딜레이
 }) {
     const [hoverIndex, setHoverIndex] = useState(null);
 
     const rootRef = useRef(null);
     const titleRef = useRef(null);
+    const titleStrongRef = useRef(null); // 첫 줄(span)만 wght 트윈
     const subRef = useRef(null);
     const slideRef = useRef(null);
 
@@ -46,33 +49,41 @@ export default function TourMainCon1({
     useLayoutEffect(() => {
         const ctx = gsap.context(() => {
             const headerEl = document.querySelector('.site-header');
+            const titleEl = titleRef.current;
+            const titleStrongEl = titleStrongRef.current;
 
-            // 최종 스타일 읽기
-            const titleCS = getComputedStyle(titleRef.current);
+            const titleCS = getComputedStyle(titleEl);
             const titleFinalColor = titleCS.color;
             const titleFinalPx = parseFloat(titleCS.fontSize) || 50;
-            const titleFinalW = titleFinalWeight ?? (parseInt(titleCS.fontWeight, 10) || 700);
+
+            const strongCS = titleStrongEl ? getComputedStyle(titleStrongEl) : titleCS;
+            const titleFinalW =
+                titleFinalWeight ??
+                (parseInt(strongCS.fontWeight, 10) || parseInt(titleCS.fontWeight, 10) || 700);
 
             const subCS = getComputedStyle(subRef.current);
             const subFinalColor = subCS.color;
             const subFinalPx = parseFloat(subCS.fontSize) || 24;
 
-            // px → scale 환산
             const titleInitScale = Math.max(0.1, titleInitPx / titleFinalPx);
             const subInitScale = Math.max(0.1, subInitPx / subFinalPx);
 
-            // 초기 상태
             if (headerEl)
                 gsap.set(headerEl, { autoAlpha: 0, y: -24, willChange: 'transform, opacity' });
-            gsap.set(titleRef.current, {
+            gsap.set(titleEl, {
                 scale: titleInitScale,
                 color: titleInitColor,
                 autoAlpha: 0,
                 transformOrigin: '50% 50%',
                 willChange: 'transform, opacity',
-                fontWeight: titleInitWeight, // ✅ 초기 굵기 설정
-                fontVariationSettings: `"wght" ${titleInitWeight}`, // ✅ 가변폰트면 부드럽게
             });
+            if (titleStrongEl) {
+                gsap.set(titleStrongEl, {
+                    fontWeight: titleInitWeight,
+                    fontVariationSettings: `"wght" ${titleInitWeight}`,
+                    willChange: 'transform, opacity',
+                });
+            }
             gsap.set(subRef.current, {
                 scale: subInitScale,
                 color: subInitColor,
@@ -85,57 +96,49 @@ export default function TourMainCon1({
 
             const tl = gsap.timeline({ defaults: { ease: 'power3.out' } }).timeScale(speed);
 
-            // 헤더
-            if (headerEl) tl.to(headerEl, { autoAlpha: 1, y: 0, duration: 0.8 }, 0);
-
-            // h2: 크게 → 최종 (색 + 굵기)
-            tl.to(
-                titleRef.current,
-                { autoAlpha: 1, scale: 1, color: titleFinalColor, duration: 1.2 },
-                0.1
-            );
-
-            // ✅ h2 굵기 부드럽게 (가변 폰트 wght 트윈)
-            {
+            // 1) 제목
+            tl.to(titleEl, { autoAlpha: 1, scale: 1, color: titleFinalColor, duration: 1.2 }, 0);
+            if (titleStrongEl) {
                 const w = { val: titleInitWeight };
-                const setVar = gsap.quickSetter(titleRef.current, 'fontVariationSettings');
+                const setVar = gsap.quickSetter(titleStrongEl, 'fontVariationSettings');
                 tl.to(
                     w,
-                    {
-                        val: titleFinalW,
-                        duration: 1.2,
-                        onUpdate: () => setVar(`"wght" ${w.val}`),
-                    },
-                    0.1
-                )
-                    // 폴백: 가변 폰트가 아니면 최종에 font-weight만 확정
-                    .set(titleRef.current, { fontWeight: titleFinalW }, '>-0.01');
+                    { val: titleFinalW, duration: 1.2, onUpdate: () => setVar(`"wght" ${w.val}`) },
+                    0
+                ).set(titleStrongEl, { fontWeight: titleFinalW }, '>-0.01');
             }
 
-            // p: 거의 동시에(살짝 늦게) 크게 → 최종
+            // 2) 서브텍스트 (제목 직후 빠르게)
             tl.to(
                 subRef.current,
                 { autoAlpha: 1, y: 0, scale: 1, color: subFinalColor, duration: 1.05 },
-                0.22
+                subDelaySec
             );
 
-            // 홀드
-            tl.to({}, { duration: hold });
-
-            // 슬라이드
-            tl.to(slideRef.current, { autoAlpha: 1, y: 0, duration: 0.7 }, 0).from(
+            // 3) 슬라이드 (더 앞당김)
+            tl.to(
+                slideRef.current,
+                { autoAlpha: 1, y: 0, duration: 0.7 },
+                subDelaySec + slideAppearAfterSec
+            ).from(
                 slideRef.current.querySelectorAll('.img-wrap'),
                 { y: 30, autoAlpha: 0, duration: 0.5, stagger: 0.07 },
                 '<'
             );
 
-            // will-change 정리
+            // 4) 헤더 (충분히 보여준 뒤)
+            tl.to({}, { duration: titleHoldSec }, '>');
+            if (headerEl) tl.to(headerEl, { autoAlpha: 1, y: 0, duration: 0.8 }, '>');
+
+            // 5) 약간 대기
+            tl.to({}, { duration: hold }, '>');
+
+            // 정리
             tl.add(() => {
                 const clear = { clearProps: 'will-change' };
                 if (headerEl) gsap.set(headerEl, clear);
-                gsap.set([titleRef.current, subRef.current, slideRef.current], clear);
-                // 가변폰트 설정도 정리(필요 시 유지하려면 지우지 마세요)
-                gsap.set(titleRef.current, { clearProps: 'fontVariationSettings' });
+                gsap.set([titleEl, subRef.current, slideRef.current], clear);
+                if (titleStrongEl) gsap.set(titleStrongEl, { clearProps: 'fontVariationSettings' });
             });
         }, rootRef);
 
@@ -149,15 +152,19 @@ export default function TourMainCon1({
         speed,
         titleInitWeight,
         titleFinalWeight,
+        titleHoldSec,
+        subDelaySec,
+        slideAppearAfterSec,
     ]);
 
     return (
         <section className="tour-main-con tour-main-con1" ref={rootRef}>
             <div className="head-txt-box">
                 <h2 ref={titleRef}>
-                    <span>씬투어 </span>, <br /> OTT 속 그 장면을 여행으로
+                    <span ref={titleStrongRef}>SCENE TOUR</span> <br />
+                    From Screen to Scene
                 </h2>
-                <p ref={subRef}>화면 속 순간을 현실 여행으로 이어드립니다.</p>
+                <p ref={subRef}>화면 속 순간을 여행의 장면으로</p>
             </div>
 
             <ul
