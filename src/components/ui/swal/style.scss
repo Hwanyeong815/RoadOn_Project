@@ -1,0 +1,79 @@
+@use '../../../styles/utils/' as *;
+
+.swalx-container {
+    padding: 16px;
+}
+
+.swalx-popup {
+    background: $white;
+    border-radius: vw(20px);
+    box-shadow: 0 vw(12px) vw(32px) rgba(0, 0, 0, 0.18);
+    padding: vw(24px) vw(24px) 0;
+    min-width: 320px;
+    overflow: hidden;
+    width: vw(450px);
+    height: vw(220px);
+}
+
+.swalx-title {
+    @include font-20px-B;
+    text-align: center;
+}
+.swalx-html {
+    text-align: center;
+    color: $greyscale-1100;
+    @include font-14px;
+    white-space: pre-line;
+    margin: auto;
+
+    &--login-sm {
+        @include font-20px-B;
+    }
+}
+
+.swalx-actions {
+    display: grid;
+    align-items: end;
+    grid-template-columns: 1fr 1fr;
+}
+
+.swal2-actions {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    margin: 20px -24px 0 !important;
+}
+.swal2-actions .swal2-styled {
+}
+
+.swalx-btn {
+    width: 100%;
+    height: vw(60px);
+    box-sizing: border-box;
+    border: 0;
+    border-radius: 0;
+    transition: 0.14s ease;
+    @include font-20px;
+}
+
+.swalx-cancel {
+    background-color: $greyscale-400;
+}
+.swalx-confirm {
+    background: $mint;
+    color: $white;
+}
+.swalx-cancel:hover {
+    filter: brightness(0.98);
+}
+.swalx-confirm:hover {
+    filter: brightness(0.95);
+}
+
+.swal2-actions:has(.swalx-btn:nth-child(1):only-child),
+.swalx-actions:has(.swalx-btn:nth-child(1):only-child) {
+    grid-template-columns: 1fr !important;
+}
+.swal2-actions:has(.swalx-btn:nth-child(1):only-child) .swalx-confirm,
+.swalx-actions:has(.swalx-btn:nth-child(1):only-child) .swalx-confirm {
+    border-bottom-left-radius: var(--swalx-radius);
+}
