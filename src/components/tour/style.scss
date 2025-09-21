@@ -2,5 +2,13 @@
 
 #TourMain {
     .tour-main-con {
+        // scroll-snap-align: start; /* 섹션 윗부분을 뷰포트 상단에 맞춤 */
+        // scroll-snap-stop: normal;
     }
+}
+html.snap-y {
+    scroll-snap-type: y proximity; /* ← mandatory보다 자연스러움 */
+    scroll-padding-top: var(--header-h, 100px);
+    scroll-behavior: smooth; /* 앵커/JS 스크롤도 부드럽게 */
+    overscroll-behavior-y: contain;
 }
