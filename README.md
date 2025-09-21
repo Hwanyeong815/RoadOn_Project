@@ -10,3 +10,5 @@ npm install react-datepicker date-fns
 
 yarn add react-copy-to-clipboard
 npm install react-copy-to-clipboard
+
+yarn add sweetalert2

@@ -1,6 +1,7 @@
 @use './../utils' as *;
 
 #footer {
+    // margin-top: vw(100px);
     background-color: $greyscale-200;
     width: 100%;
     height: vw(320px);
@@ -8,10 +9,12 @@
     // margin: 0;
 
     .inner {
-        padding: vw(90px) vw(240px);
+        padding: vw(90px) 0;
+
+        box-sizing: border-box;
         display: flex;
         justify-content: center;
-        width: 100%;
+
         gap: vw(250px);
     }
     h2 {
@@ -49,6 +52,7 @@
                     }
                     flex-direction: column;
                     margin-bottom: vw(10px);
+                    line-height: 1;
                 }
                 &.copyright {
                     color: $greyscale-900;
