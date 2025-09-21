@@ -1,3 +1,4 @@
+// src/components/hotels/detail/DetailLeft.jsx
 import { BsTelephone } from 'react-icons/bs';
 import { MdOutlineEmail } from 'react-icons/md';
 import {
@@ -20,7 +21,7 @@ import WishButton from '../../ui/wishbutton/WishButton';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import useAuthStore from '../../../store/authStore';
 import { useNavigate } from 'react-router-dom';
-import { openWishlistShortcut } from '../../ui/swal/presets';
+import { openWishlistShortcut, openAndNavigate } from '../../ui/swal/presets'; // ⬅️ 추가
 
 const DetailLeft = ({
     hotel,
@@ -58,9 +59,12 @@ const DetailLeft = ({
     const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
     const navigate = useNavigate();
 
-    const handleAdClick = () => {
-        navigate('/login');
-    };
+    // ⬇️ 광고 배너 클릭 시: loginRequired 알럿 → 확인 누르면 /login으로 이동
+    const handleAdClick = () =>
+        openAndNavigate('loginRequired', {
+            confirmTo: '/login',
+            navigate,
+        });
 
     return (
         <div className="detail-left">
@@ -79,7 +83,6 @@ const DetailLeft = ({
                     </div>
                     <div className="more-btn">
                         <img src="/images/icon/share.svg" className="share-btn" alt="공유" />
-                        {/* <img src="/images/icon/like.svg" alt="찜하기" /> */}
                         <div className="wish-overlay">
                             <WishButton
                                 type="hotel"
@@ -160,6 +163,7 @@ const DetailLeft = ({
                             })}
                         </ul>
                     </div>
+
                     {!isLoggedIn && (
                         <div
                             className="con advertise"
@@ -172,6 +176,7 @@ const DetailLeft = ({
                             />
                         </div>
                     )}
+
                     <div className="con con2 room-option-wrap" ref={roomOptionRef}>
                         <h2>객실 선택</h2>
                         <ul className="room-filter">
@@ -210,6 +215,7 @@ const DetailLeft = ({
                             )}
                         </div>
                     </div>
+
                     <div className="con con3 hotel-info-wrap" ref={hotelInfoRef}>
                         <h2>숙소 정보</h2>
                         <p>{hotel.about}</p>
@@ -222,9 +228,11 @@ const DetailLeft = ({
                             </span>
                         </div>
                     </div>
+
                     <div className="con con4 hotel-policies-wrap">
                         <Policies hotel={hotel} />
                     </div>
+
                     <div className="con con5 hotel-cancel-wrap">
                         <h2>취소/변경 안내</h2>
                         <ul className="follows">
