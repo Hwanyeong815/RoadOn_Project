@@ -86,14 +86,25 @@
                     }
                     .bottom-price {
                         text-align: right;
-                        span {
+                        > span {
                             display: block;
-                            @include font-20px-M;
-                            color: $greyscale-1000;
+                            @include font-22px;
+                            color: $greyscale-900;
+                            text-decoration: line-through;
                         }
                         strong {
                             display: block;
-                            @include font-30px-SB;
+                            @include font-32px-SB;
+                        }
+                        .discounted-price {
+                            display: flex;
+                            align-items: center;
+                            gap: vw(12px);
+                            span {
+                                @include font-28px;
+                                color: $alert;
+                                line-height: 36px;
+                            }
                         }
                     }
                 }
@@ -227,7 +238,10 @@
     }
 }
 
-.pay {
+.pay-btn {
+    &:hover {
+        background-color: $foundation-mint-normalhover !important;
+    }
 }
 
 .payment-left {
@@ -1025,13 +1039,23 @@ strong {
         flex-direction: column;
         justify-content: center;
         gap: vw(20px);
-        .hotels-search {
-            .search-bar {
-            width: vw(1092px);
+        // 적용이 안됨
+        .search-bar {
+            width: vw(1160px);
             margin: auto;
-            }
+                .search-item {
+                    .placeholder, input {
+                            color: $white;                        
+                            text-align-last: left;
+                        }
+                    span {
+                        
+                            color: $white;
+                    }
+                }
         }
     }
+    
 
 }}
 
@@ -1308,3 +1332,202 @@ strong {
         transform: translateY(0);
     }
 }
+
+#detail-location {
+    .map {
+        background-color: #dcdcdc;
+        height: vw(350px);
+        margin: vw(30px) vw(10px) vw(20px);
+    }
+    .title {
+        margin-bottom: vw(30px);
+    }
+    .address {
+        margin-top: vw(20px);
+        margin-left: vw(15px);
+
+        strong {
+            @include font-18px-SB;
+        }
+        .vector {
+            margin-top: vw(17px);
+            li {
+                position: relative;
+                &::after {
+                    content: '';
+                    position: absolute;
+                    left: 0.2%;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    width: 4px;
+                    height: 4px;
+                    background-color: $default;
+                    @include circle;
+                }
+                padding-left: vw(20px);
+                margin-bottom: vw(5px);
+            }
+        }
+    }
+}
+
+
+.filter-wrap {
+            width: 15.625vw;
+            .map-modal {
+                height: 7.2917vw;
+                border-radius: 10px;
+                margin-bottom: vw(48px);
+                background-image: url('../../../public/images/hotels/search/map_modal.jpg');
+                background-size: cover;
+                background-repeat: no-repeat;
+                cursor: pointer;
+            }
+            .filter {
+                .filtering {
+                    margin-bottom: vw(48px);
+                    p {
+                        @include font-20px-M;
+                        margin-bottom: vw(24px);
+                    }
+                    .round-btns {
+                        li {
+                            &.active {
+                                // 클릭된 li에 대한 스타일
+                                background-color: $mint;
+                                color: $white;
+                                border: vw(1px) solid $mint;
+                            }
+                            
+                        }
+                    }
+                    ul {
+                        margin-left: vw(20px);
+                        li {
+                            cursor: pointer;
+                            @include font-16px;
+                            display: flex;
+                            align-items: center;
+                            gap: vw(12px);
+                            color: $default;
+                            &.active {
+                                // 클릭된 li에 대한 스타일
+                                border-color: #ddd;
+                            }
+                            span {
+                                display: inline-block;
+                                border-radius: vw(3px);
+                                 display: inline-block;
+                                width: vw(14px);
+                                height: vw(14px);
+                                border: 1px solid #ccc;
+                                position: relative;
+                                transition: all 0.2s ease;
+                            }
+                             span.checked {
+                background-color: $mint;
+                border-color: $mint;
+
+
+                // 체크 표시 (✔) 스타일
+                &::after {
+                    content: '✔';
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    color: $white;
+                    // font-12px는 mixin으로 가정
+                    @include font-12px;
+                }
+            }
+                        }
+                    }
+                }
+            }
+            .type {
+                .type-title {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    p {
+                    }
+                    .redo {
+                        color: $greyscale-1000;
+                        @include font-16px;
+                        cursor: pointer;
+                        display: flex;
+                        align-items: center;
+                        gap: vw(6px);
+                        margin-bottom: vw(24px);
+                    }
+                }
+                ul {
+                    margin-left: vw(20px);
+                    display: flex;
+                    flex-direction: column;
+                    gap: vw(10px);
+                    li {
+                        span {
+                            &.checked {
+                                // 체크되었을 때 스타일
+                                border-color: none;
+
+                            }
+                        }
+                    }
+                }
+            }
+            .star,
+            .service {
+                ul {
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: vw(12px);
+                    li {
+                        padding: vw(6px) vw(15px);
+                        box-sizing: border-box;
+                        border-radius: vw(40px);
+                        border: 1px solid $greyscale-1000;
+                        cursor: pointer;
+                    }
+                }
+            }
+            .discount {
+                ul {
+                    li {
+                        display: flex;
+                        align-items: center;
+                        span {
+                        }
+                        .event {
+                            display: inline-block;
+                            font-size: vw(12px);
+                            padding: vw(2px) vw(8px);
+                            background-color: $foundation-mint-lightactive;
+                            border-radius: vw(20px);
+                            color: $mint;
+                            margin-bottom: 0;
+                        }
+                        .sale {
+                            display: inline-block;
+                            @include font-16px;
+                            margin-bottom: 0;
+                            transform: translateX(vw(-5px));
+                        }
+                    }
+                }
+            }
+            .list-wrap {
+                width: 55.2083vw;
+                height: 7.2917vw;
+                border: 1px solid #353535;
+                .list-top {
+                }
+                .list-box {
+                    display: flex;
+                    flex-direction: column;
+                    gap: vw(20px);
+                }
+            }
+        }

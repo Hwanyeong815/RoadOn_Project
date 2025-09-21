@@ -1,8 +1,8 @@
 import HotelsMainCon1 from "./hotelsMainCon1";
-import AirportCon2 from "./AirportCon2";
-import AirportCon3 from "./AirportCon3";
-import AirportCon4 from "./AirportCon4";
-import AirportCon5 from "./AirportCon5";
+import AirportCon2 from "../../airport/airportMain/AirportCon2";
+import AirportCon3 from "../../airport/airportMain/AirportCon3";
+import AirportCon4 from "../../airport/airportMain/AirportCon4";
+import AirportCon5 from "../../airport/airportMain/AirportCon5";
 
 const HotelsMain = () => {    
     return (

@@ -1,12 +1,15 @@
+// HotelsDetail.jsx
 import { useNavigate, useParams } from 'react-router-dom';
 import '../style.scss';
 import useHotelStore from '../../../store/hotelStore';
-import options from '../../../api/hotelsRoomTypeData';
+import options from '../../../api/hotelsRoomTypeData'; // 원본 고정 데이터
 import { useRef, useState } from 'react';
 import DetailLeft from '../../../components/hotels/hotelsDetail/DetailLeft';
 import DetailRight from '../../../components/hotels/hotelsDetail/DetailRight';
 import DetailBottom from '../../../components/hotels/hotelsDetail/DetailBottom';
 import GalleryModal from '../../../components/hotels/hotelsDetail/GalleryModal';
+import SearchBar from '../../../components/ui/SearchBar/SearchBar';
+import SearchBarWhite from '../../../components/home/visual/search/SearchBarWhite';
 
 const HotelsDetail = () => {
     const { slug } = useParams();
@@ -34,6 +37,18 @@ const HotelsDetail = () => {
         );
     }
 
+    // ✅ 가격 동적 계산 로직 추가
+    const dynamicOptions = options.map((room, index) => {
+        const basePrice = hotel.price; // HotelBox에서 받아온 hotel의 가격
+        const priceIncrement = 36850;
+        const newPrice = basePrice + (index * priceIncrement);
+
+        return {
+            ...room,
+            price: newPrice,
+        };
+    });
+
     const handleScrollTo = (ref, tabName) => {
         setActiveTab(tabName);
         if (ref && ref.current) {
@@ -48,15 +63,16 @@ const HotelsDetail = () => {
     const hotelReviews = getHotelReviews(hotel.id, hotel.reviewCount);
 
     const [showAllRooms, setShowAllRooms] = useState(false);
-    const [selectedRoom, setSelectedRoom] = useState(options[0]);
+    // ✅ 초기 선택 객실도 동적 가격으로 설정
+    const [selectedRoom, setSelectedRoom] = useState(dynamicOptions[0]);
     const [selectedFilter, setSelectedFilter] = useState(null);
     const navigate = useNavigate();
 
     const getFilteredRooms = () => {
         if (!selectedFilter) {
-            return showAllRooms ? options : options.slice(0, 4);
+            return showAllRooms ? dynamicOptions : dynamicOptions.slice(0, 4);
         }
-        return options.filter((room) => room.include.includes(selectedFilter));
+        return dynamicOptions.filter((room) => room.include.includes(selectedFilter));
     };
 
     const handleFilterClick = (filterName) => {
@@ -84,32 +100,21 @@ const HotelsDetail = () => {
         setIsGalleryOpen(false);
     };
 
-    if (!hotel) {
-        return (
-            <div className="hotel-detail-error">
-                <h2>호텔을 찾을 수 없습니다.</h2>
-                <p>요청하신 호텔 정보가 존재하지 않습니다.</p>
-            </div>
-        );
-    }
-
     const calculateAverageRating = (reviews) => {
         if (!reviews || reviews.length === 0) return '0.00';
-
         const totalRating = reviews.reduce((sum, review) => sum + review.rate, 0);
         const average = totalRating / reviews.length;
-
         return average.toFixed(2);
     };
 
     const averageRating = calculateAverageRating(hotelReviews);
-
     const getHighRatedReviews = useHotelStore((state) => state.getHighRatedReviews);
     const miniReviews = getHighRatedReviews(hotel.id, 3);
 
     return (
         <main className="hotel-detail">
             <div className="inner">
+                <SearchBarWhite />
                 <section className="hotel-thum">
                     <div
                         className="img-box big-img-1"
@@ -137,7 +142,7 @@ const HotelsDetail = () => {
                 <section className="detail-body-info">
                     <DetailLeft
                         hotel={hotel}
-                        options={options}
+                        options={dynamicOptions} 
                         displayedRooms={getFilteredRooms()}
                         selectedFilter={selectedFilter}
                         selectedRoom={selectedRoom}
@@ -160,7 +165,7 @@ const HotelsDetail = () => {
                 <DetailBottom hotel={hotel} reviews={hotelReviews} activeTab={activeTab}
                     handleScrollTo={handleScrollTo}
                     locationRef={locationRef}
-                    reviewsRef={reviewsRef}/>
+                    reviewsRef={reviewsRef} />
             </div>
         </main>
     );

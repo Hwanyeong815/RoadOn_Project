@@ -1,7 +1,13 @@
 import './style.scss';
 import { IoCardOutline } from 'react-icons/io5';
+import { format } from 'date-fns';
+import { ko } from 'date-fns/locale';
 
-const HotelPaymentLeft = ({ hotel, selectedRoom }) => {
+const HotelPaymentLeft = ({ hotel, selectedRoom, startDate, endDate, nights, people }) => {
+    // 날짜를 원하는 형식으로 포맷합니다. (예: 11.05(수))
+    const formattedStartDate = startDate ? format(new Date(startDate), 'MM.dd(E)', { locale: ko }) : '날짜 미정';
+    const formattedEndDate = endDate ? format(new Date(endDate), 'MM.dd(E)', { locale: ko }) : '날짜 미정';
+
     return (
         <div className="pay payment-left">
             <div className="pay-detail">
@@ -15,52 +21,36 @@ const HotelPaymentLeft = ({ hotel, selectedRoom }) => {
                         <div className="check-in-out">
                             <div className="check-in">
                                 <p>체크인</p>
-                                <strong>{/*검색창 날짜*/}11.05(수) 15:00</strong>
+                                <strong>{formattedStartDate} 15:00</strong>
                             </div>
                             <div className="nights">
-                                <p>{/*검색창 날짜 - 박 수 계산 필요*/} 4박</p>
+                                <p>{nights}박</p>
                             </div>
                             <div className="check-out">
                                 <p>체크아웃</p>
-                                <strong>{/*검색창 날짜*/}11.09(일) 12:00</strong>
+                                <strong>{formattedEndDate} 12:00</strong>
                             </div>
                         </div>
                     </div>
                     <div className="pay-party">
                         <h4>예약 인원</h4>
-                        <p>{/*props*/}성인 2명</p>
+                        <p>성인 {people}명</p>
                     </div>
                     <div className="pay-resname">
                         <h4>예약자 정보</h4>
                         <p>
-                            <span>{/*props - 마이페이지 정보에서 가져오기*/}홍길동, </span>
-                            <span>{/*props*/}abcd@gmail.com</span>
+                            <span>홍길동, </span>
+                            <span>abcd@gmail.com</span>
                         </p>
                         <p>
-                            <span>{/*props*/}+82 01023457890</span>
+                            <span>+82 01023457890</span>
                         </p>
                     </div>
-                    {/* <div className="pay-passport">
-                        <h4>여권 영문 이름</h4>
-                        <div className="eng-name">
-                            <input type="text" placeholder="영문 이름" />
-                            <input type="text" placeholder="영문 성" />
-                        </div>
-                    </div> */}
-                    {/*<div className="pay-request">
-                        <h4>요청사항</h4>
-                        <textarea
-                            name="request"
-                            id="request"
-                            placeholder="요청사항을 입력해주세요 (최대 100자)"
-                            maxlength="100"
-                        ></textarea>
-                    </div>*/}
                     <div className="pay-coupon">
                         <h4>쿠폰</h4>
                         <select id="coupon" name="select-coupon">
                             <option value="" disabled selected hidden>
-                                사용 가능한 쿠폰 <span>{/*props*/}1개</span>
+                                사용 가능한 쿠폰 <span>1개</span>
                             </option>
                             <option value="apple">가능한 옵션</option>
                             <option value="banana">마이페이지의</option>
@@ -70,8 +60,7 @@ const HotelPaymentLeft = ({ hotel, selectedRoom }) => {
                     <div className="pay-point">
                         <h4>포인트</h4>
                         <p>
-                            RT 포인트 {/*props*/}
-                            <span>12,000</span>P
+                            RT 포인트 <span>12,000</span>P
                         </p>
                         <input type="number" />
                         <button>전액 사용</button>
@@ -108,7 +97,6 @@ const HotelPaymentLeft = ({ hotel, selectedRoom }) => {
                             </ul>
                         </div>
                         <div className="pay-default">
-                            {/* 구현 어려우면 빼기... */}
                             <span></span> <p>이 결제수단을 다음에도 사용</p>
                         </div>
                     </div>

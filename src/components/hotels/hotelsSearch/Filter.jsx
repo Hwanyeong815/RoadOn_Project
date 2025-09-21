@@ -92,7 +92,7 @@ const Filter = () => {
                 </div>
                 <div className="filtering star">
                     <p>성급</p>
-                    <ul>
+                    <ul className='round-btns'>
                         {['전체', '5성급', '4성급', '3성급', '2성급', '1성급'].map((star) => (
                             <li
                                 key={star}
@@ -110,7 +110,7 @@ const Filter = () => {
                 </div>
                 <div className="filtering service">
                     <p>시설/서비스</p>
-                    <ul>
+                    <ul className='round-btns'>
                         {[
                             '무료 와이파이',
                             '24시간 체크인',

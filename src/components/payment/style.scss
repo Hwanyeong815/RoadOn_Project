@@ -699,12 +699,12 @@
     button {
         width: vw(395px);
         height: vw(52px);
-        background-color: $orange;
+        background-color: $mint;
         color: $white;
         display: flex;
         justify-content: center;
         align-items: center;
-        border-radius: vw(8px);
+        border-radius: vw(50px);
         @include font-20px-M;
         border: none;
         &:hover {

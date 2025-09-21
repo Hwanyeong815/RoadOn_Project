@@ -1,35 +1,64 @@
-// src/components/hotels/hotelsSearch/HotelBox.jsx
 import '../style.scss';
 import { useNavigate } from 'react-router-dom';
 import WishButton from '../../ui/wishbutton/WishButton';
 import useWishStore from '../../../store/wishStore';
+import useHotelStore from '../../../store/hotelStore';
 
 const HotelBox = ({ hotelId, inWishList = false }) => {
     const hotels = useWishStore((s) => s.hotels || []);
     const hotel = hotels.find((h) => String(h?.id) === String(hotelId));
 
     const navigate = useNavigate();
+    const getHotelReviews = useHotelStore((state) => state.getHotelReviews);
 
     if (!hotel) return inWishList ? null : <div>호텔 정보를 찾을 수 없습니다.</div>;
+
+    const calculateAverageRating = (hotelId, reviewCount) => {
+        const reviews = getHotelReviews(hotelId, reviewCount);
+        if (!reviews || reviews.length === 0) return "0.00";
+        const totalRating = reviews.reduce((sum, review) => sum + review.rate, 0);
+        const average = totalRating / reviews.length;
+        return average.toFixed(1);
+    };
+
+    const averageRating = calculateAverageRating(hotel.id, hotel.reviewCount);
+    const reviewCount = Number(hotel?.reviewCount ?? 0);
 
     const handleHotelClick = () => {
         if (hotel.slug) navigate(`/hotels/${hotel.slug}`);
     };
 
-    // 이미지 경로
     const imgSrc =
         (hotel?.image?.[0] && `/images/hotels/detail/hotelsList/${hotel.image[0]}`) ||
         '/images/hotels/default.png';
 
-    // ✅ 평균 평점: averageRating 없으면 rate 사용
-    const rawAvg = hotel?.averageRating ?? hotel?.rate; // ← 핵심
-    const averageRating =
-        rawAvg === undefined || rawAvg === null || rawAvg === ''
-            ? '0.0'
-            : Number(rawAvg).toFixed(1);
+    const getDiscountedPrice = (price, percentageOff) => {
+        if (!price || !percentageOff) return 0;
+        const discountedValue = price * (1 - percentageOff / 100);
+        return Math.floor(discountedValue);
+    };
 
-    // ✅ 리뷰 수: 주어진 reviewCount 그대로 사용(없으면 0)
-    const reviewCount = Number(hotel?.reviewCount ?? 0);
+    const renderPrice = () => {
+        // hotel.discount 값이 true일 경우 할인된 가격을 표시
+        if (hotel.discount === true) {
+            const discountedPrice = getDiscountedPrice(hotel.price, hotel.percentageOff);
+            return (
+                <div className="bottom-price">
+                    <span>{Number(hotel.price ?? 0).toLocaleString()}원</span>
+                    <div className="discounted-price">
+                        <span>{hotel.percentageOff}%</span>
+                        <strong>{Number(discountedPrice).toLocaleString()}원</strong>
+                    </div>
+                </div>
+            );
+        }
+        // hotel.discount 값이 false 또는 없을 경우 기본 가격을 표시
+        return (
+            <div className="bottom-price">
+                <strong>{Number(hotel.price ?? 0).toLocaleString()}원</strong>
+            </div>
+        );
+    };
 
     return (
         <div
@@ -71,10 +100,7 @@ const HotelBox = ({ hotelId, inWishList = false }) => {
                         <img src="/images/hotels/search/map_pin.svg" alt="" />
                         <span>{hotel.location}</span>
                     </div>
-                    <div className="bottom-price">
-                        <span>1박, 성인 2명</span>
-                        <strong>{Number(hotel.price ?? 0).toLocaleString()}원</strong>
-                    </div>
+                    {renderPrice()}
                 </div>
             </div>
         </div>
