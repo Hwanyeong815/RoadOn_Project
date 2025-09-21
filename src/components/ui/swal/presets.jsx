@@ -28,7 +28,7 @@ export const presets = {
         html: '로그인이 필요한 서비스입니다. \n 로그인 하시겠습니까?',
         showCancelButton: true,
         cancelButtonText: '취소',
-        confirmButtonText: '로그인 하러가기',
+        confirmButtonText: '확인',
         customClass: {
             container: 'swalx-container',
             popup: 'swalx-popup',
@@ -38,6 +38,13 @@ export const presets = {
             confirmButton: 'swalx-btn swalx-confirm',
             cancelButton: 'swalx-btn swalx-cancel',
         },
+    },
+    loginRequired2: {
+        title: '<strong>로그인 하시겠습니까?</strong>',
+        html: '로그인이 필요한 서비스입니다. \n 로그인 하시겠습니까?',
+        showCancelButton: true,
+        cancelButtonText: '취소',
+        confirmButtonText: '로그인 하러가기',
     },
     addedToWishlist: {
         title: '<strong>찜 목록에 추가하였습니다.</strong>',
