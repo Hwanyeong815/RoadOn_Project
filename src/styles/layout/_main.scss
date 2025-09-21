@@ -8,4 +8,7 @@
     @include tablet {
         width: 95%;
     }
+    @include mobile {
+        width: vw(350px);
+    }
 }
