@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import WishButton from '../../ui/wishbutton/WishButton';
 import useWishStore from '../../../store/wishStore';
 import useHotelStore from '../../../store/hotelStore';
+import { openWishlistShortcut } from '../../ui/swal/presets'; // ✅ 그대로 사용
 
 const HotelBox = ({ hotelId, inWishList = false }) => {
     const hotels = useWishStore((s) => s.hotels || []);
@@ -15,7 +16,7 @@ const HotelBox = ({ hotelId, inWishList = false }) => {
 
     const calculateAverageRating = (hotelId, reviewCount) => {
         const reviews = getHotelReviews(hotelId, reviewCount);
-        if (!reviews || reviews.length === 0) return "0.00";
+        if (!reviews || reviews.length === 0) return '0.00';
         const totalRating = reviews.reduce((sum, review) => sum + review.rate, 0);
         const average = totalRating / reviews.length;
         return average.toFixed(1);
@@ -39,7 +40,6 @@ const HotelBox = ({ hotelId, inWishList = false }) => {
     };
 
     const renderPrice = () => {
-        // hotel.discount 값이 true일 경우 할인된 가격을 표시
         if (hotel.discount === true) {
             const discountedPrice = getDiscountedPrice(hotel.price, hotel.percentageOff);
             return (
@@ -52,7 +52,6 @@ const HotelBox = ({ hotelId, inWishList = false }) => {
                 </div>
             );
         }
-        // hotel.discount 값이 false 또는 없을 경우 기본 가격을 표시
         return (
             <div className="bottom-price">
                 <strong>{Number(hotel.price ?? 0).toLocaleString()}원</strong>
@@ -77,7 +76,15 @@ const HotelBox = ({ hotelId, inWishList = false }) => {
                     }}
                 />
                 <div className="wish-overlay" onClick={(e) => e.stopPropagation()}>
-                    <WishButton type="hotel" id={hotel.id} data={hotel} />
+                    <WishButton
+                        type="hotel"
+                        id={hotel.id}
+                        data={hotel}
+                        // ✅ 추가될 때만 스윗알럿 → 확인 시 찜목록 이동
+                        onWish={(added) => {
+                            if (added) openWishlistShortcut({ navigate });
+                        }}
+                    />
                 </div>
             </div>
 

@@ -1,16 +1,16 @@
-// src/components/ui/wishbutton/WishButton.jsx
 import { useEffect, useMemo, useState } from 'react';
 import useWishStore from '../../../store/wishStore';
 import './style.scss';
-import { FaHeart, FaRegHeart } from 'react-icons/fa'; // 빈 하트(FaRegHeart)도 추가
+import { FaHeart, FaRegHeart } from 'react-icons/fa';
 
 const WishButton = ({
     type = 'hotel',
     id,
     data = null,
     className = '',
-    filledIcon: FilledIcon = FaHeart, // 기본 채워진 하트
-    emptyIcon: EmptyIcon = FaRegHeart, // 기본 빈 하트
+    filledIcon: FilledIcon = FaHeart,
+    emptyIcon: EmptyIcon = FaRegHeart,
+    onWish, // ✅ 추가: 토글 결과 전달 콜백 (true=추가, false=삭제)
 }) => {
     const items = useWishStore((s) => s.items) || [];
     const addItemFn = useWishStore((s) => s.addItem || null);
@@ -48,6 +48,7 @@ const WishButton = ({
                 setStateItems(newItems);
             }
             setWished(false);
+            onWish?.(false); // ✅ 삭제 콜백
         } else {
             // 추가
             const payload = { uid, type, id, data };
@@ -57,6 +58,7 @@ const WishButton = ({
                 setStateItems([payload, ...before]);
             }
             setWished(true);
+            onWish?.(true); // ✅ 추가 콜백
         }
     };
 
