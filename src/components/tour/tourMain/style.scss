@@ -5,7 +5,8 @@
     margin-bottom: vw(100px);
     .tour-main-con {
         overflow-x: hidden;
-        height: vw(1080px);
+        // min-height: 100vh;
+        height: vw(1180px);
 
         position: relative;
         &1 {
@@ -22,16 +23,21 @@
                 text-align: center;
                 color: $white;
                 h2 {
-                    font-size: rem(50px);
-                    line-height: 1.6;
-                    font-weight: 700;
+                    font-size: rem(60px);
+                    line-height: 1.2;
+                    font-weight: 400;
                     margin-bottom: vw(20px);
                     span {
-                        color: $orange;
+                        font-weight: 600;
+                        -webkit-text-stroke-width: 1px;
+                        -webkit-text-stroke-color: $orange;
+                        color: rgba(255, 127, 80, 0.1);
                     }
                 }
                 p {
-                    @include font-24px-M;
+                    @include font-20px-M;
+                    color: $greyscale-900;
+                    opacity: 0.5;
                 }
             }
             .body-slide {
@@ -286,6 +292,14 @@
                         }
                         .txt-row {
                             display: flex;
+                            &1 {
+                                span {
+                                    &:first-child {
+                                        color: $greyscale-1100;
+                                        margin-right: vw(4px);
+                                    }
+                                }
+                            }
                             &4 {
                                 justify-content: space-between;
                                 align-items: end;

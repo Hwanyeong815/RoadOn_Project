@@ -1,53 +1,53 @@
-@use "../../../styles/utils" as *;
+@use '../../../styles/utils' as *;
 
 .mainvisual {
-  width: 100%;
-  height: 100vh;
-  overflow: hidden;
-
-  position: relative;
-  .overlay {
     width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.2);
-  }
-  video {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    min-width: 100%;
-    min-height: 100%;
-    transform: translate(-50%, -50%);
-    object-fit: cover; // 반응형으로 꽉 채우기
-    z-index: -1;
-  }
+    height: 100vh;
+    overflow: hidden;
 
-  .text {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-45%, -45%);
-    h1 {
-      font-size: 4rem;
-      letter-spacing: -0.12rem;
-      color: #fff;
-      margin-bottom: 50px;
+    position: relative;
+    .overlay {
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.2);
     }
-    p {
-      font-size: 20px;
-      font-weight: 400;
-      color: #fff;
-      margin-bottom: 6.96rem;
+    video {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        min-width: 100%;
+        min-height: 100%;
+        transform: translate(-50%, -50%);
+        object-fit: cover; // 반응형으로 꽉 채우기
+        z-index: -1;
+    }
 
-      span {
-        font-weight: 700;
-        font-size: 20px;
-        font-style: normal;
-      }
+    .text {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-45%, -45%);
+        h1 {
+            font-size: 4rem;
+            letter-spacing: -0.12rem;
+            color: #fff;
+            margin-bottom: 50px;
+        }
+        p {
+            font-size: 20px;
+            font-weight: 400;
+            color: #fff;
+            margin-bottom: 6.96rem;
+
+            span {
+                font-weight: 700;
+                font-size: 20px;
+                font-style: normal;
+            }
+        }
     }
-  }
 }
