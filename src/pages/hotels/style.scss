@@ -2,13 +2,37 @@
 
 .hotel {
     width: 100%;
-    margin-top: vw(260px);
+    .search-bar {
+            width: vw(1160px);
+            margin-top: vw(50px);
+            margin-bottom: vw(50px);
+            border: $greyscale-300;
+            box-shadow: 0 vw(4px) vw(8px) 0 rgba(0, 0, 0, 0.06);
+            box-sizing: border-box;
+            padding: vw(22.5px) vw(25px);
+            .search-item {
+                background: rgba(244, 244, 244, 0.90);
+                .icon {
+                    color: $mint;
+                    
+                }
+                input{                        
+                    &::placeholder {
+                        color: $greyscale-1100;
+                    }
+                        text-align-last: left;
+                    }
+                span {
+                    
+                        color: $greyscale-1100;
+                }
+            }
+        }
     .inner {
-        padding: 100px 0;
         display: flex;
         gap: 40px;
-        
     }
+
     @include tablet {
         .about {
             .inner {
@@ -21,9 +45,36 @@
     }
 }
 
+
 .hotel-detail {
     .inner {
-        padding: 0;
+        padding: 0;        
+        .search-bar {
+            width: vw(1160px);
+            margin-top: vw(50px);
+            margin-bottom: vw(50px);
+            border: $greyscale-300;
+            box-shadow: 0 vw(4px) vw(8px) 0 rgba(0, 0, 0, 0.06);
+            box-sizing: border-box;
+            padding: vw(22.5px) vw(25px);
+            .search-item {
+                background: rgba(244, 244, 244, 0.90);
+                .icon {
+                    color: $mint;
+                    
+                }
+                input{                        
+                    &::placeholder {
+                        color: $greyscale-1100;
+                    }
+                        text-align-last: left;
+                    }
+                span {
+                    
+                        color: $greyscale-1100;
+                }
+            }
+        }
         .hotel-thum {
             display: flex;
             gap: vw(24px);

@@ -1,9 +1,9 @@
 // hotelsSearch.jsx
 
 import Filter from '../../../components/hotels/hotelsSearch/Filter';
-import SearchBar from '../../../components/ui/SearchBar/SearchBar';
 import useHotelStore from '../../../store/hotelStore';
 import HotelBox from '../../../components/hotels/hotelsSearch/HotelBox';
+import SearchBarWhite from '../../../components/home/visual/search/SearchBarWhite';
 
 function hotelsSearch() {
     // `useHotelStore`를 사용하여 필터 상태와 getFilteredHotels 함수를 모두 가져옵니다.
@@ -16,7 +16,7 @@ function hotelsSearch() {
 
     return (
         <main className="hotel">
-            <SearchBar />
+            <SearchBarWhite />
             <div className="inner">
                 <Filter />
                 <div className="list-wrap">

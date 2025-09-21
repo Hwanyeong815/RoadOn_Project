@@ -238,7 +238,10 @@
     }
 }
 
-.pay {
+.pay-btn {
+    &:hover {
+        background-color: $foundation-mint-normalhover !important;
+    }
 }
 
 .payment-left {
@@ -1036,13 +1039,23 @@ strong {
         flex-direction: column;
         justify-content: center;
         gap: vw(20px);
-        .hotels-search {
-            .search-bar {
-            width: vw(1092px);
+        // 적용이 안됨
+        .search-bar {
+            width: vw(1160px);
             margin: auto;
-            }
+                .search-item {
+                    .placeholder, input {
+                            color: $white;                        
+                            text-align-last: left;
+                        }
+                    span {
+                        
+                            color: $white;
+                    }
+                }
         }
     }
+    
 
 }}
 

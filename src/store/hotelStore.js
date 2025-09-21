@@ -13,7 +13,6 @@ const useHotelStore = create((set, get) => ({
         startDate: null,
         endDate: null,
         people: 1,
-        discount: false,
     },
 
     // 기존 필터 상태
@@ -82,7 +81,6 @@ const useHotelStore = create((set, get) => ({
         return filtered;
     },
 
-    // 나머지 기존 메서드들...
     getHotelById: (id) => {
         const { hotels } = get();
         return hotels.find((hotel) => hotel.id === id);

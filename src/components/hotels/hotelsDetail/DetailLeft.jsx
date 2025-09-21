@@ -18,8 +18,8 @@ import Location from './Location';
 import MiniReviewItem from './MiniReviewItem';
 import WishButton from '../../ui/wishbutton/WishButton';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
-// import { useRef, useState } from 'react';
-// import DetailBotReviewsItem from '../../tour/tourDetail/detailBottom/DetailBotReviewsItem';
+import useAuthStore from '../../../store/authStore'; 
+import { useNavigate } from 'react-router-dom';
 
 const DetailLeft = ({
     hotel,
@@ -47,6 +47,13 @@ const DetailLeft = ({
         '24시간 체크인': CheckIn,
         스파: Spa,
         '개별 바베큐': Bbq,
+    };
+
+     const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+    const navigate = useNavigate();
+
+    const handleAdClick = () => {
+        navigate('/login');
     };
 
     return (
@@ -144,9 +151,11 @@ const DetailLeft = ({
                             })}
                         </ul>
                     </div>
-                    <div className="con advertise">
-                        <img src="/images/hotels/detail/login_first.png" alt="login_first.png" />
-                    </div>
+                    {!isLoggedIn && (
+                        <div className="con advertise" onClick={handleAdClick} style={{cursor: 'pointer'}}>
+                            <img src="/images/hotels/detail/login_first.png" alt="login_first.png" />
+                        </div>
+                    )}
                     <div className="con con2 room-option-wrap" ref={roomOptionRef}>
                         <h2>객실 선택</h2>
                         <ul className="room-filter">
