@@ -5,13 +5,10 @@ html.is-active {
 }
 
 #header {
-    z-index: 100;
-    // position: fixed;
-    // top: 0;
-
+    z-index: 10000;
+    top: 0;
     width: 100%;
     height: 95px;
-    background: rgba($color: #000, $alpha: 0);
 
     .inner {
         height: 100px;
@@ -23,8 +20,10 @@ html.is-active {
         top: 50%;
         transform: translateY(-50%);
         display: flex;
+        align-items: center;
+
         a {
-            height: 33px;
+            height: vw(33px);
 
             img {
                 height: 100%;
@@ -75,8 +74,7 @@ html.is-active {
                     transition: 0.1s;
                     color: $white;
                     background-color: transparent;
-                    span {
-                    }
+
                     img {
                         filter: saturate(0) brightness(2);
                         margin-right: 10px;
@@ -113,6 +111,50 @@ html.is-active {
                                     left: 10px;
                                     top: 50%;
                                     transform: translateY(-50%);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    &.bg-on {
+        /* 헤더가 비투명 상태일 때 링크 색만 다크(그레이)로 변경 */
+        // box-shadow: 0 6px 18px rgba(20, 20, 20, 0.06);
+        -webkit-backdrop-filter: blur(6px);
+        backdrop-filter: blur(6px);
+
+        .nav {
+            ul {
+                li {
+                    a {
+                        color: $greyscale-1100;
+                        transition: color 0.14s ease;
+                        img {
+                            filter: saturate(0) brightness(0.6);
+                            margin-right: 10px;
+                        }
+                    }
+                    &:hover {
+                        a {
+                            color: $mint;
+                        }
+                        img {
+                            filter: saturate(1) brightness(1);
+                        }
+                    }
+                }
+
+                /* my-menu의 마지막 아이템 구분선 색도 그레이로 */
+                &.my-menu {
+                    li {
+                        &:not(.none-line) {
+                            a {
+                                &:last-child {
+                                    &::after {
+                                        background-color: $greyscale-1100;
+                                    }
                                 }
                             }
                         }
