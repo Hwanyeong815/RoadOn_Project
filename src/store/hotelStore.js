@@ -13,6 +13,7 @@ const useHotelStore = create((set, get) => ({
         startDate: null,
         endDate: null,
         people: 1,
+        discount: false,
     },
 
     // 기존 필터 상태
