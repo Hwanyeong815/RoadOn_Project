@@ -80,7 +80,6 @@ const HotelBox = ({ hotelId, inWishList = false }) => {
                         type="hotel"
                         id={hotel.id}
                         data={hotel}
-                        // ✅ 추가될 때만 스윗알럿 → 확인 시 찜목록 이동
                         onWish={(added) => {
                             if (added) openWishlistShortcut({ navigate });
                         }}
