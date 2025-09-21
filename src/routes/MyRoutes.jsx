@@ -23,6 +23,7 @@ import ScrollToTop from '../common/ScrollToTop';
 import EditProfile from '../components/login/editProfile';
 import TourPaymentLeft from '../components/payment/TourPaymentLeft';
 import Logout from '../components/logout';
+import Test from '../components/ui/swal/Test';
 
 export const MyRoutes = () => {
     return (
@@ -58,6 +59,7 @@ export const MyRoutes = () => {
 
                     <Route path="editProfile" element={<EditProfile />} />
                     <Route path="*" element={<NotFiles />} />
+                    <Route path="/test" element={<Test />} />
                 </Route>
             </Routes>
         </BrowserRouter>
