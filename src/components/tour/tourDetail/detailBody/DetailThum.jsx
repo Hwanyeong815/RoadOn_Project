@@ -15,7 +15,6 @@ const DetailThum = ({ tourData }) => {
     const handleCloseGallery = () => {
         setIsGalleryOpen(false);
     };
-    
 
     return (
         <section className="detail-thum">
@@ -36,30 +35,30 @@ const DetailThum = ({ tourData }) => {
                 )}
             </div> */}
             <section className="hotel-thum">
-                    <div
-                        className="img-box big-img-1"
-                        onClick={handleImageClick}
-                        style={{ cursor: 'pointer' }}
-                    >
-                        {/* <img src={`/images/hotels/detail/hotelsList/${tourData.image[0]}`} alt="숙소이미지1" /> */}
-                        <img src={`/images/tour/detail/${tourData.detailImg[0]}`} alt="투어이미지1" />
-                    </div>
-                    <div
-                        className="img-box big-img-2"
-                        onClick={handleImageClick}
-                        style={{ cursor: 'pointer' }}
-                    >
-                        <img src={`/images/tour/detail/${tourData.detailImg[1]}`} alt="투어이미지2" />
-                        <img src="/images/icon/gallery.svg" alt="갤러리" />
-                    </div>
-                </section>
-                {isGalleryOpen && (
-                    <GalleryModal
-                        images={tourData.detailImg}
-                        hotelName={tourData.title}
-                        onClose={handleCloseGallery}
-                    />
-                )}
+                <div
+                    className="img-box big-img-1"
+                    onClick={handleImageClick}
+                    style={{ cursor: 'pointer' }}
+                >
+                    {/* <img src={`/images/hotels/detail/hotelsList/${tourData.image[0]}`} alt="숙소이미지1" /> */}
+                    {/* <img src={`/images/tour/detail/${tourData.detailImg[0]}`} alt="투어이미지1" /> */}
+                </div>
+                <div
+                    className="img-box big-img-2"
+                    onClick={handleImageClick}
+                    style={{ cursor: 'pointer' }}
+                >
+                    <img src={`/images/tour/detail/${tourData.detailImg[1]}`} alt="투어이미지2" />
+                    <img src="/images/icon/gallery.svg" alt="갤러리" />
+                </div>
+            </section>
+            {isGalleryOpen && (
+                <GalleryModal
+                    images={tourData.detailImg}
+                    hotelName={tourData.title}
+                    onClose={handleCloseGallery}
+                />
+            )}
         </section>
     );
 };
