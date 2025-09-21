@@ -1,194 +1,187 @@
-import { useEffect, useRef } from 'react';
+// src/hooks/useAutoHeaderBg.js
+import { useLayoutEffect, useEffect, useRef } from 'react';
 
-/* 유틸: 색 문자열을 {r,g,b,a}로 반환 (hex, #fff, rgb(), rgba()) */
-const parseColor = (s = '') => {
-    if (!s) return null;
-    const str = s.trim().toLowerCase();
-    // hex #rrggbb or #rgb
-    const hexMatch = str.match(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i);
-    if (hexMatch) {
-        const h = hexMatch[1];
-        if (h.length === 3) {
-            const r = parseInt(h[0] + h[0], 16);
-            const g = parseInt(h[1] + h[1], 16);
-            const b = parseInt(h[2] + h[2], 16);
-            return { r, g, b, a: 1 };
-        } else {
-            const r = parseInt(h.slice(0, 2), 16);
-            const g = parseInt(h.slice(2, 4), 16);
-            const b = parseInt(h.slice(4, 6), 16);
-            return { r, g, b, a: 1 };
-        }
-    }
-    // rgb/rgba
-    const rgbMatch = str.match(/rgba?\(\s*([0-9]+),\s*([0-9]+),\s*([0-9]+)(?:,\s*([0-9.]+))?\s*\)/);
-    if (rgbMatch) {
+// helpers
+const parseRgb = (s = '') => {
+    const m = ('' + s).match(/rgba?\(\s*([0-9]+),\s*([0-9]+),\s*([0-9]+)(?:,\s*([0-9.]+))?\s*\)/);
+    if (m) return { r: +m[1], g: +m[2], b: +m[3], a: m[4] ? +m[4] : 1 };
+    const hex = ('' + s).trim().match(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i);
+    if (hex) {
+        const h = hex[1];
+        if (h.length === 3)
+            return {
+                r: parseInt(h[0] + h[0], 16),
+                g: parseInt(h[1] + h[1], 16),
+                b: parseInt(h[2] + h[2], 16),
+                a: 1,
+            };
         return {
-            r: +rgbMatch[1],
-            g: +rgbMatch[2],
-            b: +rgbMatch[3],
-            a: rgbMatch[4] ? +rgbMatch[4] : 1,
+            r: parseInt(h.slice(0, 2), 16),
+            g: parseInt(h.slice(2, 4), 16),
+            b: parseInt(h.slice(4, 6), 16),
+            a: 1,
         };
     }
     return null;
 };
-
-/* perceived luminance (0-255 scale) */
 const luminance = ({ r, g, b }) => 0.2126 * r + 0.7152 * g + 0.0722 * b;
-
-/* 투명한지 확인 */
-const isTransparent = (s) => !s || s === 'transparent' || /rgba\(.+,\s*0\)$/.test(s);
-
-/* 요소에서 의미있는 backgroundColor 찾기 (부모로 올라감) */
-const getEffectiveBackgroundColor = (el) => {
+const isTransparent = (s = '') => !s || s === 'transparent' || /rgba\(.+, ?0\)/.test(s);
+const getEffectiveBg = (el) => {
     let cur = el;
     while (cur && cur !== document.documentElement) {
-        const style = getComputedStyle(cur);
-        const bg = style.backgroundColor;
+        const cs = getComputedStyle(cur);
+        const bg = cs.backgroundColor;
         if (!isTransparent(bg))
-            return {
-                color: bg,
-                hasBgImage: style.backgroundImage && style.backgroundImage !== 'none',
-            };
+            return { color: bg, hasBgImage: cs.backgroundImage && cs.backgroundImage !== 'none' };
         cur = cur.parentElement;
     }
-    const bodyStyle = getComputedStyle(document.body);
+    const cs = getComputedStyle(document.body);
     return {
-        color: bodyStyle.backgroundColor,
-        hasBgImage: bodyStyle.backgroundImage && bodyStyle.backgroundImage !== 'none',
+        color: cs.backgroundColor,
+        hasBgImage: cs.backgroundImage && cs.backgroundImage !== 'none',
     };
 };
 
 /**
- * 자동 감지 훅
- * - headerRef: header ref
- * - opts: { sampleCount: 3, offsetY: 2, luminanceThreshold: 245, requiredWhiteCount: 2 }
+ * useAutoHeaderBg(headerRef, opts)
+ * - 히스테리시스 + 다중 샘플 + 안정화
+ * - 초기 페인트 전에 useLayoutEffect로 즉시 판정
+ * - minScrollForOn: 이 픽셀보다 스크롤 전에는 .bg-on을 절대 켜지 않음(투명 유지)
  */
-const useAutoHeaderBgAuto = (headerRef, opts = {}) => {
+const useAutoHeaderBg = (headerRef, opts = {}) => {
     const {
-        sampleCount = 3,
         offsetY = 2,
-        luminanceThreshold = 245, // perceived luminance threshold (0-255)
-        requiredWhiteCount = 2, // sampleCount 중 이 개수 이상이면 white 판정
-        observeMutations = true,
+        stabilizeMs = 150,
+        L_ON = 250,
+        L_OFF = 235,
+        minScrollForOn = 0, // <--- 추가
+        deps = [], // 라우트 변경 등 외부 신호
     } = opts;
 
     const rafRef = useRef(null);
-    const moRef = useRef(null);
+    const pendingTimerRef = useRef(null);
+    const lastAppliedRef = useRef(null);
 
+    const applyState = (header, isWhite, color = '#ffffff') => {
+        if (!header) return;
+        if (lastAppliedRef.current === isWhite) return;
+        lastAppliedRef.current = isWhite;
+        if (isWhite) {
+            header.classList.add('bg-on');
+            header.style.setProperty('--header-bg', color);
+            header.style.setProperty('--header-fg', '#111111');
+        } else {
+            header.classList.remove('bg-on');
+            header.style.removeProperty('--header-bg');
+            header.style.removeProperty('--header-fg');
+        }
+    };
+
+    const checkPointIsWhite = (x, y, Lthreshold) => {
+        if (x < 0 || x > window.innerWidth || y < 0 || y > window.innerHeight) return false;
+        const el = document.elementFromPoint(x, y);
+        if (!el) return false;
+
+        const ov = el.closest('[data-bg]')?.dataset?.bg;
+        if (ov) {
+            const s = ('' + ov).trim().toLowerCase();
+            return s === 'white' || s === '#fff' || s === '#ffffff';
+        }
+        if (el === document.body || el === document.documentElement) return false;
+
+        const { color, hasBgImage } = getEffectiveBg(el);
+        const p = parseRgb(color);
+        if (!p || hasBgImage || p.a <= 0.85) return false;
+        return luminance(p) >= Lthreshold;
+    };
+
+    const manualCheck = (header, isCurrentlyOn) => {
+        if (!header) return false;
+
+        // 스크롤이 충분히 내려가기 전에는 항상 OFF (투명 유지)
+        const y = window.scrollY || document.documentElement.scrollTop || 0;
+        if (!isCurrentlyOn && y < minScrollForOn) return false;
+
+        const rect = header.getBoundingClientRect();
+        const xs = [
+            Math.round(rect.left + 8),
+            Math.round(rect.left + rect.width / 2),
+            Math.round(rect.right - 8),
+        ];
+        const y1 = Math.round(rect.bottom + offsetY);
+        const y2 = y1 + 12;
+        const Lth = isCurrentlyOn ? L_OFF : L_ON;
+
+        let cnt = 0;
+        [y1, y2].forEach((Y) =>
+            xs.forEach((X) => {
+                if (checkPointIsWhite(X, Y, Lth)) cnt++;
+            })
+        );
+
+        return isCurrentlyOn ? cnt >= 3 : cnt >= 4;
+    };
+
+    const scheduleCheck = (header) => {
+        if (rafRef.current) cancelAnimationFrame(rafRef.current);
+        rafRef.current = requestAnimationFrame(() => {
+            const result = manualCheck(header, !!lastAppliedRef.current);
+            if (result === lastAppliedRef.current) {
+                if (pendingTimerRef.current) {
+                    clearTimeout(pendingTimerRef.current);
+                    pendingTimerRef.current = null;
+                }
+                return;
+            }
+            if (pendingTimerRef.current) clearTimeout(pendingTimerRef.current);
+            pendingTimerRef.current = setTimeout(() => {
+                const confirm = manualCheck(header, !!lastAppliedRef.current);
+                applyState(header, confirm);
+                pendingTimerRef.current = null;
+            }, stabilizeMs);
+        });
+    };
+
+    // 초기: 페인트 전에 즉시 판단
+    useLayoutEffect(() => {
+        const header = headerRef?.current;
+        if (!header) return;
+        const first = manualCheck(header, false);
+        applyState(header, first);
+        scheduleCheck(header);
+        const t1 = setTimeout(() => scheduleCheck(header), 60);
+        const t2 = setTimeout(() => scheduleCheck(header), 200);
+        return () => {
+            clearTimeout(t1);
+            clearTimeout(t2);
+            if (rafRef.current) cancelAnimationFrame(rafRef.current);
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [headerRef]);
+
+    // 이벤트 기반 재판정
     useEffect(() => {
         const header = headerRef?.current;
         if (!header) return;
-        let headerHeight = header.offsetHeight || 0;
 
-        const getSampleXs = (rect) => {
-            // sampleCount 1 => center, 3 => left/center/right
-            if (sampleCount === 1) return [Math.round(rect.left + rect.width / 2)];
-            const leftX = Math.round(rect.left + 8);
-            const rightX = Math.round(rect.right - 8);
-            const centerX = Math.round(rect.left + rect.width / 2);
-            if (sampleCount === 2) return [leftX, rightX];
-            // default 3
-            return [leftX, centerX, rightX];
-        };
+        const onScrollResize = () => scheduleCheck(header);
+        window.addEventListener('scroll', onScrollResize, { passive: true });
+        window.addEventListener('resize', onScrollResize);
+        const onPageShow = () => scheduleCheck(header);
+        window.addEventListener('pageshow', onPageShow);
+        if (document.fonts && document.fonts.ready)
+            document.fonts.ready.then(() => scheduleCheck(header));
 
-        const check = () => {
-            if (!header) return;
-            const rect = header.getBoundingClientRect();
-            const xs = getSampleXs(rect);
-            const y = Math.round(rect.bottom + offsetY);
+        // 외부 deps(예: 라우트 변경)에도 반응
+        scheduleCheck(header);
 
-            if (y < 0 || y > window.innerHeight) {
-                header.classList.remove('bg-on');
-                header.style.removeProperty('--header-bg');
-                return;
-            }
-
-            let whiteCount = 0;
-
-            xs.forEach((x) => {
-                if (x < 0 || x > window.innerWidth) return;
-                const el = document.elementFromPoint(x, y);
-                if (!el) return;
-                // 명시적 override가 섹션에 있으면 우선 처리
-                const dataBg = el.closest('[data-bg]')?.dataset?.bg;
-                if (dataBg) {
-                    const norm = ('' + dataBg).trim().toLowerCase();
-                    if (norm === 'white' || norm === '#fff' || norm === '#ffffff') whiteCount++;
-                    return;
-                }
-
-                const { color, hasBgImage } = getEffectiveBackgroundColor(el);
-                const parsed = parseColor(color);
-                if (parsed) {
-                    const L = luminance(parsed);
-                    // 흰색에 가깝고 불투명(또는 알파>0.9)
-                    if (L >= luminanceThreshold && parsed.a > 0.85) whiteCount++;
-                    return;
-                }
-                // bg를 못 읽었거나 bg-image가 존재하면 보수적으로 white로 안 판단
-                if (hasBgImage) {
-                    // 이미지인데 element가 <img>이면서 same-origin이면 canvas로 픽셀 샘플링 시도해볼 수 있음.
-                    // 여기선 안전모드: 이미지가 있으면 white로 간주하지 않음.
-                    return;
-                }
-            });
-
-            const isWhite = whiteCount >= requiredWhiteCount;
-            if (isWhite) {
-                header.classList.add('bg-on');
-                header.style.setProperty('--header-bg', '#ffffff');
-            } else {
-                header.classList.remove('bg-on');
-                header.style.removeProperty('--header-bg');
-            }
-        };
-
-        const scheduleCheck = () => {
-            if (rafRef.current) cancelAnimationFrame(rafRef.current);
-            rafRef.current = requestAnimationFrame(check);
-        };
-
-        // 초기 체크
-        scheduleCheck();
-
-        window.addEventListener('scroll', scheduleCheck, { passive: true });
-        window.addEventListener('resize', scheduleCheck);
-
-        // header 높이 변동 시 체크 로직 재계산 (rootMargin 개념 대신 바로 픽셀 샘플)
-        let ro;
-        if (window.ResizeObserver) {
-            ro = new ResizeObserver(() => {
-                const newH = header.offsetHeight || 0;
-                if (newH !== headerHeight) {
-                    headerHeight = newH;
-                    scheduleCheck();
-                }
-            });
-            ro.observe(header);
-        }
-
-        // DOM 변경(컨텐츠 변경) 감지 — 필요하면 활성화
-        if (observeMutations && window.MutationObserver) {
-            moRef.current = new MutationObserver(() => scheduleCheck());
-            moRef.current.observe(document.body, {
-                childList: true,
-                subtree: true,
-                attributes: true,
-            });
-        }
-
-        // cleanup
         return () => {
-            window.removeEventListener('scroll', scheduleCheck);
-            window.removeEventListener('resize', scheduleCheck);
-            if (rafRef.current) cancelAnimationFrame(rafRef.current);
-            if (ro) ro.disconnect();
-            if (moRef.current) moRef.current.disconnect();
-            header.style.removeProperty('--header-bg');
-            header.classList.remove('bg-on');
+            window.removeEventListener('scroll', onScrollResize);
+            window.removeEventListener('resize', onScrollResize);
+            window.removeEventListener('pageshow', onPageShow);
         };
-    }, [headerRef, sampleCount, offsetY, luminanceThreshold, requiredWhiteCount, observeMutations]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [headerRef, offsetY, stabilizeMs, L_ON, L_OFF, minScrollForOn, ...deps]);
 };
 
-export default useAutoHeaderBgAuto;
+export default useAutoHeaderBg;

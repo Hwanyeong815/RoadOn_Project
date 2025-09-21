@@ -1,17 +1,22 @@
 @use './../utils' as *;
 
 #footer {
-    background-color: #ebebeb;
+    background-color: $greyscale-200;
     width: 100%;
+    height: vw(320px);
+    // position: absolute;
+    // margin: 0;
 
     .inner {
-        padding: 120px 0;
+        padding: vw(90px) vw(240px);
         display: flex;
-        justify-content: space-between;
+        justify-content: center;
+        width: 100%;
+        gap: vw(250px);
     }
     h2 {
-        font-size: 20px;
-        height: 40px;
+        font-size: vw(20px);
+        height: vw(40px);
         a {
             height: 100%;
             img {
@@ -20,25 +25,30 @@
         }
     }
     .footer {
+        &-group {
+            display: flex;
+            gap: vw(60px);
+        }
         &-info-wrap {
             user-select: none;
-            width: 540px;
+            width: vw(540px);
             color: $greyscale-1000;
             div {
                 display: flex;
                 @include font-18px;
                 &.links {
+                    width: max-content;
                     p {
-                        margin-right: 20px;
+                        margin-right: vw(20px);
                     }
-                    margin-bottom: 20px;
+                    margin-bottom: vw(20px);
                 }
                 &.info {
                     p {
-                        margin-bottom: 10px;
+                        margin-bottom: vw(10px);
                     }
                     flex-direction: column;
-                    margin-bottom: 10px;
+                    margin-bottom: vw(10px);
                 }
                 &.copyright {
                     color: $greyscale-900;
@@ -47,18 +57,18 @@
         }
         &-award-wrap {
             user-select: none;
-            width: 370px;
+            width: vw(370px);
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
+            gap: vw(20px);
             color: $greyscale-1000;
             @include font-16px;
             p {
                 display: flex;
-                height: 40px;
+                height: vw(40px);
                 img {
-                    margin-right: 10px;
-                    min-width: 30px;
+                    margin-right: vw(10px);
+                    min-width: vw(30px);
                 }
             }
         }

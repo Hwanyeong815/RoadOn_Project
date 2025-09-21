@@ -1,12 +1,20 @@
-import { Link } from 'react-router-dom';
+// src/components/Header.jsx
+import { Link, useLocation } from 'react-router-dom';
 import NavBar from './NavBar';
 import { useRef, useEffect } from 'react';
 import useAutoHeaderBg from '../../hooks/useAutoHeaderBg';
-import FloatingBtn from './FloatingBtn';
+// import FloatingBtn from './FloatingBtn' // 필요 시 사용
 
 const Header = () => {
     const headerRef = useRef(null);
-    useAutoHeaderBg(headerRef);
+    const { pathname } = useLocation();
+
+    // /hotels, /airport 페이지는 초기에 반드시 투명 유지 → 40px 이상 스크롤 시에만 bg-on 허용
+    const forceTransparent = pathname === '/hotels' || pathname === '/airport';
+    useAutoHeaderBg(headerRef, {
+        deps: [pathname],
+        minScrollForOn: forceTransparent ? 40 : 0,
+    });
 
     useEffect(() => {
         const header = headerRef.current;
@@ -26,17 +34,34 @@ const Header = () => {
         preload(greySrc);
 
         const apply = () => {
-            if (header.classList.contains('bg-on')) {
-                if (img.src !== greySrc) img.src = greySrc;
-            } else {
-                if (img.src !== defaultSrc) img.src = defaultSrc;
-            }
+            const targetSrc = header.classList.contains('bg-on') ? greySrc : defaultSrc;
+            if (img.dataset.currentSrc === targetSrc) return;
+
+            // 부드러운 전환: 페이드 아웃 → 소스 교체 → onload에 페이드 인
+            img.style.transition = 'opacity 0.14s ease';
+            img.style.opacity = '0';
+
+            const doSwap = () => {
+                img.dataset.currentSrc = targetSrc;
+                const onLoad = () => {
+                    img.removeEventListener('load', onLoad);
+                    requestAnimationFrame(() => {
+                        img.style.opacity = '1';
+                    });
+                };
+                img.addEventListener('load', onLoad);
+                img.src = targetSrc;
+            };
+
+            setTimeout(doSwap, 60);
         };
 
+        // 초기 적용
         apply();
 
-        const mo = new MutationObserver((mutations) => {
-            for (const m of mutations) {
+        // 헤더 클래스 변화 감지 → 로고 스왑
+        const mo = new MutationObserver((muts) => {
+            for (const m of muts) {
                 if (m.attributeName === 'class') {
                     apply();
                     break;
@@ -45,10 +70,8 @@ const Header = () => {
         });
         mo.observe(header, { attributes: true, attributeFilter: ['class'] });
 
-        return () => {
-            mo.disconnect();
-        };
-    }, []);
+        return () => mo.disconnect();
+    }, [pathname]);
 
     return (
         <header id="header" ref={headerRef} className="site-header">
@@ -60,8 +83,10 @@ const Header = () => {
                             alt="Brand"
                             data-src-default="/images/ci.png"
                             data-src-grey="/images/ci-grey.png"
+                            data-current-src="/images/ci.png"
                             width="140"
                             height="auto"
+                            style={{ opacity: 1, transition: 'opacity 0.14s ease' }}
                         />
                     </Link>
                 </h1>
