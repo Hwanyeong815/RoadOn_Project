@@ -1,8 +1,8 @@
-// src/components/Header.jsx
 import { Link } from 'react-router-dom';
 import NavBar from './NavBar';
 import { useRef, useEffect } from 'react';
 import useAutoHeaderBg from '../../hooks/useAutoHeaderBg';
+import FloatingBtn from './FloatingBtn';
 
 const Header = () => {
     const headerRef = useRef(null);
@@ -12,15 +12,12 @@ const Header = () => {
         const header = headerRef.current;
         if (!header) return;
 
-        // 로고 img 선택 (h1 내부)
         const img = header.querySelector('h1 img');
         if (!img) return;
 
-        // 기본 경로(필요시 변경)
         const defaultSrc = img.dataset.srcDefault || '/images/ci.png';
         const greySrc = img.dataset.srcGrey || '/images/ci-grey.png';
 
-        // 프리로드: 깜빡임 최소화
         const preload = (src) => {
             const p = new Image();
             p.src = src;
@@ -28,9 +25,7 @@ const Header = () => {
         preload(defaultSrc);
         preload(greySrc);
 
-        // 적용 함수
         const apply = () => {
-            // bg-on이 있으면 "비투명(흰배경) 상태"로 간주 -> grey
             if (header.classList.contains('bg-on')) {
                 if (img.src !== greySrc) img.src = greySrc;
             } else {
@@ -38,10 +33,8 @@ const Header = () => {
             }
         };
 
-        // 초기 적용 (마운트 시)
         apply();
 
-        // class 변화 감지
         const mo = new MutationObserver((mutations) => {
             for (const m of mutations) {
                 if (m.attributeName === 'class') {
@@ -52,7 +45,6 @@ const Header = () => {
         });
         mo.observe(header, { attributes: true, attributeFilter: ['class'] });
 
-        // cleanup
         return () => {
             mo.disconnect();
         };
@@ -75,6 +67,7 @@ const Header = () => {
                 </h1>
                 <NavBar />
             </div>
+            {/* <FloatingBtn /> */}
         </header>
     );
 };

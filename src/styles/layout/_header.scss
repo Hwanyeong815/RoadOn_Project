@@ -183,4 +183,71 @@ html.is-active {
             }
         }
     }
-} //header end
+}
+
+#floating-btn {
+    opacity: 0;
+    position: fixed;
+    top: vw(260px);
+    right: vw(65px);
+    width: vw(60px);
+    height: vw(120px);
+    background-color: $greyscale-100;
+    @include circle;
+    .floating-btn-wrap {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        box-shadow: 0 vw(2px) vw(8px) 0 rgba($default, 0.2);
+        @include circle;
+        transition: 0.8s, ease;
+        cursor: pointer;
+
+        &::after {
+            position: absolute;
+            content: '';
+            background-color: $greyscale-500;
+            width: 100%;
+            height: 1px;
+            left: 50%;
+            top: 50%;
+            transform: translateX(-50%);
+        }
+        button {
+            width: 100%;
+            height: 50%;
+            position: relative;
+            border: none;
+            font-size: rem(20px);
+        }
+
+        .floating-btn {
+            &-top,
+            &-bottom {
+                &:hover,
+                &:active {
+                    box-shadow: 0 vw(2px) vw(8px) 0 rgba($default, 0.5);
+                    p {
+                        color: $mint;
+                        transform: scale(2);
+                        filter: brightness(0.6);
+                    }
+                }
+            }
+            &-top {
+                border-radius: vw(100px) vw(100px) 0 0;
+            }
+            &-bottom {
+                border-radius: 0 0 vw(100px) vw(100px);
+            }
+        }
+    }
+    &.is-visible {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+    }
+}
