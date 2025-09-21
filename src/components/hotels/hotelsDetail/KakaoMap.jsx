@@ -1,107 +1,122 @@
-import React, { useEffect, useRef } from 'react';
+// KakaoMap.jsx - 간단한 유동적 주소 버전
+import { useState, useEffect, useRef } from "react";
 
-const KakaoMap = ({ address, hotelName, width = '100%', height = '400px' }) => {
+const KakaoMap = ({ address, name }) => {
     const mapContainer = useRef(null);
-    const map = useRef(null);
-    const marker = useRef(null);
+    const [isLoaded, setIsLoaded] = useState(false);
 
     useEffect(() => {
-        // 카카오맵 API가 로드되었는지 확인
-        if (!window.kakao || !window.kakao.maps) {
-            console.error('카카오맵 API가 로드되지 않았습니다.');
-            return;
-        }
+        if (!mapContainer.current) return;
 
-        // 지도 초기화 함수
-        const initializeMap = () => {
-            const { kakao } = window;
-
-            // 지도 옵션 설정
-            const mapOption = {
-                center: new kakao.maps.LatLng(37.5665, 126.978), // 서울시청 좌표 (기본값)
-                level: 3, // 확대 레벨
-            };
-
-            // 지도 생성
-            map.current = new kakao.maps.Map(mapContainer.current, mapOption);
-
-            // 주소-좌표 변환 객체 생성
-            const geocoder = new kakao.maps.services.Geocoder();
-
-            // 주소로 좌표 검색
-            if (address) {
-                geocoder.addressSearch(address, (result, status) => {
-                    if (status === kakao.maps.services.Status.OK) {
-                        const coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-
-                        // 기존 마커 제거
-                        if (marker.current) {
-                            marker.current.setMap(null);
-                        }
-
-                        // 마커 생성
-                        marker.current = new kakao.maps.Marker({
-                            map: map.current,
-                            position: coords,
-                        });
-
-                        // 인포윈도우 생성 (호텔 이름 표시)
-                        const infowindow = new kakao.maps.InfoWindow({
-                            content: `<div style="width:150px;text-align:center;padding:6px 0;">${
-                                hotelName || '호텔 위치'
-                            }</div>`,
-                        });
-
-                        // 인포윈도우를 마커 위에 표시
-                        infowindow.open(map.current, marker.current);
-
-                        // 지도 중심을 마커 위치로 이동
-                        map.current.setCenter(coords);
-                    } else {
-                        console.error('주소 검색에 실패했습니다:', address);
-                    }
-                });
-            }
-        };
-
-        // 카카오맵 API 로드 대기
-        if (window.kakao && window.kakao.maps) {
-            // 이미 로드된 경우
-            window.kakao.maps.load(initializeMap);
-        } else {
-            // 스크립트 로딩 대기
-            const checkKakao = setInterval(() => {
-                if (window.kakao && window.kakao.maps) {
-                    clearInterval(checkKakao);
-                    window.kakao.maps.load(initializeMap);
-                }
-            }, 100);
-
-            // 10초 후 타임아웃
-            setTimeout(() => {
+        // 카카오맵이 로드될 때까지 기다리기
+        const checkKakao = setInterval(() => {
+            if (window.kakao && window.kakao.maps) {
                 clearInterval(checkKakao);
-                console.error('카카오맵 API 로딩 타임아웃');
-            }, 10000);
+                createMap();
+            }
+        }, 100);
+
+        // 5초 후 타임아웃
+        setTimeout(() => {
+            clearInterval(checkKakao);
+        }, 5000);
+
+        return () => clearInterval(checkKakao);
+    }, [address, name]);
+
+    const createMap = () => {
+        console.log('Creating map with address:', address);
+
+        const container = mapContainer.current;
+        
+        // 기본 위치 (강남역)
+        const defaultPosition = new window.kakao.maps.LatLng(37.4981125, 127.0379399);
+        
+        const options = {
+            center: defaultPosition,
+            level: 3
+        };
+
+        const map = new window.kakao.maps.Map(container, options);
+
+        if (address && window.kakao.maps.services) {
+            // 주소 검색 시도
+            const geocoder = new window.kakao.maps.services.Geocoder();
+            
+            geocoder.addressSearch(address, function(result, status) {
+                if (status === window.kakao.maps.services.Status.OK) {
+                    // 주소 검색 성공
+                    const coords = new window.kakao.maps.LatLng(result[0].y, result[0].x);
+                    
+                    const marker = new window.kakao.maps.Marker({
+                        map: map,
+                        position: coords
+                    });
+
+                    const infowindow = new window.kakao.maps.InfoWindow({
+                        content: '<div style="width:150px;text-align:center;padding:6px 0;">' + (name || '숙소') + '</div>'
+                    });
+                    
+                    infowindow.open(map, marker);
+                    map.setCenter(coords);
+                    
+                    console.log('Address found:', address);
+                } else {
+                    // 주소 검색 실패 - 기본 위치에 마커
+                    const marker = new window.kakao.maps.Marker({
+                        map: map,
+                        position: defaultPosition
+                    });
+
+                    const infowindow = new window.kakao.maps.InfoWindow({
+                        content: '<div style="width:150px;text-align:center;padding:6px 0;">' + (name || '숙소') + '<br><small>위치 정보 없음</small></div>'
+                    });
+                    
+                    infowindow.open(map, marker);
+                    
+                    console.log('Address not found:', address);
+                }
+            });
+        } else {
+            // Geocoder 없으면 기본 위치만
+            const marker = new window.kakao.maps.Marker({
+                map: map,
+                position: defaultPosition
+            });
+
+            const infowindow = new window.kakao.maps.InfoWindow({
+                content: '<div style="width:150px;text-align:center;padding:6px 0;">' + (name || '숙소') + '</div>'
+            });
+            
+            infowindow.open(map, marker);
         }
 
-        // 컴포넌트 언마운트 시 정리
-        return () => {
-            if (marker.current) {
-                marker.current.setMap(null);
-            }
-        };
-    }, [address, hotelName]);
+        setIsLoaded(true);
+    };
 
     return (
-        <div
-            ref={mapContainer}
-            style={{
-                width: width,
-                height: height,
+        <div 
+            ref={mapContainer} 
+            style={{ 
+                width: '100%', 
+                height: '400px',
                 borderRadius: '8px',
                 border: '1px solid #ddd',
+                backgroundColor: isLoaded ? 'transparent' : '#f5f5f5'
             }}
-        />
+        >
+            {!isLoaded && (
+                <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    height: '100%',
+                    color: '#666'
+                }}>
+                    지도 로딩 중...
+                </div>
+            )}
+        </div>
     );
 };
 

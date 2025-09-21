@@ -1,59 +1,111 @@
-import { useState } from 'react';
-import DetailPromoItem from '../../tour/tourDetail/detailBottom/DetailPromoItem';
-import DetailReviewItem from './DetailReviewItem';
+import { useState, useEffect, useRef } from "react";
+import DetailReviewItem from "./DetailReviewItem";
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { HiOutlineClipboardDocument } from 'react-icons/hi2';
-import KakaoMap from './KakaoMap';
-import DetailReviews from './DetailReviews';
+import { HiOutlineClipboardDocument } from "react-icons/hi2";
+import KakaoMap from "./KakaoMap";
 
-const DetailBottom = ({ hotel, reviews }) => {
+const DetailBottom = ({hotel, reviews, locationRef, reviewsRef}) => {
     const [copied, setCopied] = useState(false);
-    const promoHotelIds = [3, 6, 9, 15];
 
     const handleCopySuccess = () => {
         setCopied(true);
-        setTimeout(() => setCopied(false), 2000); // 2초 후 상태 초기화
+        setTimeout(() => setCopied(false), 2000);
     };
 
+    const calculateAverageRating = (reviews) => {
+        if (!reviews || reviews.length === 0) return 0;
+        
+        const totalRating = reviews.reduce((sum, review) => sum + review.rate, 0);
+        const average = totalRating / reviews.length;
+        
+        return average.toFixed(2);
+    };
+
+    const averageRating = calculateAverageRating(reviews);
+
+    const [showAllReviews, setShowAllReviews] = useState(false);
+    const [displayedCount, setDisplayedCount] = useState(4);
+
+    const displayedReviews = showAllReviews 
+        ? reviews 
+        : reviews?.slice(0, displayedCount) || [];
+
+    const handleShowMore = () => {
+        if (showAllReviews) {
+            setShowAllReviews(false);
+            setDisplayedCount(4);
+        } else {
+            const nextCount = displayedCount + 4;
+            if (nextCount >= (reviews?.length || 0)) {
+                setShowAllReviews(true);
+            } else {
+                setDisplayedCount(nextCount);
+            }
+        }
+    };
+
+    const getButtonText = () => {
+        if (showAllReviews) {
+            return '방문자 리뷰 접기';
+        } else if (displayedCount >= (reviews?.length || 0)) {
+            return '방문자 리뷰 접기';
+        } else {
+            return `방문자 리뷰 더보기`;
+        }
+    };
+    
     return (
         <section className="detail-bottom-info">
-            {/* 숙소 위치 섹션 */}
-            <section id="detail-location">
+            <section id="detail-loaction" ref={locationRef}>
                 <h2 className="title">숙소 위치</h2>
-                <KakaoMap address={hotel.address} hotelName={hotel.name} height="400px" />
+                <div className="map">
+                    <KakaoMap address={hotel?.address} name={hotel?.name} />
+                </div>
                 <div className="address">
                     <strong>
-                        {hotel.address}
-                        <CopyToClipboard
-                            text={hotel.address || hotel.location}
+                        {hotel?.address} 
+                        <CopyToClipboard 
+                            text={hotel?.address || hotel?.location} 
                             onCopy={handleCopySuccess}
                         >
-                            <span
-                                className="copy-icon"
-                                style={{ cursor: 'pointer', marginLeft: '8px' }}
-                            >
+                            <span className="copy-icon" style={{ cursor: 'pointer', marginLeft: '8px' }}>
                                 <HiOutlineClipboardDocument />
                             </span>
                         </CopyToClipboard>
-                        {copied && <span className="copy-feedback">주소가 복사되었습니다.</span>}
+                        {copied && <span className="copy-feedback">주소가 복사되었습니다.</span>}                 
                     </strong>
                     <ul className="vector">
-                        {hotel.landmark.map((place, idx) => (
+                        {hotel?.landmark?.map((place, idx) =>
                             <li key={idx}>{place}</li>
-                        ))}
+                        )}
                     </ul>
                 </div>
             </section>
-            {/* 리뷰 섹션 */}
-            <DetailReviews reviews={reviews} />
-            {/* 숙소 추천 섹션*/}
-            <section id="detail-Promo">
-                <h2 className="title">다른 고객들이 함께 본 숙소</h2>
-                <ul className="promo-list">
-                    {promoHotelIds.map((hotelId) => (
-                        <DetailPromoItem key={hotelId} hotelId={hotelId} />
-                    ))}
-                </ul>
+            <section id="detail-Bot-Reviews" ref={reviewsRef}>
+                <div className="reviews-wrap-head">
+                    <h2 className="title">
+                        방문자 리뷰
+                        <span>({reviews?.length || 0})</span>
+                    </h2>
+                    <div className="rate">
+                        <span>
+                            <img src="/images/hotels/detail/icon/star_rate.svg" alt="별점" />
+                        </span>
+                        {averageRating}
+                    </div>                
+                </div>
+                <div className="reviews-wrap-body">
+                    <ul className="reviews-wrap-body-list">
+                        {displayedReviews?.map((review) => (
+                            <DetailReviewItem key={review.id} review={review} />
+                        ))}
+                    </ul>
+                </div>
+                {(reviews?.length || 0) > 4 && (
+                    <div className="button" onClick={handleShowMore} style={{ cursor: 'pointer' }}>
+                        <p>{getButtonText()}</p>
+                    </div>
+                )}
             </section>
         </section>
     );
