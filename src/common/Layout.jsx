@@ -2,6 +2,7 @@
 import { Outlet } from 'react-router-dom';
 import Header from './header';
 import Footer from './footer';
+import FloatingBtn from './header/FloatingBtn';
 
 const Layout = () => {
     return (
@@ -15,6 +16,7 @@ const Layout = () => {
             </main>
 
             <Footer />
+            <FloatingBtn showAfter={1200} />
         </div>
     );
 };
