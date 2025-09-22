@@ -204,7 +204,7 @@
                     .check-out {
                         p {
                             @include font-16px-M;
-                            color: $mint;
+                            color: $orange;
                         }
                         strong {
                             @include font-18px;
@@ -501,9 +501,9 @@
                     width: vw(110px);
                     height: vw(52px);
                     border-radius: vw(6px);
-                    background-color: $foundation-mint-lighthover;
+                    background-color: $greyscale-1000;
                     border: none;
-                    color: $greyscale-1200;
+                    color: $white;
                     @include font-16px;
                     &:hover {
                         background-color: $foundation-mint-lightactive;
@@ -532,8 +532,8 @@
                         &:hover,
                         &.on {
                             cursor: pointer;
-                            border: 0.8px solid $orange;
-                            color: $orange;
+                            border: 0.8px solid $mint;
+                            color: $mint;
                         }
                         &:first-child {
                             display: flex;
@@ -606,7 +606,8 @@
     box-sizing: border-box;
     padding: vw(50px) vw(30px);
     width: vw(455px);
-    height: vw(660px);
+    height: vw(650px);
+    position: relative;
     .res-title {
         display: flex;
         gap: vw(25px);
@@ -647,7 +648,7 @@
         display: flex;
         flex-direction: column;
         gap: vw(25px);
-        height: vw(281px);
+        height: vw(300px);
         .price {
             display: flex;
             flex-direction: column;
@@ -666,6 +667,7 @@
                 }
             }
         }
+
         p {
             display: flex;
             justify-content: space-between;
@@ -686,13 +688,16 @@
     }
     .assent {
         @include font-16px;
-        margin-top: vw(25px);
-        margin-bottom: vw(25px);
+        margin-top: vw(20px);
+        margin-bottom: vw(16px);
         span {
             width: vw(12px);
             height: vw(12px);
             display: inline-block;
             border: 1px solid $default;
+            margin-right: vw(15px);
+        }
+        input {
             margin-right: vw(15px);
         }
     }
@@ -710,6 +715,65 @@
         &:hover {
             background-color: $foundation-orange-normalhover;
         }
+    }
+
+    .flight-title {
+        display: flex;
+        .flight-info {
+        }
+        .flight-details {
+            .airline-name {
+            }
+            .flight-number {
+            }
+            .route {
+            }
+        }
+    }
+    .flight-segments {
+        margin-bottom: vw(30px);
+        display: flex;
+        .airline-logo {
+            width: vw(20px);
+            height: vw(20px);
+            overflow: hidden;
+            border-radius: vw(4px);
+            margin-right: vw(12px);
+            img {
+                width: 100%;
+                height: 100%;
+            }
+            span {
+            }
+        }
+        .segment-summary {
+            .segment-header {
+            }
+            .segment-route {
+                display: flex;
+                gap: vw(25px);
+                .departure {
+                }
+                .flight-line {
+                }
+                .arrival {
+                    .airport {
+                    }
+                }
+            }
+        }
+    }
+    .terms-content {
+        position: absolute;
+        top: calc(90%); // .assent 아래에 위치 (100%는 부모의 높이, 10px는 여백)
+        left: 0;
+        right: 0;
+        background: #fff; // 배경색 설정
+        border: 1px solid #ddd; // 테두리 추가
+        border-radius: 8px;
+        padding: 15px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        z-index: 10; // 다른 요소 위에 표시
     }
 }
 
