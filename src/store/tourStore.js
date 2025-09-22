@@ -1,4 +1,3 @@
-// src/store/tourStore.js
 import { create } from 'zustand';
 import packagesData from '../api/packagesData';
 import packagesReviewData from '../api/packagesReviewData';
@@ -59,16 +58,14 @@ function normalizePackagesToTours(packagesArr) {
             posterImg: p.posterImg || '',
             images: Array.isArray(p.images) ? p.images : [],
             benefits: Array.isArray(p.benefits) ? p.benefits : [],
-            slug,
+            slug, // ✅ 추가된 필드들
 
-            // ✅ 추가된 필드들
             duration: p.duration || '',
             flight: p.flight || '',
             shopping: p.shopping || '',
             guide_fee: p.guide_fee || '',
-            optional: p.optional ?? null,
+            optional: p.optional ?? null, // 상세 페이지용 원본 보존
 
-            // 상세 페이지용 원본 보존
             schedule: p.schedule,
             itinerary: p.itinerary,
             flight_info: p.flight_info,
@@ -83,74 +80,63 @@ const normalizedTours = normalizePackagesToTours(packagesData);
 const useTourStore = create((set, get) => ({
     // 원본(참조용)
     packages: packagesData,
-    reviews: packagesReviewData,
+    reviews: packagesReviewData, // UI가 실제로 쓰는 목록은 packages 기준으로 정규화한 tours
 
-    // UI가 실제로 쓰는 목록은 packages 기준으로 정규화한 tours
-    tours: normalizedTours,
+    tours: normalizedTours, // 기본 제외 없음
 
-    // 기본 제외 없음
-    excludedIds: new Set(),
+    excludedIds: new Set(), // UI 상태
 
-    // UI 상태
     activeCategory: '예능',
-    activeIndex: 0,
+    activeIndex: 0, // 투어
 
-    // 투어
     currentTour: null,
 
     activeTab: '시설/서비스',
 
-// 탭을 설정하는 함수
-    setActiveTab: (tabName) => set({ activeTab: tabName }),
+    // 탭을 설정하는 함수
+    setActiveTab: (tabName) => set({ activeTab: tabName }), // 스크롤 이동을 처리하는 함수
 
-    // 스크롤 이동을 처리하는 함수
     handleScrollTo: (ref, tabName) => {
         get().setActiveTab(tabName);
         if (ref && ref.current) {
             window.scrollTo({
-                top: ref.current.offsetTop - 120, 
+                top: ref.current.offsetTop - 120,
                 behavior: 'smooth',
             });
         }
-    },
+    }, // actions
 
-    // actions
     setCategory: (cat) => set({ activeCategory: cat, activeIndex: 0 }),
-    setIndex: (idx) => set({ activeIndex: idx }),
+    setIndex: (idx) => set({ activeIndex: idx }), // 제외 제어
 
-    // 제외 제어
     excludeIds: (ids) => set({ excludedIds: new Set(ids) }),
     toggleExclude: (id) => {
         const next = new Set(get().excludedIds);
         next.has(id) ? next.delete(id) : next.add(id);
         set({ excludedIds: next });
-    },
+    }, // slug로 투어 데이터 설정
 
-    // slug로 투어 데이터 설정
     setCurrentTourBySlug: (slug) => {
-        const tour = packagesData.find((pkg) => pkg.slug === slug);
+        const tour = get().tours.find((pkg) => pkg.slug === slug);
         if (tour) {
             set({ currentTour: tour });
         } else {
             console.warn(`Tour with slug "${slug}" not found`);
             set({ currentTour: null });
         }
-    },
+    }, // 현재 투어 초기화
 
-    // 현재 투어 초기화
     clearCurrentTour: () => set({ currentTour: null }),
 
     getTourHighRatedReviews: (tourId, count = 3) => {
         // 3점 이상 리뷰만 필터링
-        const highRatedReviews = packagesReviewData.filter((review) => review.rate >= 3);
+        const highRatedReviews = packagesReviewData.filter((review) => review.rate >= 3); // 투어 ID 기반 시드로 고정된 순서
 
-        // 투어 ID 기반 시드로 고정된 순서
         const seededRandom = (seed) => {
             let x = Math.sin(seed) * 10000;
             return x - Math.floor(x);
-        };
+        }; // 고정된 순서로 섞기
 
-        // 고정된 순서로 섞기
         const shuffledReviews = [...highRatedReviews].sort((a, b) => {
             const seedA = seededRandom(tourId * 300 + a.id);
             const seedB = seededRandom(tourId * 300 + b.id);
@@ -163,8 +149,6 @@ const useTourStore = create((set, get) => ({
             uniqueId: `tour-mini-${tourId}-${review.id}-${index}`,
         }));
     },
-
-    
 }));
 
 export default useTourStore;

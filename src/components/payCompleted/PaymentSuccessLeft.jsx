@@ -45,7 +45,7 @@ const PaymentSuccessLeft = ({ reservationData }) => {
 
                 <div className="pay-box-wrap">
                     <div>
-                        <h4>예약 정보</h4>
+                        {/* <h4>예약 정보</h4> */}
                         <div className="reservation-info">
                             <div className="reservation-number">
                                 <p>예약번호</p>
@@ -58,7 +58,21 @@ const PaymentSuccessLeft = ({ reservationData }) => {
                         </div>
                     </div>
 
-                    <div className="pay-schedule">
+                    {/* <div>
+                        <h4>예약 정보</h4>
+                        <div className="reservation-info">
+                            <div className="reservation-number">
+                                <p>예약번호</p>
+                                <strong>{reservationNumber}</strong>
+                            </div>
+                            <div className="payment-date">
+                                <p>결제일시</p>
+                                <span>{paymentDate}</span>
+                            </div>
+                        </div>
+                    </div> */}
+
+                    {/* <div className="pay-schedule">
                         <h4>예약 일정</h4>
                         <div className="check-in-out">
                             <div className="check-in">
@@ -89,7 +103,7 @@ const PaymentSuccessLeft = ({ reservationData }) => {
                         <p>
                             <span>+82 01023457890</span>
                         </p>
-                    </div>
+                    </div> */}
 
                     {/* <div className="payment-method-info">
                         <h4>결제 정보</h4>
@@ -105,7 +119,7 @@ const PaymentSuccessLeft = ({ reservationData }) => {
                         </div>
                     </div> */}
 
-                    <div className="notice-info">
+                    {/* <div className="notice-info">
                         <h4>안내사항</h4>
                         <ul>
                             <li>예약 확인서가 등록하신 이메일로 발송됩니다.</li>
@@ -113,7 +127,7 @@ const PaymentSuccessLeft = ({ reservationData }) => {
                             <li>취소/변경은 마이페이지에서 가능합니다.</li>
                             <li>문의사항이 있으시면 고객센터(1588-1234)로 연락주세요.</li>
                         </ul>
-                    </div>
+                    </div> */}
 
                     <div className="action-buttons">
                         <button className="btn-secondary" onClick={handleGoHome}>

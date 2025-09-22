@@ -12,6 +12,12 @@ const HotelPaymentLeft = ({
     selectedRoom,
     startDate,
     endDate,
+//     nights,
+//     people,
+//     onPaymentMethodChange,
+// }) => {
+//     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('card');
+
     nights = 1,
     people,
     onPaymentMethodChange,
@@ -82,6 +88,26 @@ const HotelPaymentLeft = ({
                             <span>+82 01023457890</span>
                         </p>
                     </div>
+//                     <div className="pay-coupon">
+//                         <h4>쿠폰</h4>
+//                         <select id="coupon" name="select-coupon" defaultValue="">
+//                             <option value="" disabled hidden>
+//                                 사용 가능한 쿠폰 1개
+//                             </option>
+//                             <option value="hotels">10,000원 [숙소 할인]</option>
+//                             <option value="tour" disabled>
+//                                 30,000원 [투어 할인]
+//                             </option>
+//                         </select>
+//                     </div>
+//                     <div className="pay-point">
+//                         <h4>포인트</h4>
+//                         <p>
+//                             RT 포인트 <span>12,000</span>P
+//                         </p>
+//                         <input type="number" />
+//                         <button>전액 사용</button>
+//                     </div>
 
                     {/* 쿠폰/포인트 (PaymentReward → 상위로 반영) */}
                     <PaymentReward

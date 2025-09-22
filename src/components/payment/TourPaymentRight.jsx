@@ -1,3 +1,4 @@
+
 // src/components/payment/TourPaymentRight.jsx
 import './style.scss';
 import { loadTossPayments } from '@tosspayments/payment-sdk';
