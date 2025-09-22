@@ -1,5 +1,4 @@
-// src/components/.../DetailThum.jsx
-import { useState, useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import './style.scss';
 import GalleryModal from '../../../hotels/hotelsDetail/GalleryModal';
 

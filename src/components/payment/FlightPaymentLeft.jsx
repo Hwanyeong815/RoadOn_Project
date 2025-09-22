@@ -3,12 +3,13 @@ import useAirportStore from '../../store/airportStore';
 import { IoIosCheckmarkCircleOutline, IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
 import { useState } from 'react';
 
-const FlightPaymentLeft = ({ airport, segments }) => {
+const FlightPaymentLeft = ({ airport, segments, onPaymentMethodChange }) => {
     const getAirportById = useAirportStore((state) => state.getAirportById);
     const filters = useAirportStore((state) => state.filters);
     // const airport = getAirportById(airportId);
 
     const [gender, setGender] = useState('male');
+    const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('card');
     const user = { gender };
     const [isOpen, setIsOpen] = useState(false);
 
@@ -21,6 +22,13 @@ const FlightPaymentLeft = ({ airport, segments }) => {
             return index === 0 ? '가는편' : '오는편';
         }
         return '가는편';
+    };
+
+    const handlePaymentMethodSelect = (method) => {
+        setSelectedPaymentMethod(method);
+        if (onPaymentMethodChange) {
+            onPaymentMethodChange(method);
+        }
     };
 
     console.log('현재 인원 수:', filters.people);
@@ -95,15 +103,6 @@ const FlightPaymentLeft = ({ airport, segments }) => {
                                 </div>
                             </div>
                         ))}
-
-                        {/* <div className="arrive-wrap">
-                            <h4 className="arrive">오는편</h4>
-                            <div className="w-to-w">
-                                <span>{airport.arriveCode}</span>
-                                <img src="/images/icon/air-arrow.svg" alt="화살표" />
-                                <span>{airport.departCode}</span>
-                            </div>
-                        </div> */}
                     </div>
                     <div className="flight-resname">
                         <h4>예약자 정보</h4>
@@ -227,8 +226,8 @@ const FlightPaymentLeft = ({ airport, segments }) => {
                                 name="select-coupon"
                                 onClick={() => setIsOpen(!isOpen)}
                             >
-                                <option value="" disabled selected hidden>
-                                    사용 가능한 쿠폰 <span>{/*props*/}1개</span>
+                                <option value="" disabled hidden>
+                                    사용 가능한 쿠폰 1개
                                 </option>
                                 <option value="apple">가능한 옵션</option>
                                 <option value="banana">마이페이지의</option>
@@ -251,44 +250,60 @@ const FlightPaymentLeft = ({ airport, segments }) => {
                     <div className="pay-method">
                         <h4>결제수단</h4>
                         <ul className="payments">
-                            <li>
+                            <li
+                                className={selectedPaymentMethod === 'card' ? 'selected' : ''}
+                                onClick={() => handlePaymentMethodSelect('card')}
+                            >
                                 <IoCardOutline />
                                 <span>신용/체크 카드</span>
                             </li>
-                            <li>
+                            <li
+                                className={selectedPaymentMethod === 'tosspay' ? 'selected' : ''}
+                                onClick={() => handlePaymentMethodSelect('tosspay')}
+                            >
                                 <img src="/images/icon/tosspay.png" alt="토스페이" />
                             </li>
-                            <li>
+                            <li
+                                className={selectedPaymentMethod === 'naverpay' ? 'selected' : ''}
+                                onClick={() => handlePaymentMethodSelect('naverpay')}
+                            >
                                 <img src="/images/icon/naverpay.png" alt="네이버페이" />
                             </li>
-                            <li>
+                            <li
+                                className={selectedPaymentMethod === 'kakaopay' ? 'selected' : ''}
+                                onClick={() => handlePaymentMethodSelect('kakaopay')}
+                            >
                                 <img src="/images/icon/kakaopay.png" alt="카카오페이" />
                             </li>
                         </ul>
-                        <div className="card-types">
-                            <h5>카드 종류</h5>
-                            <select defaultValue="">
-                                <option value="" disabled>
-                                    카드를 선택해주세요.
-                                </option>
-                                <option value="kb">KB국민카드</option>
-                                <option value="sh">신한카드</option>
-                                <option value="bc">BC카드</option>
-                                <option value="hy">현대카드</option>
-                            </select>
-                        </div>
-                        <div className="installment">
-                            <h5>할부 선택</h5>
-                            <select defaultValue="0">
-                                <option value="0">일시불</option>
-                                <option value="3">3개월</option>
-                                <option value="6">6개월</option>
-                                <option value="12">12개월</option>
-                            </select>
-                        </div>
+                        {selectedPaymentMethod === 'card' && (
+                            <>
+                                <div className="card-types">
+                                    <h5>카드 종류</h5>
+                                    <select defaultValue="">
+                                        <option value="" disabled>
+                                            카드를 선택해주세요.
+                                        </option>
+                                        <option value="kb">KB국민카드</option>
+                                        <option value="sh">신한카드</option>
+                                        <option value="bc">BC카드</option>
+                                        <option value="hy">현대카드</option>
+                                    </select>
+                                </div>
+                                <div className="installment">
+                                    <h5>할부 선택</h5>
+                                    <select defaultValue="0">
+                                        <option value="0">일시불</option>
+                                        <option value="3">3개월</option>
+                                        <option value="6">6개월</option>
+                                        <option value="12">12개월</option>
+                                    </select>
+                                </div>
+                            </>
+                        )}
                         <div className="pay-default">
-                            <input id="saveMethod" type="checkbox" />
-                            <label htmlFor="saveMethod">이 결제수단을 다음에도 사용</label>
+                            <input id="saveMethodFlight" type="checkbox" />
+                            <label htmlFor="saveMethodFlight">이 결제수단을 다음에도 사용</label>
                         </div>
                     </div>
                 </div>
