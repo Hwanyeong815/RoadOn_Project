@@ -10,7 +10,6 @@ const AirportSearch = () => {
             <div className="inner">
                 <Filter />
                 <div className="list-wrap">
-                    {/* AirportBoxList 안에 이미 정렬 + 리스트 렌더링 있음 */}
                     <AirportBoxList />
                 </div>
             </div>

@@ -350,6 +350,7 @@
                 }
             }
             .pay-coupon {
+                margin-bottom: vw(60px);
                 select {
                     width: vw(546px);
                     height: vw(52px);
@@ -545,14 +546,14 @@
             justify-content: space-between;
             position: relative;
             margin-top: vw(16px);
-            &::before {
-                content: '';
-                width: vw(351px);
-                height: vw(1px);
-                background-color: $greyscale-600;
-                position: absolute;
-                top: vw(-60px);
-            }
+            // &::before {
+            //     content: '';
+            //     width: vw(351px);
+            //     height: vw(1px);
+            //     background-color: $greyscale-600;
+            //     position: absolute;
+            //     top: vw(-60px);
+            // }
             strong {
                 @include font-20px-M;
             }
@@ -595,10 +596,10 @@
 
 .detail-right {
     width: vw(455px);
-    height: vw(477px);
+    // height: vw(477px);
     .detail-side {
         width: 100%;
-        height: vw(500px);
+        // height: vw(500px);
         border-radius: vw(15px);
         background-color: grey;
         padding: vw(40px) vw(30px);
@@ -1011,6 +1012,7 @@ strong {
 .detail-left {
     .detail-title {
         .detail-title-head {
+            display: flex;
             .head-left {
                 em {
                 }
@@ -1107,6 +1109,9 @@ strong {
         }
     }
 
+    .search-bar {
+        
+    }
     // 여행지 검색 부분 스타일
     .search-location {
         width: vw(260px);
@@ -1114,13 +1119,14 @@ strong {
             flex: 1;
             display: flex;
             align-items: center;
+            color: $white;
 
             .selected-location {
-                color: #333; // 선택된 위치 색상
+                color: $greyscale-1100; // 선택된 위치 색상
             }
 
             .placeholder {
-                color: #999; // placeholder 색상
+                color: $white; // placeholder 색상
             }
         }
 
@@ -1129,10 +1135,12 @@ strong {
             border: none;
             outline: none;
             color: $white;
+            text-align: left;
             @include font-16px;
             flex-grow: 1;
             &::placeholder {
                 color: rgba(255, 255, 255, 0.8);
+                text-align: left;
             }
         }
         .dropdown {
@@ -1193,7 +1201,7 @@ strong {
             background: transparent;
             border: none;
             outline: none;
-            color: $white;
+            color: $greyscale-1100;
             @include font-16px;
             cursor: pointer;
             text-align: left;
@@ -1537,6 +1545,15 @@ strong {
             display: flex;
             flex-direction: column;
             gap: vw(20px);
+        }
+    }
+}
+.hotel {
+    .filter {
+        width: vw(302px);
+    }
+    .price-slider {
+        .ranges {
         }
     }
 }

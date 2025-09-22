@@ -32,7 +32,7 @@ const PaymentSuccessLeft = ({ reservationData }) => {
     };
 
     const handleGoMyPage = () => {
-        navigate('/myPage');
+        navigate('/myPage?mypage_section=reserve');
     };
 
     return (

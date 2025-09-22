@@ -1,37 +1,62 @@
-// PaymentSuccessRight.jsx
+// src/components/hotels/PaymentSuccessRight.jsx
 import './style.scss';
 import { IoDownloadOutline, IoShareOutline } from 'react-icons/io5';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
+import { useMemo } from 'react';
 
 const PaymentSuccessRight = ({ reservationData }) => {
+    // localStorage에서 데이터를 안전하게 불러오기
+    const finalData = useMemo(() => {
+        if (reservationData) {
+            return reservationData;
+        }
+        try {
+            const storedData = localStorage.getItem('paymentData');
+            const parsedData = storedData ? JSON.parse(storedData) : null;
+
+            // 필수 데이터(hotel, selectedRoom)가 존재하는지 확인
+            if (parsedData && parsedData.hotel && parsedData.selectedRoom) {
+                return parsedData;
+            }
+            return null;
+        } catch (e) {
+            console.error('Failed to parse localStorage data', e);
+            return null;
+        }
+    }, [reservationData]);
+
+    if (!finalData) {
+        // 데이터가 없는 경우를 처리
+        return (
+            <div className="pay payment-right success">
+                <p>예약 정보를 불러오는 중 오류가 발생했거나, 정보가 존재하지 않습니다.</p>
+                <p>홈페이지로 돌아가거나 마이페이지에서 예약 내역을 확인해 주세요.</p>
+            </div>
+        );
+    }
+
     const {
         hotel,
         selectedRoom,
-        totalPrice,
         nights,
         paymentInfo,
-        reservationNumber,
-        startDate,
-        endDate,
-    } = reservationData;
+        rewardState,
+        reservationNumber, // reservationNumber 추가
+        baseAmount, // baseAmount 추가
+    } = finalData;
 
-    // 날짜 포맷팅
-    const formattedStartDate = startDate
-        ? format(new Date(startDate), 'MM.dd(E)', { locale: ko })
-        : '날짜 미정';
-    const formattedEndDate = endDate
-        ? format(new Date(endDate), 'MM.dd(E)', { locale: ko })
-        : '날짜 미정';
+    // 할인 금액 계산
+    const couponAmount = rewardState?.couponAmount || 0;
+    const usedPoints = rewardState?.usedPoints || 0;
+    const totalDiscount = couponAmount + usedPoints;
 
     const handleDownloadReceipt = () => {
-        // 영수증 다운로드 로직
         console.log('영수증 다운로드');
         alert('영수증 다운로드 기능은 준비 중입니다.');
     };
 
     const handleShareReservation = () => {
-        // 예약 정보 공유 로직
         if (navigator.share) {
             navigator.share({
                 title: '예약 완료',
@@ -39,7 +64,6 @@ const PaymentSuccessRight = ({ reservationData }) => {
                 url: window.location.href,
             });
         } else {
-            // Web Share API를 지원하지 않는 경우 클립보드에 복사
             navigator.clipboard.writeText(
                 `${hotel?.name} 예약이 완료되었습니다.\n예약번호: ${reservationNumber}`
             );
@@ -65,52 +89,34 @@ const PaymentSuccessRight = ({ reservationData }) => {
                         <span>{selectedRoom?.name}</span>
                     </div>
                 </div>
-                {/* 
-                <div className="check-in-out">
-                    <div className="sche check-in">
-                        <p>체크인</p>
-                        <strong>
-                            {formattedStartDate} <br />
-                            15:00
-                        </strong>
-                    </div>
-                    <div className="sche nights">
-                        <p>{nights}박</p>
-                    </div>
-                    <div className="sche check-out">
-                        <p>체크아웃</p>
-                        <strong>
-                            {formattedEndDate} <br />
-                            12:00
-                        </strong>
-                    </div>
-                </div> */}
 
                 <div className="res-prices">
                     <ul className="price total">
                         <li>
                             <b>요금 합계</b>
-                            <b>{totalPrice?.toLocaleString()}원</b>
+                            <b>{baseAmount?.toLocaleString()}원</b>
                         </li>
                         <li>
                             <span>객실 1개 X {nights}박</span>
-                            <span>{totalPrice?.toLocaleString()}원</span>
+                            <span>{baseAmount?.toLocaleString()}원</span>
                         </li>
                     </ul>
+
                     <ul className="price discount">
                         <li>
                             <b>할인 혜택</b>
-                            <b>-11,800원</b>
+                            <b>-{totalDiscount.toLocaleString()}원</b>
                         </li>
                         <li>
                             <span>상품 및 쿠폰 할인</span>
-                            <span>-11,800원</span>
+                            <span>-{couponAmount.toLocaleString()}원</span>
                         </li>
                         <li>
                             <span>포인트 사용</span>
-                            <span>-0원</span>
+                            <span>-{usedPoints.toLocaleString()}원</span>
                         </li>
                     </ul>
+
                     <div className="final-amount">
                         <p>
                             <strong>결제 완료 금액</strong>
