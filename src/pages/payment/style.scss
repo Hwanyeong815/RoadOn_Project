@@ -733,3 +733,333 @@ strong {
             }
         }
     }
+// 기존 style.scss에 추가할 PaymentFail 전용 스타일
+
+// PaymentFail 전용 스타일
+.payment-left.fail {
+    .fail-header {
+        text-align: center;
+        margin-bottom: 30px;
+        padding: 20px;
+        background: #fef2f2;
+        border-radius: 12px;
+        border: 1px solid #fecaca;
+
+        .fail-icon {
+            font-size: 48px;
+            color: #ef4444;
+            margin-bottom: 16px;
+        }
+
+        h3 {
+            font-size: 24px;
+            color: #dc2626;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        p {
+            color: #7f1d1d;
+            font-size: 16px;
+        }
+    }
+
+    .failure-info {
+        padding: 20px;
+        background: #fef2f2;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        border: 1px solid #fecaca;
+
+        .failure-time,
+        .failure-reason,
+        .error-code {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+
+            p {
+                color: #7f1d1d;
+                margin: 0;
+                font-weight: 500;
+            }
+
+            span {
+                color: #dc2626;
+                font-weight: 500;
+            }
+        }
+
+        .failure-reason span {
+            max-width: 200px;
+            text-align: right;
+            word-break: keep-all;
+        }
+    }
+
+    .troubleshooting {
+        margin-top: 20px;
+
+        h4 {
+            margin-bottom: 16px;
+            color: #1f2937;
+            font-size: 16px;
+        }
+
+        ul {
+            padding-left: 0;
+            list-style: none;
+
+            li {
+                position: relative;
+                padding-left: 20px;
+                margin-bottom: 8px;
+                color: #4b5563;
+                font-size: 14px;
+                line-height: 1.5;
+
+                &:before {
+                    content: '💡';
+                    position: absolute;
+                    left: 0;
+                    font-size: 12px;
+                }
+            }
+        }
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 8px;
+        margin-top: 24px;
+        flex-wrap: wrap;
+
+        button {
+            flex: 1;
+            min-width: 120px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            font-size: 14px;
+
+            &.btn-secondary {
+                background: #f3f4f6;
+                border: 1px solid #d1d5db;
+                color: #374151;
+
+                &:hover {
+                    background: #e5e7eb;
+                }
+            }
+
+            &.btn-retry {
+                background: #f59e0b;
+                border: 1px solid #f59e0b;
+                color: white;
+
+                &:hover {
+                    background: #d97706;
+                }
+            }
+
+            &.btn-home {
+                background: #6b7280;
+                border: 1px solid #6b7280;
+                color: white;
+
+                &:hover {
+                    background: #4b5563;
+                }
+            }
+        }
+    }
+}
+
+.payment-right.fail {
+    .failure-summary {
+        .failure-status {
+            text-align: center;
+            padding: 20px;
+            margin-bottom: 20px;
+
+            .status-badge.error {
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                padding: 8px 16px;
+                background: #fee2e2;
+                border-radius: 20px;
+                margin-bottom: 12px;
+
+                .status-icon {
+                    width: 20px;
+                    height: 20px;
+                    background: #ef4444;
+                    color: white;
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 12px;
+                    font-weight: bold;
+                }
+
+                .status-text {
+                    color: #dc2626;
+                    font-weight: 500;
+                }
+            }
+
+            .failure-message {
+                color: #7f1d1d;
+                font-size: 14px;
+                margin: 0;
+                word-break: keep-all;
+            }
+        }
+
+        .failed-amount {
+            border-top: 2px solid #fecaca;
+            padding-top: 16px;
+            margin-top: 16px;
+
+            p {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin: 0;
+
+                strong {
+                    font-size: 18px;
+                    color: #1f2937;
+
+                    &.failed-price {
+                        color: #dc2626;
+                        text-decoration: line-through;
+                        opacity: 0.7;
+                    }
+                }
+            }
+        }
+
+        .retry-section {
+            margin: 24px 0;
+            text-align: center;
+
+            h4 {
+                margin-bottom: 16px;
+                color: #1f2937;
+                font-size: 16px;
+            }
+
+            .retry-payment-btn {
+                width: 100%;
+                padding: 16px;
+                background: #f59e0b;
+                border: 1px solid #f59e0b;
+                color: white;
+                border-radius: 8px;
+                font-weight: 600;
+                font-size: 16px;
+                cursor: pointer;
+                transition: all 0.2s;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+
+                &:hover {
+                    background: #d97706;
+                }
+            }
+        }
+
+        .alternative-options {
+            margin: 24px 0;
+
+            h4 {
+                margin-bottom: 16px;
+                color: #1f2937;
+                font-size: 16px;
+            }
+
+            .option-buttons {
+                display: flex;
+                gap: 8px;
+
+                .option-btn {
+                    flex: 1;
+                    padding: 12px 16px;
+                    background: #f3f4f6;
+                    border: 1px solid #d1d5db;
+                    color: #374151;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    transition: all 0.2s;
+                    font-size: 14px;
+
+                    &:hover {
+                        background: #e5e7eb;
+                    }
+                }
+            }
+        }
+
+        .payment-help {
+            background: #f9fafb;
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 20px;
+
+            h4 {
+                margin-bottom: 16px;
+                color: #1f2937;
+                font-size: 16px;
+            }
+
+            .help-items {
+                .help-item {
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    margin-bottom: 12px;
+
+                    &:last-child {
+                        margin-bottom: 0;
+                    }
+
+                    .help-icon {
+                        font-size: 20px;
+                        flex-shrink: 0;
+                    }
+
+                    .help-text {
+                        p {
+                            margin: 0 0 4px 0;
+                            color: #1f2937;
+                            font-weight: 500;
+                            font-size: 14px;
+                        }
+
+                        small {
+                            color: #6b7280;
+                            font-size: 12px;
+                            line-height: 1.4;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

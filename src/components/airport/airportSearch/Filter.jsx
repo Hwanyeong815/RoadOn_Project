@@ -147,7 +147,7 @@ const Filter = () => {
                                 };
 
                                 return (
-                                    <li key={airline}>
+                                    <li key={airline} style={{border: 'none'}}>
                                         <button
                                             className={isActive ? 'active' : ''}
                                             onClick={handleClick}

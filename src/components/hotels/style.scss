@@ -425,6 +425,14 @@
                             left: 50%;
                             transform: translate(-50%, -50%);
                         }
+                        &:hover {
+                            // border: $mint !important;
+                        }
+                        &.selected {
+                            border-color: $mint;
+                            background-color: rgba($mint, 0.1);
+                            color: $mint;
+                        }
                     }
                 }
                 .card-types {
@@ -590,7 +598,7 @@
     height: vw(477px);
     .detail-side {
         width: 100%;
-        height: vw(460px);
+        height: vw(500px);
         border-radius: vw(15px);
         background-color: grey;
         padding: vw(40px) vw(30px);
@@ -840,7 +848,7 @@ strong {
     background-color: $white;
     border: 1px solid $greyscale-400;
     border-radius: vw(10px);
-    z-index: 9999;
+    z-index: 99999;
     .gallery-content {
         background: white;
         border-radius: 12px;
@@ -1004,27 +1012,33 @@ strong {
     .detail-title {
         .detail-title-head {
             .head-left {
-                em {}
-                h3 {}
-                b {}
+                em {
+                }
+                h3 {
+                }
+                b {
+                }
                 .rate {
-                    img {}
+                    img {
+                    }
                 }
             }
-            .more-btn, .more-btn-a {
-                img {}
+            .more-btn,
+            .more-btn-a {
+                img {
+                }
                 .share-btn {
                     &:hover {
-                    transform: scale(1.06);
+                        transform: scale(1.06);
                     }
                 }
                 .wish-hotel-btn {
                     width: vw(50px);
                     height: vw(50px);
                     background-color: $greyscale-300;
-                     box-shadow: none;
-                     border: none;
-                     border-radius: 50%;
+                    box-shadow: none;
+                    border: none;
+                    border-radius: 50%;
                 }
             }
         }
@@ -1034,42 +1048,41 @@ strong {
 .ht-main-con1 {
     .visual-bg-ht {
         background-image: url('/public/images/hotels/main/hotel-visual-img.png') !important;
-    .inner {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        gap: vw(20px);
-        // 적용이 안됨
-        .search-bar {
-            width: vw(1160px);
-            margin: auto;
+        .inner {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: vw(20px);
+            // 적용이 안됨
+            .search-bar {
+                width: vw(1160px);
+                margin: auto;
                 .search-item {
-                    .placeholder, input {
-                            color: $white;                        
-                            text-align-last: left;
-                        }
+                    .placeholder,
+                    input {
+                        color: $white;
+                        text-align-last: left;
+                    }
                     span {
-                        
-                            color: $white;
+                        color: $white;
                     }
                 }
+            }
         }
     }
-    
-
-}}
-
+}
 
 .search-bar {
     display: flex;
     align-items: center;
-    gap: vw(12px);
+    // gap: vw(12px);
     flex-wrap: wrap;
     width: vw(1092px);
     margin: auto;
     background: rgba(255, 255, 255, 0.1);
     border-radius: vw(40px);
-    padding: vw(10px) vw(12px);
+    padding: vw(10px) vw(20px);
+    box-sizing: border-box;
 
     .search-item {
         display: flex;
@@ -1096,20 +1109,20 @@ strong {
 
     // 여행지 검색 부분 스타일
     .search-location {
-        width: vw(260px); 
+        width: vw(260px);
         .location-display {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    
-    .selected-location {
-      color: #333; // 선택된 위치 색상
-    }
-    
-    .placeholder {
-      color: #999; // placeholder 색상
-    }
-  }
+            flex: 1;
+            display: flex;
+            align-items: center;
+
+            .selected-location {
+                color: #333; // 선택된 위치 색상
+            }
+
+            .placeholder {
+                color: #999; // placeholder 색상
+            }
+        }
 
         input {
             background: transparent;
@@ -1136,7 +1149,7 @@ strong {
             animation: dp-fade-slide 0.2s ease-out;
 
             z-index: 1000; // 충분히 높은 값
-  pointer-events: auto; // 클릭 이벤트 허용
+            pointer-events: auto; // 클릭 이벤트 허용
 
             .search-input {
                 width: 100%;
@@ -1164,8 +1177,8 @@ strong {
                         background: $greyscale-100;
                     }
 
-                     cursor: pointer;
-  pointer-events: auto;
+                    cursor: pointer;
+                    pointer-events: auto;
                 }
             }
         }
@@ -1371,163 +1384,159 @@ strong {
     }
 }
 
-
 .filter-wrap {
-            width: 15.625vw;
-            .map-modal {
-                height: 7.2917vw;
-                border-radius: 10px;
-                margin-bottom: vw(48px);
-                background-image: url('../../../public/images/hotels/search/map_modal.jpg');
-                background-size: cover;
-                background-repeat: no-repeat;
-                cursor: pointer;
+    width: 15.625vw;
+    .map-modal {
+        height: 7.2917vw;
+        border-radius: 10px;
+        margin-bottom: vw(48px);
+        background-image: url('../../../public/images/hotels/search/map_modal.jpg');
+        background-size: cover;
+        background-repeat: no-repeat;
+        cursor: pointer;
+    }
+    .filter {
+        .filtering {
+            margin-bottom: vw(48px);
+            p {
+                @include font-20px-M;
+                margin-bottom: vw(24px);
             }
-            .filter {
-                .filtering {
-                    margin-bottom: vw(48px);
-                    p {
-                        @include font-20px-M;
-                        margin-bottom: vw(24px);
-                    }
-                    .round-btns {
-                        li {
-                            &.active {
-                                // 클릭된 li에 대한 스타일
-                                background-color: $mint;
-                                color: $white;
-                                border: vw(1px) solid $mint;
-                            }
-                            
-                        }
-                    }
-                    ul {
-                        margin-left: vw(20px);
-                        li {
-                            cursor: pointer;
-                            @include font-16px;
-                            display: flex;
-                            align-items: center;
-                            gap: vw(12px);
-                            color: $default;
-                            &.active {
-                                // 클릭된 li에 대한 스타일
-                                border-color: #ddd;
-                            }
-                            span {
-                                display: inline-block;
-                                border-radius: vw(3px);
-                                 display: inline-block;
-                                width: vw(14px);
-                                height: vw(14px);
-                                border: 1px solid #ccc;
-                                position: relative;
-                                transition: all 0.2s ease;
-                            }
-                             span.checked {
-                background-color: $mint;
-                border-color: $mint;
-
-
-                // 체크 표시 (✔) 스타일
-                &::after {
-                    content: '✔';
-                    position: absolute;
-                    top: 50%;
-                    left: 50%;
-                    transform: translate(-50%, -50%);
-                    color: $white;
-                    // font-12px는 mixin으로 가정
-                    @include font-12px;
-                }
-            }
-                        }
+            .round-btns {
+                li {
+                    &.active {
+                        // 클릭된 li에 대한 스타일
+                        background-color: $mint;
+                        color: $white;
+                        border: vw(1px) solid $mint;
                     }
                 }
             }
-            .type {
-                .type-title {
+            ul {
+                margin-left: vw(20px);
+                li {
+                    cursor: pointer;
+                    @include font-16px;
                     display: flex;
-                    justify-content: space-between;
                     align-items: center;
-                    p {
-                    }
-                    .redo {
-                        color: $greyscale-1000;
-                        @include font-16px;
-                        cursor: pointer;
-                        display: flex;
-                        align-items: center;
-                        gap: vw(6px);
-                        margin-bottom: vw(24px);
-                    }
-                }
-                ul {
-                    margin-left: vw(20px);
-                    display: flex;
-                    flex-direction: column;
-                    gap: vw(10px);
-                    li {
-                        span {
-                            &.checked {
-                                // 체크되었을 때 스타일
-                                border-color: none;
-
-                            }
-                        }
-                    }
-                }
-            }
-            .star,
-            .service {
-                ul {
-                    display: flex;
-                    flex-wrap: wrap;
                     gap: vw(12px);
-                    li {
-                        padding: vw(6px) vw(15px);
-                        box-sizing: border-box;
-                        border-radius: vw(40px);
-                        border: 1px solid $greyscale-1000;
-                        cursor: pointer;
+                    color: $default;
+                    &.active {
+                        // 클릭된 li에 대한 스타일
+                        border-color: #ddd;
                     }
-                }
-            }
-            .discount {
-                ul {
-                    li {
-                        display: flex;
-                        align-items: center;
-                        span {
-                        }
-                        .event {
-                            display: inline-block;
-                            font-size: vw(12px);
-                            padding: vw(2px) vw(8px);
-                            background-color: $foundation-mint-lightactive;
-                            border-radius: vw(20px);
-                            color: $mint;
-                            margin-bottom: 0;
-                        }
-                        .sale {
-                            display: inline-block;
-                            @include font-16px;
-                            margin-bottom: 0;
-                            transform: translateX(vw(-5px));
+                    span {
+                        display: inline-block;
+                        border-radius: vw(3px);
+                        display: inline-block;
+                        width: vw(14px);
+                        height: vw(14px);
+                        border: 1px solid #ccc;
+                        position: relative;
+                        transition: all 0.2s ease;
+                    }
+                    span.checked {
+                        background-color: $mint;
+                        border-color: $mint;
+
+                        // 체크 표시 (✔) 스타일
+                        &::after {
+                            content: '✔';
+                            position: absolute;
+                            top: 50%;
+                            left: 50%;
+                            transform: translate(-50%, -50%);
+                            color: $white;
+                            // font-12px는 mixin으로 가정
+                            @include font-12px;
                         }
                     }
-                }
-            }
-            .list-wrap {
-                width: 55.2083vw;
-                height: 7.2917vw;
-                border: 1px solid #353535;
-                .list-top {
-                }
-                .list-box {
-                    display: flex;
-                    flex-direction: column;
-                    gap: vw(20px);
                 }
             }
         }
+    }
+    .type {
+        .type-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            p {
+            }
+            .redo {
+                color: $greyscale-1000;
+                @include font-16px;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                gap: vw(6px);
+                margin-bottom: vw(24px);
+            }
+        }
+        ul {
+            margin-left: vw(20px);
+            display: flex;
+            flex-direction: column;
+            gap: vw(10px);
+            li {
+                span {
+                    &.checked {
+                        // 체크되었을 때 스타일
+                        border-color: none;
+                    }
+                }
+            }
+        }
+    }
+    .star,
+    .service {
+        ul {
+            display: flex;
+            flex-wrap: wrap;
+            gap: vw(12px);
+            li {
+                padding: vw(6px) vw(15px);
+                box-sizing: border-box;
+                border-radius: vw(40px);
+                border: 1px solid $greyscale-1000;
+                cursor: pointer;
+            }
+        }
+    }
+    .discount {
+        ul {
+            li {
+                display: flex;
+                align-items: center;
+                span {
+                }
+                .event {
+                    display: inline-block;
+                    font-size: vw(12px);
+                    padding: vw(2px) vw(8px);
+                    background-color: $foundation-mint-lightactive;
+                    border-radius: vw(20px);
+                    color: $mint;
+                    margin-bottom: 0;
+                }
+                .sale {
+                    display: inline-block;
+                    @include font-16px;
+                    margin-bottom: 0;
+                    transform: translateX(vw(-5px));
+                }
+            }
+        }
+    }
+    .list-wrap {
+        width: 55.2083vw;
+        height: 7.2917vw;
+        border: 1px solid #353535;
+        .list-top {
+        }
+        .list-box {
+            display: flex;
+            flex-direction: column;
+            gap: vw(20px);
+        }
+    }
+}

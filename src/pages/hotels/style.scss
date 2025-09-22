@@ -2,9 +2,11 @@
 
 .hotel {
     width: 100%;
+    box-sizing: border-box;
+    padding-top: vw(60px);
     .search-bar {
             width: vw(1160px);
-            margin-top: vw(50px);
+            margin-top: vw(90px);
             margin-bottom: vw(50px);
             border: $greyscale-300;
             box-shadow: 0 vw(4px) vw(8px) 0 rgba(0, 0, 0, 0.06);

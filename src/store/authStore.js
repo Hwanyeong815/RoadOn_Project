@@ -37,15 +37,17 @@ const loadFromStorage = () => {
 };
 
 const initial = (() => {
-    if (typeof window === 'undefined')
-        return { users: [defaultTestUser], currentUser: defaultTestUser };
+    // 기본(최초 실행) 로그인 X
+    const base = { users: [defaultTestUser], currentUser: null };
+    if (typeof window === 'undefined') return base;
+
     const stored = loadFromStorage();
     if (stored && Array.isArray(stored.users) && stored.users.length > 0) {
         const users = stored.users;
-        const currentUser = users.find((u) => u.id === stored.currentUserId) || users[0] || null;
+        const currentUser = users.find((u) => u.id === stored.currentUserId) || null;
         return { users, currentUser };
     }
-    return { users: [defaultTestUser], currentUser: defaultTestUser };
+    return base;
 })();
 
 const saveToStorage = (get) => {
@@ -65,7 +67,7 @@ const useAuthStore = create((set, get) => ({
     token: null,
     isLoggedIn: !!initial.currentUser,
 
-    // add user
+    // 사용자 추가
     addUser: (user) => {
         const u = {
             ...user,
@@ -78,12 +80,14 @@ const useAuthStore = create((set, get) => ({
         return u;
     },
 
+    // 현재 사용자 ID로 설정
     setCurrentById: (id) => {
         const u = get().users.find((x) => x.id === id) || null;
         set({ currentUser: u, isLoggedIn: !!u });
         saveToStorage(get);
     },
 
+    // 현재 사용자 직접 설정
     setCurrent: (user) => {
         const u = user || null;
         if (u && !get().users.some((x) => x.id === u.id)) {
@@ -94,6 +98,7 @@ const useAuthStore = create((set, get) => ({
         saveToStorage(get);
     },
 
+    // 사용자 정보 업데이트
     updateUser: (id, patch) => {
         set((state) => {
             const users = state.users.map((u) => (u.id === id ? { ...u, ...patch } : u));
@@ -106,6 +111,7 @@ const useAuthStore = create((set, get) => ({
         saveToStorage(get);
     },
 
+    // 사용자 제거
     removeUser: (id) => {
         set((state) => {
             const users = state.users.filter((u) => u.id !== id);
@@ -116,11 +122,13 @@ const useAuthStore = create((set, get) => ({
         saveToStorage(get);
     },
 
+    // 토큰 설정
     setToken: (token) => {
         set({ token });
         saveToStorage(get);
     },
 
+    // 요약/프로필 일부 필드 업데이트
     setSummary: (partialSummary) => {
         set((state) => {
             const currentUser = state.currentUser
@@ -134,6 +142,7 @@ const useAuthStore = create((set, get) => ({
         saveToStorage(get);
     },
 
+    // 비밀번호 설정
     setPassword: (id, plainPassword) => {
         set((state) => {
             const users = state.users.map((u) =>
@@ -148,6 +157,7 @@ const useAuthStore = create((set, get) => ({
         saveToStorage(get);
     },
 
+    // 자격 증명 검사 (username 또는 email + 비번)
     validateCredentials: (identifier, plainPassword) => {
         if (!identifier) return null;
         const idLower = String(identifier).trim().toLowerCase();
@@ -160,6 +170,13 @@ const useAuthStore = create((set, get) => ({
         return (user.password || '') === plainPassword ? user : null;
     },
 
+    // 로그아웃
+    logout: () => {
+        set({ currentUser: null, isLoggedIn: false, token: null });
+        saveToStorage(get);
+    },
+
+    // 전체 초기화
     clearAll: () => {
         set({ users: [], currentUser: null, token: null, isLoggedIn: false });
         try {

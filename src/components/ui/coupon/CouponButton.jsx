@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
+// src/components/myPage/CouponButton.jsx
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAuthStore from '../../../store/authStore';
 import useRewardStore from '../../../store/rewardStore';
@@ -7,26 +8,25 @@ import './style.scss';
 
 const CouponButton = ({
     onIssued,
-    // 🔧 강조(하이라이트) 커스터마이즈용 props — 추후 문구만 바꾸고 싶을 때 여기만 변경하면 됨
     highlightOnClaim = true,
-    highlightLabel = '쿠폰 지급 완료', // ← 나중에 원하는 문구로 교체
-    highlightDuration = 2000, // 강조 유지 시간(ms)
-    highlightClassName = 'just-claimed', // 강조용 클래스명
+    highlightLabel = '쿠폰 지급 완료',
+    highlightDuration = 2000,
+    highlightClassName = 'just-claimed',
 }) => {
     const currentUser = useAuthStore((s) => s.currentUser);
     const userId = currentUser?.id || 'u_test_1';
 
-    // ✅ 상태 구독
+    // 상태 구독
     const claimed = useRewardStore((s) => !!s.rewardByUser[userId]?.claimed?.welcomePack);
     const couponsCount = useRewardStore((s) => (s.rewardByUser[userId]?.coupons || []).length);
 
-    const claimWelcomePack = useRewardStore((s) => s.claimWelcomePack);
+    // 고정형 웰컴팩 함수 사용 (숙소 3장, 투어 3장)
+    const claimWelcomePackFixed = useRewardStore((s) => s.claimWelcomePackFixed);
     const resetRewards = useRewardStore((s) => s.resetRewards);
 
     const [loading, setLoading] = useState(false);
-    const [justClaimed, setJustClaimed] = useState(false); // ✅ 방금 지급 강조 상태
+    const [justClaimed, setJustClaimed] = useState(false);
     const timerRef = useRef(null);
-
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -39,12 +39,17 @@ const CouponButton = ({
         if (loading) return;
         setLoading(true);
         try {
-            const res = await claimWelcomePack(userId, 5); // 5장 발급
+            // **숙소 3장, 투어 3장** 고정 발급
+            const res = await claimWelcomePackFixed(userId, 3, 3);
 
             if (!res?.ok) {
                 const html =
                     res?.reason === 'already-claimed'
                         ? '이미 쿠폰팩을 받았습니다.'
+                        : res?.reason === 'insufficient-coupons-for-categories'
+                        ? `충분한 카테고리 쿠폰이 없습니다. (호텔:${
+                              res.available?.hotels || 0
+                          }, 투어:${res.available?.tours || 0})`
                         : res?.reason === 'no-coupons-left'
                         ? '발급 가능한 쿠폰이 더 이상 없습니다.'
                         : '쿠폰 발급에 실패했습니다.';
@@ -58,11 +63,10 @@ const CouponButton = ({
                 return;
             }
 
-            // ✅ 발급 성공: SweetAlert2 → (확인 시) 쿠폰함 이동
+            // 성공
             await openCouponBoxShortcut({ navigate });
             onIssued?.();
 
-            // ✅ 강조 전환 (사용자가 이동을 취소했을 때도 시각적으로 피드백)
             if (highlightOnClaim) {
                 setJustClaimed(true);
                 if (timerRef.current) clearTimeout(timerRef.current);
@@ -105,10 +109,11 @@ const CouponButton = ({
             setLoading(false);
         }
     };
+    // after successful claim (inside handleClaim)
+    console.log('DEBUG rewardByUser AFTER claim:', useRewardStore.getState().rewardByUser);
 
     return (
         <div className="coupon-button-wrap">
-            {/* 지급 전 */}
             {!claimed ? (
                 <button
                     type="button"
@@ -120,19 +125,18 @@ const CouponButton = ({
                     {loading ? '발급 중...' : '쿠폰 전체 받기'}
                 </button>
             ) : (
-                // 지급 후: 기본은 "쿠폰 초기화", 방금 지급/전환 직후에는 강조 표시
                 <button
                     type="button"
                     className={`button g coupon-reset-btn ${justClaimed ? highlightClassName : ''}`}
                     onClick={handleReset}
-                    disabled={loading || justClaimed} // 강조 중엔 클릭 잠깐 막기(선택)
+                    disabled={loading || justClaimed}
                     aria-busy={loading}
-                    aria-live="polite" // 스크린리더에 전환 안내
+                    aria-live="polite"
                 >
                     {loading
                         ? '초기화 중...'
                         : justClaimed
-                        ? highlightLabel // 👈 여기 문구만 나중에 "쿠폰 지급 완료" 등으로 자유 변경
+                        ? highlightLabel
                         : `쿠폰 초기화 (${couponsCount}장 보유 중)`}
                 </button>
             )}

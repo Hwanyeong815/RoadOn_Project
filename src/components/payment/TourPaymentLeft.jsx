@@ -5,6 +5,7 @@ import { IoIosCheckmarkCircleOutline } from 'react-icons/io';
 import { IoCardOutline } from 'react-icons/io5';
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
 import useRewardStore from '../../store/rewardStore';
+import PaymentReward from '../ui/coupon/PaymentReward';
 
 const TourPaymentLeft = ({
     userId = 'u_test_1',
@@ -230,8 +231,17 @@ const TourPaymentLeft = ({
                             </div>
                         </div>
                     </div>
-
-                    {/* 쿠폰 */}
+                    <PaymentReward
+                        userId={userId}
+                        productType={'hotel'} // or 'tour'
+                        totalAmount={totalAmount}
+                        onChange={({ coupon, usedPoints, couponAmount, finalAmount }) => {
+                            // 결제 버튼 클릭시 이 상태를 사용하도록 부모에 저장
+                            setRewardState({ coupon, usedPoints, couponAmount, finalAmount });
+                        }}
+                    />
+                    {/* 
+              
                     <div className="pay-coupon">
                         <h4>쿠폰</h4>
                         <select
@@ -253,7 +263,7 @@ const TourPaymentLeft = ({
                         </select>
                     </div>
 
-                    {/* 포인트 */}
+                  
                     <div className="pay-point">
                         <h4>포인트</h4>
                         <p>
@@ -271,7 +281,7 @@ const TourPaymentLeft = ({
                                 전액 사용
                             </button>
                         </div>
-                    </div>
+                    </div> */}
 
                     {/* 결제 수단 */}
                     <div className="pay-method">

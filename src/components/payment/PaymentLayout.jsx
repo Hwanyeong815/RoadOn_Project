@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import FlightPaymentLeft from './FlightPaymentLeft';
 import FlightPaymentRight from './FlightPaymentRight';
 import HotelPaymentLeft from './HotelPaymentLeft';
@@ -6,17 +7,40 @@ import TourPaymentLeft from './TourPaymentLeft';
 import TourPaymentRight from './TourPaymentRight';
 
 const PaymentLayout = ({ productType, productData }) => {
+    const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('card');
+
+    const handlePaymentMethodChange = (method) => {
+        setSelectedPaymentMethod(method);
+    };
+
     const renderPaymentContent = () => {
         switch (productType) {
             case 'hotel':
                 return {
-                    left: <HotelPaymentLeft {...productData} />,
-                    right: <HotelPaymentRight {...productData} />,
+                    left: (
+                        <HotelPaymentLeft
+                            {...productData}
+                            onPaymentMethodChange={handlePaymentMethodChange}
+                        />
+                    ),
+                    right: (
+                        <HotelPaymentRight {...productData} paymentMethod={selectedPaymentMethod} />
+                    ),
                 };
             case 'flight':
                 return {
-                    left: <FlightPaymentLeft {...productData} />,
-                    right: <FlightPaymentRight {...productData} />,
+                    left: (
+                        <FlightPaymentLeft
+                            {...productData}
+                            onPaymentMethodChange={handlePaymentMethodChange}
+                        />
+                    ),
+                    right: (
+                        <FlightPaymentRight
+                            {...productData}
+                            paymentMethod={selectedPaymentMethod}
+                        />
+                    ),
                 };
             case 'tour':
                 return {
