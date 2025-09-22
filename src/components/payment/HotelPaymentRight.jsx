@@ -1,12 +1,23 @@
+// HotelPaymentRight.jsx 수정된 부분
 import './style.scss';
 import { loadTossPayments } from '@tosspayments/payment-sdk';
 import { useState } from 'react';
 
-const HotelPaymentRight = ({ hotel, selectedRoom, totalPrice, nights, paymentMethod = 'card' }) => {
+const HotelPaymentRight = ({
+    hotel,
+    selectedRoom,
+    totalPrice,
+    nights,
+    people,
+    startDate,
+    endDate,
+    paymentMethod = 'card',
+}) => {
     const [isProcessing, setIsProcessing] = useState(false);
-    
-    const clientKey = import.meta.env.VITE_TOSS_CLIENT_KEY || 'test_ck_D5GePWvyJnrK0W0k6q8gLzN97Eoq';
-    
+
+    const clientKey =
+        import.meta.env.VITE_TOSS_CLIENT_KEY || 'test_ck_D5GePWvyJnrK0W0k6q8gLzN97Eoq';
+
     // 주문 ID 생성 함수
     const generateOrderId = () => {
         const timestamp = new Date().getTime();
@@ -17,24 +28,37 @@ const HotelPaymentRight = ({ hotel, selectedRoom, totalPrice, nights, paymentMet
     // 결제 수단별 매핑
     const getPaymentMethodKey = (method) => {
         const methodMap = {
-            'card': '카드',
-            'tosspay': '토스페이',
-            'naverpay': '네이버페이',
-            'kakaopay': '카카오페이'
+            card: '카드',
+            tosspay: '토스페이',
+            naverpay: '네이버페이',
+            kakaopay: '카카오페이',
         };
         return methodMap[method] || '카드';
     };
 
     const handlePayment = async () => {
         if (isProcessing) return;
-        
+
         setIsProcessing(true);
-        
+
         try {
+            // 결제 데이터를 localStorage에 임시 저장 (결제 완료 페이지에서 사용)
+            const paymentData = {
+                hotel,
+                selectedRoom,
+                totalPrice,
+                nights,
+                people,
+                startDate,
+                endDate,
+                productType: 'hotel',
+            };
+            localStorage.setItem('paymentData', JSON.stringify(paymentData));
+
             const tossPayments = await loadTossPayments(clientKey);
             const orderId = generateOrderId();
             const paymentMethodKey = getPaymentMethodKey(paymentMethod);
-            
+
             await tossPayments.requestPayment(paymentMethodKey, {
                 amount: 450760, // 최종 결제 금액
                 orderId: orderId,
@@ -53,7 +77,7 @@ const HotelPaymentRight = ({ hotel, selectedRoom, totalPrice, nights, paymentMet
         } catch (error) {
             console.error('결제 오류:', error);
             setIsProcessing(false);
-            
+
             if (error.code === 'USER_CANCEL') {
                 alert('결제가 취소되었습니다.');
             } else if (error.code === 'INVALID_CARD_COMPANY') {
@@ -111,11 +135,7 @@ const HotelPaymentRight = ({ hotel, selectedRoom, totalPrice, nights, paymentMet
             <p className="assent">
                 <span></span>개인정보 처리 및 이용약관에 동의합니다.
             </p>
-            <button 
-                className='pay-btn' 
-                onClick={handlePayment}
-                disabled={isProcessing}
-            >
+            <button className="pay-btn" onClick={handlePayment} disabled={isProcessing}>
                 {isProcessing ? '결제 처리 중...' : '450,760원 결제하기'}
             </button>
         </div>

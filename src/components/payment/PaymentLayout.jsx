@@ -17,19 +17,30 @@ const PaymentLayout = ({ productType, productData }) => {
         switch (productType) {
             case 'hotel':
                 return {
-                    left: <HotelPaymentLeft 
-                        {...productData} 
-                        onPaymentMethodChange={handlePaymentMethodChange}
-                    />,
-                    right: <HotelPaymentRight 
-                        {...productData} 
-                        paymentMethod={selectedPaymentMethod}
-                    />,
+                    left: (
+                        <HotelPaymentLeft
+                            {...productData}
+                            onPaymentMethodChange={handlePaymentMethodChange}
+                        />
+                    ),
+                    right: (
+                        <HotelPaymentRight {...productData} paymentMethod={selectedPaymentMethod} />
+                    ),
                 };
             case 'flight':
                 return {
-                    left: <FlightPaymentLeft {...productData} />,
-                    right: <FlightPaymentRight {...productData} />,
+                    left: (
+                        <FlightPaymentLeft
+                            {...productData}
+                            onPaymentMethodChange={handlePaymentMethodChange}
+                        />
+                    ),
+                    right: (
+                        <FlightPaymentRight
+                            {...productData}
+                            paymentMethod={selectedPaymentMethod}
+                        />
+                    ),
                 };
             case 'tour':
                 return {
