@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Layout from '../common/Layout';
 import {
     Home,
@@ -6,7 +6,6 @@ import {
     NotFiles,
     Login,
     Payment,
-    // PayCompleted, 미완
     HotelsDetail,
     HotelsSearch,
     Tour,
@@ -30,13 +29,13 @@ export const MyRoutes = () => {
         <BrowserRouter>
             <ScrollToTop />
             <Routes>
-                {/* 랜딩은 별도 경로 */}
+                {/* 최초 로드시 Landing 보이고, 이후 /는 Home */}
+                <Route path="/" element={<Landing />} />
                 <Route path="/landing" element={<Landing />} />
 
                 <Route element={<Layout />}>
-                    <Route index element={<Home />} />
+                    <Route index element={<Home />} /> {/* / -> Home */}
                     <Route path="payment" element={<Payment />} />
-                    {/*Route path="payment/completed" element={<PayCompleted />} />*/}
                     <Route path="payment/tour" element={<TourPaymentLeft />} />
                     <Route path="hotels">
                         <Route index element={<Hotels />} />
@@ -54,12 +53,11 @@ export const MyRoutes = () => {
                     </Route>
                     <Route path="myPage" element={<MyPage />} />
                     <Route path="login" element={<Login />} />
-                    <Route path="Join" element={<Join />} />
+                    <Route path="join" element={<Join />} />
                     <Route path="logout" element={<Logout />} />
-
                     <Route path="editProfile" element={<EditProfile />} />
+                    <Route path="test" element={<Test />} />
                     <Route path="*" element={<NotFiles />} />
-                    <Route path="/test" element={<Test />} />
                 </Route>
             </Routes>
         </BrowserRouter>
