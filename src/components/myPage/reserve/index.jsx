@@ -9,14 +9,7 @@ import useReserveStore from '../../../store/reserveStore';
 
 const TABS = ['전체', '국내숙소', '해외숙소', '체험·투어입장권', '항공'];
 
-/**
- * tab -> filter type
- * - '전체' => null
- * - '국내숙소' => hotel + domestic heuristic
- * - '해외숙소' => hotel + !domestic
- * - '체험·투어입장권' => package|tour
- * - '항공' => flight
- */
+/** 탭 → 필터 매핑 */
 const tabToFilter = (label) => {
     const l = (label || '').toString();
     if (/전체/.test(l)) return { type: null };
@@ -27,7 +20,7 @@ const tabToFilter = (label) => {
     return { type: null };
 };
 
-// 휴리스틱: 호텔 위치 텍스트로 국내/해외 판단 (간단하고 명시적으로 키워드 포함 검사)
+/** 국내/해외 판별 휴리스틱 */
 const isDomesticLocation = (loc) => {
     if (!loc) return false;
     const s = String(loc).toLowerCase();
@@ -53,6 +46,28 @@ const isDomesticLocation = (loc) => {
     return keywords.some((kw) => s.includes(kw));
 };
 
+/** ---------- 정렬(최신순) 유틸 ---------- */
+const getSortKey = (r) => {
+    // 1) createdAt 우선
+    const t1 = Date.parse(r?.createdAt || '');
+    if (!Number.isNaN(t1)) return t1;
+    // 2) updatedAt 보조
+    const t2 = Date.parse(r?.updatedAt || '');
+    if (!Number.isNaN(t2)) return t2;
+    // 3) 예약코드에 YYYYMMDD가 있으면 그 날짜 기준
+    const m = String(r?.reservationId || '').match(/(\d{8})/);
+    if (m) {
+        const ymd = m[1];
+        const y = +ymd.slice(0, 4);
+        const mo = +ymd.slice(4, 6) - 1;
+        const d = +ymd.slice(6, 8);
+        return new Date(y, mo, d, 23, 59, 59, 999).getTime();
+    }
+    return 0;
+};
+
+const sortByNewest = (arr = []) => arr.slice().sort((a, b) => getSortKey(b) - getSortKey(a));
+
 const Reserve = ({ preview = true, previewCount = 2, onMore = () => {}, items = null }) => {
     const [activeTab, setActiveTab] = useState(TABS[0]);
     const [page, setPage] = useState(1);
@@ -67,33 +82,35 @@ const Reserve = ({ preview = true, previewCount = 2, onMore = () => {}, items = 
 
     const filtered = useMemo(() => {
         const f = tabToFilter(activeTab);
-        if (!f.type) return data.slice();
+        if (!f.type) return sortByNewest(data);
 
         if (Array.isArray(f.type)) {
             // package or tour
-            return data.filter((d) =>
+            const res = data.filter((d) =>
                 f.type.includes(((d.type || '') + '').toString().toLowerCase())
             );
+            return sortByNewest(res);
         }
 
         if (f.type === 'hotel' && typeof f.domestic === 'boolean') {
-            return data.filter((d) => {
+            const res = data.filter((d) => {
                 if (((d.type || '') + '').toString().toLowerCase() !== 'hotel') return false;
-                // product data의 location로 국내/해외 판별 (우선 product snapshot, 없으면 merged data)
                 const loc = d.data?.location ?? d.data?.address ?? d.data?.place ?? '';
                 const domestic = isDomesticLocation(loc);
                 return f.domestic ? domestic : !domestic;
             });
+            return sortByNewest(res);
         }
 
-        // simple type match
-        return data.filter(
+        const res = data.filter(
             (d) => ((d.type || '') + '').toString().toLowerCase() === String(f.type).toLowerCase()
         );
+        return sortByNewest(res);
     }, [data, activeTab]);
 
     const total = filtered.length;
     const previewItems = filtered.slice(0, previewCount);
+
     const pageItems = useMemo(() => {
         const start = (page - 1) * pageSize;
         return filtered.slice(start, start + pageSize);
