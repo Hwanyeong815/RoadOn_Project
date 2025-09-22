@@ -2,13 +2,14 @@
 
 gsap, react-icons, swiper
 
+yarn add gsap swiper react-icons
+
 yarn add zustand
-npm install zustand
 
 yarn add react-datepicker date-fns
-npm install react-datepicker date-fns
 
 yarn add react-copy-to-clipboard
-npm install react-copy-to-clipboard
 
 yarn add sweetalert2
+
+yarn add @tosspayments/payment-sdk
