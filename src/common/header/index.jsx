@@ -24,7 +24,7 @@ const Header = () => {
         if (!img) return;
 
         const defaultSrc = img.dataset.srcDefault || '/images/CI.png';
-        const greySrc = img.dataset.srcGrey || '/images/ci-grey.png';
+        const greySrc = img.dataset.srcGrey || '/images/CI-grey.png';
 
         const preload = (src) => {
             const p = new Image();
