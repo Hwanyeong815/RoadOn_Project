@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Layout from '../common/Layout';
 import {
     Home,
@@ -6,7 +6,6 @@ import {
     NotFiles,
     Login,
     Payment,
-    // PayCompleted, 미완
     HotelsDetail,
     HotelsSearch,
     Tour,
@@ -17,7 +16,6 @@ import {
     Join,
     Landing,
 } from '../pages';
-
 import AirportDetail from '../components/airport/airportSearch/AirportDetail';
 import ScrollToTop from '../common/ScrollToTop';
 import EditProfile from '../components/login/editProfile';
@@ -25,12 +23,28 @@ import TourPaymentLeft from '../components/payment/TourPaymentLeft';
 import Logout from '../components/logout';
 import Test from '../components/ui/swal/Test';
 
+// ✅ 최초 1회만 landing으로 보내는 가드
+const FirstVisitGate = () => {
+    const nav = useNavigate();
+    const { pathname } = useLocation();
+
+    useLayoutEffect(() => {
+        if (pathname === '/' && !localStorage.getItem('seen:landing')) {
+            localStorage.setItem('seen:landing', '1');
+            nav('/landing', { replace: true });
+        }
+    }, [nav, pathname]);
+
+    return <Outlet />;
+};
+
 export const MyRoutes = () => {
     return (
         <BrowserRouter>
             <ScrollToTop />
             <Routes>
-                {/* 랜딩은 별도 경로 */}
+                {/* 최초 로드시 Landing 보이고, 이후 /는 Home */}
+                <Route path="/" element={<Landing />} />
                 <Route path="/landing" element={<Landing />} />
 
                 <Route element={<Layout />}>
@@ -54,12 +68,11 @@ export const MyRoutes = () => {
                     </Route>
                     <Route path="myPage" element={<MyPage />} />
                     <Route path="login" element={<Login />} />
-                    <Route path="Join" element={<Join />} />
+                    <Route path="join" element={<Join />} />
                     <Route path="logout" element={<Logout />} />
-
                     <Route path="editProfile" element={<EditProfile />} />
+                    <Route path="test" element={<Test />} />
                     <Route path="*" element={<NotFiles />} />
-                    <Route path="/test" element={<Test />} />
                 </Route>
             </Routes>
         </BrowserRouter>
