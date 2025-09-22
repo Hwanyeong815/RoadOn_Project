@@ -32,7 +32,7 @@
     }
 
     .reservation-info {
-        padding: 20px;
+        padding: 20px 300px;
         background: #f9fafb;
         border-radius: 8px;
         margin-bottom: 20px;
@@ -126,11 +126,12 @@
             font-weight: 500;
             cursor: pointer;
             transition: all 0.2s;
+            @include font-16px-M;
 
             &.btn-secondary {
-                background: #f3f4f6;
-                border: 1px solid #d1d5db;
-                color: #374151;
+                background: $white;
+                border: 1px solid $mint;
+                color: $mint;
                 border-radius: vw(50px);
 
                 &:hover {
@@ -368,7 +369,7 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: vw(30px);
-    .check-in { 
+    .check-in {
     }
     .check-out {
     }

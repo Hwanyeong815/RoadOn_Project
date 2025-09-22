@@ -4,11 +4,23 @@ import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { useState } from 'react';
 
-const HotelPaymentLeft = ({ hotel, selectedRoom, startDate, endDate, nights, people, onPaymentMethodChange }) => {
+const HotelPaymentLeft = ({
+    hotel,
+    selectedRoom,
+    startDate,
+    endDate,
+    nights,
+    people,
+    onPaymentMethodChange,
+}) => {
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('card');
-    
-    const formattedStartDate = startDate ? format(new Date(startDate), 'MM.dd(E)', { locale: ko }) : '날짜 미정';
-    const formattedEndDate = endDate ? format(new Date(endDate), 'MM.dd(E)', { locale: ko }) : '날짜 미정';
+
+    const formattedStartDate = startDate
+        ? format(new Date(startDate), 'MM.dd(E)', { locale: ko })
+        : '날짜 미정';
+    const formattedEndDate = endDate
+        ? format(new Date(endDate), 'MM.dd(E)', { locale: ko })
+        : '날짜 미정';
 
     const handlePaymentMethodSelect = (method) => {
         setSelectedPaymentMethod(method);
@@ -60,7 +72,9 @@ const HotelPaymentLeft = ({ hotel, selectedRoom, startDate, endDate, nights, peo
                                 사용 가능한 쿠폰 1개
                             </option>
                             <option value="hotels">10,000원 [숙소 할인]</option>
-                            <option value="tour" disabled>30,000원 [투어 할인]</option>
+                            <option value="tour" disabled>
+                                30,000원 [투어 할인]
+                            </option>
                         </select>
                     </div>
                     <div className="pay-point">
@@ -74,26 +88,26 @@ const HotelPaymentLeft = ({ hotel, selectedRoom, startDate, endDate, nights, peo
                     <div className="pay-method">
                         <h4>결제수단</h4>
                         <ul className="payments">
-                            <li 
+                            <li
                                 className={selectedPaymentMethod === 'card' ? 'selected' : ''}
                                 onClick={() => handlePaymentMethodSelect('card')}
                             >
                                 <IoCardOutline />
                                 <span>신용/체크 카드</span>
                             </li>
-                            <li 
+                            <li
                                 className={selectedPaymentMethod === 'tosspay' ? 'selected' : ''}
                                 onClick={() => handlePaymentMethodSelect('tosspay')}
                             >
                                 <img src="/images/icon/tosspay.png" alt="토스페이" />
                             </li>
-                            <li 
+                            <li
                                 className={selectedPaymentMethod === 'naverpay' ? 'selected' : ''}
                                 onClick={() => handlePaymentMethodSelect('naverpay')}
                             >
                                 <img src="/images/icon/naverpay.png" alt="네이버페이" />
                             </li>
-                            <li 
+                            <li
                                 className={selectedPaymentMethod === 'kakaopay' ? 'selected' : ''}
                                 onClick={() => handlePaymentMethodSelect('kakaopay')}
                             >
