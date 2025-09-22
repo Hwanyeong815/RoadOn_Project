@@ -9,11 +9,25 @@
     justify-content: center;
     pointer-events: auto;
 }
+.more-btn {
+    .wish-overlay {
+        position: relative;
+        height: max-content;
+
+        .wish-button {
+            width: 50px;
+            height: 50px;
+            @include circle;
+            background-color: $greyscale-300;
+        }
+    }
+}
 
 .hotel-image {
     position: relative;
     .wish-overlay {
         top: vw(8px);
+
         right: vw(8px);
     }
 }
@@ -25,7 +39,7 @@
     width: var(36px);
     height: var(36px);
     border-radius: vw(5px);
-    border: 1px solid $greyscale-1000;
+    border: 1px solid $greyscale-400;
     font-size: rem(20px);
     cursor: pointer;
     // padding: 0;
@@ -56,7 +70,8 @@
     }
 
     .not {
-        color: $white;
+        // color: $white;
+        color: $greyscale-900;
     }
 }
 

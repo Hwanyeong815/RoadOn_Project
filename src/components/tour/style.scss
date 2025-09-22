@@ -7,8 +7,8 @@
     }
 }
 html.snap-y {
-    scroll-snap-type: y proximity; /* ← mandatory보다 자연스러움 */
-    scroll-padding-top: var(--header-h, 100px);
-    scroll-behavior: smooth; /* 앵커/JS 스크롤도 부드럽게 */
-    overscroll-behavior-y: contain;
+    // scroll-snap-type: y proximity; /* ← mandatory보다 자연스러움 */
+    // scroll-padding-top: var(--header-h, 100px);
+    // scroll-behavior: smooth; /* 앵커/JS 스크롤도 부드럽게 */
+    // overscroll-behavior-y: contain;
 }

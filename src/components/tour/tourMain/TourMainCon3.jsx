@@ -11,8 +11,11 @@ const TourMainCon3 = () => {
                     <h2>씬투어 패키지 둘러보기</h2>
                 </div>
                 <ul className="package-wrap">
-                    {packages.map((pack) => (
-                        <TourCon3Item key={pack.id} pack={pack} slug={pack.slug} />
+                    {packages.map((pack, i) => (
+                        <TourCon3Item
+                            key={pack.id ?? pack.slug ?? pack.tourId ?? `pack-${i}`} // ← 고유 key
+                            pack={pack}
+                        />
                     ))}
                 </ul>
             </div>

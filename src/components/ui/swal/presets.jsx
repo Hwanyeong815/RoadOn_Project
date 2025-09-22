@@ -2,7 +2,19 @@
 import Swal from 'sweetalert2';
 import './style.scss';
 
-// 공통 옵션 (테마/애니메이션/클래스)
+// 🌟 라우트 상수 (요청한 주소)
+export const ROUTES = {
+    wishlist: '/myPage?mypage_section=wishlist',
+    coupons: '/myPage?mypage_section=reward&reward_tab=coupons',
+};
+
+// 키별 기본 이동 경로 매핑 (confirm 버튼 기준)
+const DEFAULT_CONFIRM_ROUTES = {
+    addedToWishlist: ROUTES.wishlist,
+    couponIssued: ROUTES.coupons,
+};
+
+// 공통 옵션
 export const baseSwal = Swal.mixin({
     reverseButtons: true,
     buttonsStyling: false,
@@ -20,8 +32,7 @@ export const baseSwal = Swal.mixin({
 
 /**
  * 프리셋 모음
- * - 각 항목은 SweetAlert2 옵션 객체
- * - 필요한 텍스트만 바꿔 쓰고, 색/레이아웃은 SCSS에서 통일
+ * - 버튼 텍스트/표현만 관리, 실제 라우팅은 openAndNavigate가 처리
  */
 export const presets = {
     loginRequired: {
@@ -51,7 +62,7 @@ export const presets = {
         html: '마이페이지 &gt; 찜 목록에서 확인이 가능합니다.',
         showCancelButton: true,
         cancelButtonText: '계속 둘러보기',
-        confirmButtonText: '찜 목록 바로가기',
+        confirmButtonText: '찜 목록 바로가기', // ✅ confirm → 찜목록 이동
     },
     endReservation: {
         title: '<strong>예약을 종료하시겠습니까?</strong>',
@@ -67,7 +78,7 @@ export const presets = {
         html: '마이페이지 &gt; 쿠폰함에서 확인하세요.',
         showCancelButton: true,
         cancelButtonText: '닫기',
-        confirmButtonText: '쿠폰함 바로가기',
+        confirmButtonText: '쿠폰함 바로가기', // ✅ confirm → 쿠폰함 이동
     },
 };
 
@@ -77,7 +88,6 @@ export const openSwal = (key, override = {}) => {
     return baseSwal.fire({ ...cfg, ...override });
 };
 
-// 토스트도 필요하면 이렇게
 export const toast = (text, override = {}) =>
     baseSwal.fire({
         toast: true,
@@ -88,16 +98,33 @@ export const toast = (text, override = {}) =>
         html: text,
         ...override,
     });
+
+/**
+ * 확인/취소 버튼에 따른 이동 래퍼
+ * - confirmTo/cancelTo가 안 넘어오면, 키 기반 기본 경로를 사용(있는 경우)
+ * - navigate가 있으면 SPA 네비게이션, 없으면 window.open
+ */
 export const openAndNavigate = async (
     key,
     { confirmTo, cancelTo, target = '_self', navigate } = {}
 ) => {
     const res = await openSwal(key);
-    if (res.isConfirmed && confirmTo) {
-        navigate ? navigate(confirmTo) : window.open(confirmTo, target);
+
+    // 기본 confirm 경로 자동 보정 (키 → 기본 경로)
+    const confirmedPath = confirmTo ?? DEFAULT_CONFIRM_ROUTES[key];
+
+    if (res.isConfirmed && confirmedPath) {
+        navigate ? navigate(confirmedPath) : window.open(confirmedPath, target);
     }
     if (res.dismiss === Swal.DismissReason.cancel && cancelTo) {
         navigate ? navigate(cancelTo) : window.open(cancelTo, target);
     }
     return res;
 };
+
+// 🔸 사용 편의를 위한 헬퍼 (선택)
+export const openWishlistShortcut = (opts = {}) =>
+    openAndNavigate('addedToWishlist', { confirmTo: ROUTES.wishlist, ...opts });
+
+export const openCouponBoxShortcut = (opts = {}) =>
+    openAndNavigate('couponIssued', { confirmTo: ROUTES.coupons, ...opts });

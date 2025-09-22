@@ -1,3 +1,4 @@
+// src/components/hotels/detail/DetailLeft.jsx
 import { BsTelephone } from 'react-icons/bs';
 import { MdOutlineEmail } from 'react-icons/md';
 import {
@@ -18,8 +19,9 @@ import Location from './Location';
 import MiniReviewItem from './MiniReviewItem';
 import WishButton from '../../ui/wishbutton/WishButton';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
-import useAuthStore from '../../../store/authStore'; 
+import useAuthStore from '../../../store/authStore';
 import { useNavigate } from 'react-router-dom';
+import { openWishlistShortcut, openAndNavigate } from '../../ui/swal/presets'; // ⬅️ 추가
 
 const DetailLeft = ({
     hotel,
@@ -32,7 +34,12 @@ const DetailLeft = ({
     handleRoomSelect,
     handleShowMore,
     averageRating,
-    miniReviews, activeTab, handleScrollTo, buildingRef, roomOptionRef, hotelInfoRef,
+    miniReviews,
+    activeTab,
+    handleScrollTo,
+    buildingRef,
+    roomOptionRef,
+    hotelInfoRef,
     locationRef,
     reviewsRef,
 }) => {
@@ -49,12 +56,15 @@ const DetailLeft = ({
         '개별 바베큐': Bbq,
     };
 
-     const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+    const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
     const navigate = useNavigate();
 
-    const handleAdClick = () => {
-        navigate('/login');
-    };
+    // ⬇️ 광고 배너 클릭 시: loginRequired 알럿 → 확인 누르면 /login으로 이동
+    const handleAdClick = () =>
+        openAndNavigate('loginRequired', {
+            confirmTo: '/login',
+            navigate,
+        });
 
     return (
         <div className="detail-left">
@@ -72,15 +82,17 @@ const DetailLeft = ({
                         </p>
                     </div>
                     <div className="more-btn">
-                        <img src="/images/icon/share.svg" className='share-btn' alt="공유" />
-                        {/* <img src="/images/icon/like.svg" alt="찜하기" /> */}
-                        <WishButton 
-                            type="hotel"
-                                    id={hotel.id}
-                                    data={hotel}
-                                    filledIcon={FaHeart} // 눌렀을 때 빨간 하트
-                                    emptyIcon={FaRegHeart} // 기본은 빈 하트
-                        className='wish-hotel-btn'/>
+                        <img src="/images/icon/share.svg" className="share-btn" alt="공유" />
+                        <div className="wish-overlay">
+                            <WishButton
+                                type="hotel"
+                                id={hotel.id}
+                                data={hotel}
+                                onWish={(added) => {
+                                    if (added) openWishlistShortcut({ navigate });
+                                }}
+                            />
+                        </div>
                     </div>
                 </article>
                 <section className="detail-reviews" style={{ marginBottom: '20px' }}>
@@ -112,25 +124,25 @@ const DetailLeft = ({
                         <button
                             className={activeTab === '객실 선택' ? 'room-option on' : 'room-option'}
                             onClick={() => handleScrollTo(roomOptionRef, '객실 선택')}
-                        >객실 선택
+                        >
+                            객실 선택
                         </button>
                         <button
                             className={activeTab === '숙소 정보' ? 'hotel-info on' : 'hotel-info'}
-                            onClick={() => handleScrollTo(hotelInfoRef, '숙소 정보')} 
+                            onClick={() => handleScrollTo(hotelInfoRef, '숙소 정보')}
                         >
-                       
                             숙소 정보
                         </button>
                         <button
-                        className={activeTab === '위치' ? 'location on' : 'location'}
-                        onClick={() => handleScrollTo(locationRef, '위치')}
-                    >
+                            className={activeTab === '위치' ? 'location on' : 'location'}
+                            onClick={() => handleScrollTo(locationRef, '위치')}
+                        >
                             위치
                         </button>
                         <button
-                        className={activeTab === '리뷰' ? 'reviews on' : 'reviews'}
-                        onClick={() => handleScrollTo(reviewsRef, '리뷰')}
-                    >
+                            className={activeTab === '리뷰' ? 'reviews on' : 'reviews'}
+                            onClick={() => handleScrollTo(reviewsRef, '리뷰')}
+                        >
                             리뷰
                         </button>
                     </div>
@@ -151,11 +163,20 @@ const DetailLeft = ({
                             })}
                         </ul>
                     </div>
+
                     {!isLoggedIn && (
-                        <div className="con advertise" onClick={handleAdClick} style={{cursor: 'pointer'}}>
-                            <img src="/images/hotels/detail/login_first.png" alt="login_first.png" />
+                        <div
+                            className="con advertise"
+                            onClick={handleAdClick}
+                            style={{ cursor: 'pointer' }}
+                        >
+                            <img
+                                src="/images/hotels/detail/login_first.png"
+                                alt="login_first.png"
+                            />
                         </div>
                     )}
+
                     <div className="con con2 room-option-wrap" ref={roomOptionRef}>
                         <h2>객실 선택</h2>
                         <ul className="room-filter">
@@ -194,6 +215,7 @@ const DetailLeft = ({
                             )}
                         </div>
                     </div>
+
                     <div className="con con3 hotel-info-wrap" ref={hotelInfoRef}>
                         <h2>숙소 정보</h2>
                         <p>{hotel.about}</p>
@@ -206,9 +228,11 @@ const DetailLeft = ({
                             </span>
                         </div>
                     </div>
+
                     <div className="con con4 hotel-policies-wrap">
                         <Policies hotel={hotel} />
                     </div>
+
                     <div className="con con5 hotel-cancel-wrap">
                         <h2>취소/변경 안내</h2>
                         <ul className="follows">
