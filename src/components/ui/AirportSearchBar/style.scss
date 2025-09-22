@@ -1,372 +1,372 @@
-@use "../../../styles/utils/" as *;
+@use '../../../styles/utils/' as *;
 
 .airport-searchbar {
-  .search-box {
-    margin: auto;
-    max-width: vw(1160px);
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: vw(12px);
-    padding: vw(20px);
+    .search-box {
+        margin: auto;
+        max-width: vw(1160px);
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: vw(12px);
+        padding: vw(20px);
 
-    .search-tabs {
-      display: flex;
-      gap: vw(10px);
-      margin-bottom: vw(15px);
-      button {
-        padding: vw(8px) vw(16px);
-        border-radius: vw(20px);
-        border: none;
-        @include font-14px;
-        background: rgba(255, 255, 255, 0.2);
-        color: $white;
-        cursor: pointer;
-        &:hover {
-          background: $mint;
-          color: $white;
-        }
-        &.active {
-          background: $mint;
-          color: $white;
-        }
-      }
-    }
-
-    .search-form {
-      display: flex;
-      align-items: center;
-      gap: vw(12px);
-      flex-wrap: wrap;
-
-      .icon {
-        color: $white;
-        @include font-18px;
-        margin-right: vw(10px);
-      }
-
-      .people {
-        @include font-22px;
-      }
-
-      .plus {
-        @include font-16px;
-      }
-
-      .form-item {
-        display: flex;
-        align-items: center;
-        gap: vw(6px);
-        width: vw(260px);
-        height: vw(45px);
-        padding: vw(12px) vw(20px);
-        border-radius: vw(45px);
-        background: rgba(255, 255, 255, 0.15);
-        color: $white;
-        @include font-16px;
-        position: relative;
-        cursor: pointer;
-
-        &.start {
-          width: vw(215px);
-        }
-
-        &.end {
-          width: vw(215px);
-        }
-        &.date {
-          width: vw(200px);
-        }
-        &.people {
-          width: vw(260px);
-        }
-
-        &:hover {
-          background: rgba(255, 255, 255, 0.25);
-        }
-
-        &.small {
-          flex: none;
-          width: vw(280px);
-          height: vw(45px);
-          padding: vw(12px) vw(20px);
-          border-radius: vw(30px);
-          @include font-16px;
-        }
-
-        .dropdown {
-          position: absolute;
-          top: calc(100% + vw(6px));
-          left: 0;
-          width: 100%;
-          background: $white;
-          border-radius: vw(10px);
-          padding: vw(14px);
-          box-shadow: 0 vw(6px) vw(18px) rgba(0, 0, 0, 0.25);
-          z-index: 10;
-          color: $default;
-
-          .search-input {
-            width: 100%;
-            padding: vw(8px);
-            margin-bottom: vw(10px);
-            border: 1px solid $greyscale-300;
-            border-radius: vw(6px);
-            @include font-16px;
-            color: $default;
-          }
-
-          ul {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            max-height: vw(180px);
-            overflow-y: auto;
-
-            li {
-              padding: vw(8px);
-              border-radius: vw(6px);
-              cursor: pointer;
-              @include font-16px;
-              color: $default;
-              &:hover {
-                background: $greyscale-100;
-              }
+        .search-tabs {
+            display: flex;
+            gap: vw(10px);
+            margin-bottom: vw(15px);
+            button {
+                padding: vw(8px) vw(16px);
+                border-radius: vw(20px);
+                border: none;
+                @include font-14px;
+                background: rgba(255, 255, 255, 0.2);
+                color: $white;
+                cursor: pointer;
+                &:hover {
+                    background: $mint;
+                    color: $white;
+                }
+                &.active {
+                    background: $mint;
+                    color: $white;
+                }
             }
-          }
+        }
 
-          .people-control {
+        .search-form {
             display: flex;
             align-items: center;
-            gap: vw(10px);
-            margin-bottom: vw(10px);
+            gap: vw(12px);
+            flex-wrap: wrap;
 
-            span {
-              @include font-14px;
-              color: $default;
+            .icon {
+                color: $white;
+                @include font-18px;
+                margin-right: vw(10px);
             }
-          }
 
-          .people-btn {
-            border: none;
-            width: vw(40px);
-            height: vw(35px);
-            margin: 0 vw(10px);
-            align-items: center;
-            border-radius: vw(8px);
-            background: $mint;
-            color: $white;
-            @include font-16px;
-            cursor: pointer;
-            &:hover {
-              background: $foundation-mint-normalhover;
+            .people {
+                @include font-22px;
             }
-          }
 
-          .seat-control {
-            margin-top: vw(10px);
-
-            span {
-              display: inline-block;
-              @include font-14px;
-              margin: vw(6px) vw(8px) 0 0;
-              cursor: pointer;
-              &:hover {
-                color: $foundation-mint-normalhover;
-              }
+            .plus {
+                @include font-16px;
             }
-          }
 
-          .confirm-btn {
-            margin-top: vw(10px);
-            width: 100%;
-            padding: vw(10px);
-            border-radius: vw(40px);
-            border: none;
-            background: $mint;
-            color: $white;
-            cursor: pointer;
-            &:hover {
-              background: $foundation-mint-normalhover;
+            .form-item {
+                display: flex;
+                align-items: center;
+                gap: vw(6px);
+                width: vw(260px);
+                height: vw(45px);
+                padding: vw(12px) vw(20px);
+                border-radius: vw(45px);
+                background: rgba(255, 255, 255, 0.15);
+                color: $white;
+                @include font-16px;
+                position: relative;
+                cursor: pointer;
+
+                &.start {
+                    width: vw(215px);
+                }
+
+                &.end {
+                    width: vw(215px);
+                }
+                &.date {
+                    width: vw(200px);
+                }
+                &.people {
+                    width: vw(260px);
+                }
+
+                &:hover {
+                    background: rgba(255, 255, 255, 0.25);
+                }
+
+                &.small {
+                    flex: none;
+                    width: vw(280px);
+                    height: vw(45px);
+                    padding: vw(12px) vw(20px);
+                    border-radius: vw(30px);
+                    @include font-16px;
+                }
+
+                .dropdown {
+                    position: absolute;
+                    top: calc(100% + vw(6px));
+                    left: 0;
+                    width: 100%;
+                    background: $white;
+                    border-radius: vw(10px);
+                    padding: vw(14px);
+                    box-shadow: 0 vw(6px) vw(18px) rgba(0, 0, 0, 0.25);
+                    z-index: 10;
+                    color: $default;
+
+                    .search-input {
+                        width: 100%;
+                        padding: vw(8px);
+                        margin-bottom: vw(10px);
+                        border: 1px solid $greyscale-300;
+                        border-radius: vw(6px);
+                        @include font-16px;
+                        color: $default;
+                    }
+
+                    ul {
+                        list-style: none;
+                        margin: 0;
+                        padding: 0;
+                        max-height: vw(180px);
+                        overflow-y: auto;
+
+                        li {
+                            padding: vw(8px);
+                            border-radius: vw(6px);
+                            cursor: pointer;
+                            @include font-16px;
+                            color: $default;
+                            &:hover {
+                                background: $greyscale-100;
+                            }
+                        }
+                    }
+
+                    .people-control {
+                        display: flex;
+                        align-items: center;
+                        gap: vw(10px);
+                        margin-bottom: vw(10px);
+
+                        span {
+                            @include font-14px;
+                            color: $default;
+                        }
+                    }
+
+                    .people-btn {
+                        border: none;
+                        width: vw(45px);
+                        height: vw(34px);
+                        margin: 0 vw(10px);
+                        align-items: center;
+                        border-radius: 50%;
+                        background: $mint;
+                        color: $white;
+                        @include font-16px;
+                        cursor: pointer;
+                        &:hover {
+                            background: $foundation-mint-normalhover;
+                        }
+                    }
+
+                    .seat-control {
+                        margin-top: vw(10px);
+
+                        span {
+                            display: inline-block;
+                            @include font-14px;
+                            margin: vw(6px) vw(8px) 0 0;
+                            cursor: pointer;
+                            &:hover {
+                                color: $foundation-mint-normalhover;
+                            }
+                        }
+                    }
+
+                    .confirm-btn {
+                        margin-top: vw(10px);
+                        width: 100%;
+                        padding: vw(10px);
+                        border-radius: vw(40px);
+                        border: none;
+                        background: $mint;
+                        color: $white;
+                        cursor: pointer;
+                        &:hover {
+                            background: $foundation-mint-normalhover;
+                        }
+                    }
+                }
+
+                // DatePicker 스타일링
+                .react-datepicker-wrapper,
+                .react-datepicker__input-container input {
+                    width: 100%;
+                    background: transparent;
+                    border: none;
+                    outline: none;
+                    color: $white;
+                    @include font-14px-M;
+                    cursor: pointer;
+                    &::placeholder {
+                        color: rgba(255, 255, 255, 0.8);
+                    }
+                }
             }
-          }
-        }
 
-        // DatePicker 스타일링
-        .react-datepicker-wrapper,
-        .react-datepicker__input-container input {
-          width: 100%;
-          background: transparent;
-          border: none;
-          outline: none;
-          color: $white;
-          @include font-14px-M;
-          cursor: pointer;
-          &::placeholder {
-            color: rgba(255, 255, 255, 0.8);
-          }
-        }
-      }
+            .search-btn {
+                width: vw(120px);
+                height: vw(45px);
+                padding: vw(10px);
+                border-radius: vw(30px);
+                border: vw(2px) solid $mint;
+                background: transparent;
+                color: $mint;
+                cursor: pointer;
+                &:hover {
+                    background: $foundation-mint-normalhover;
+                    color: $white;
+                }
+            }
 
-      .search-btn {
-        width: vw(120px);
-        height: vw(45px);
-        padding: vw(10px);
-        border-radius: vw(30px);
-        border: vw(2px) solid $mint;
-        background: transparent;
-        color: $mint;
-        cursor: pointer;
-        &:hover {
-          background: $foundation-mint-normalhover;
-          color: $white;
+            .add-btn {
+                display: flex;
+                align-items: center;
+                padding: vw(10px) vw(14px);
+                height: vw(45px);
+                border-radius: vw(30px);
+                border: vw(1px) dashed $greyscale-1000;
+                background: rgba(255, 255, 255, 0.15);
+                color: $white;
+                @include font-14px-M;
+                cursor: pointer;
+                white-space: nowrap;
+                &:hover {
+                    background: rgba(255, 255, 255, 0.4);
+                }
+            }
+            .remove-btn {
+                background: transparent;
+                border: none;
+                color: $mint;
+                @include font-18px;
+                cursor: pointer;
+            }
+            // 다구간 스타일
+            &.multicity {
+                display: flex;
+                flex-direction: column;
+                gap: vw(12px);
+                .multi-row {
+                    display: flex;
+                    align-items: center;
+                    gap: vw(12px);
+                    width: 100%;
+                    .form-item {
+                        &.start {
+                            width: vw(220px);
+                        }
+                        &.end {
+                            width: vw(220px);
+                        }
+                    }
+                }
+            }
         }
-      }
+    }
 
-      .add-btn {
-        display: flex;
-        align-items: center;
-        padding: vw(10px) vw(14px);
-        height: vw(45px);
-        border-radius: vw(30px);
-        border: vw(1px) dashed $greyscale-1000;
-        background: rgba(255, 255, 255, 0.15);
-        color: $white;
-        @include font-14px-M;
-        cursor: pointer;
-        white-space: nowrap;
-        &:hover {
-          background: rgba(255, 255, 255, 0.4);
-        }
-      }
-      .remove-btn {
-        background: transparent;
+    // DatePicker 전역 스타일 (달력)
+    .react-datepicker-popper {
+        z-index: 20;
+    }
+    .react-datepicker {
+        margin-top: vw(10px);
         border: none;
-        color: $mint;
-        @include font-18px;
-        cursor: pointer;
-      }
-      // 다구간 스타일
-      &.multicity {
-        display: flex;
-        flex-direction: column;
-        gap: vw(12px);
-        .multi-row {
-          display: flex;
-          align-items: center;
-          gap: vw(12px);
-          width: 100%;
-          .form-item {
-            &.start {
-              width: vw(220px);
-            }
-            &.end {
-              width: vw(220px);
-            }
-          }
+        width: 100%;
+        @include font-14px;
+        border-radius: vw(10px);
+        padding: vw(14px);
+        box-shadow: 0 vw(6px) vw(18px) rgba(0, 0, 0, 0.25);
+        animation: dp-fade-slide 0.2s ease-out;
+
+        .react-datepicker__triangle {
+            display: none;
         }
-      }
-    }
-  }
 
-  // DatePicker 전역 스타일 (달력)
-  .react-datepicker-popper {
-    z-index: 20;
-  }
-  .react-datepicker {
-    margin-top: vw(10px);
-    border: none;
-    width: 100%;
-    @include font-14px;
-    border-radius: vw(10px);
-    padding: vw(14px);
-    box-shadow: 0 vw(6px) vw(18px) rgba(0, 0, 0, 0.25);
-    animation: dp-fade-slide 0.2s ease-out;
+        .react-datepicker__header {
+            background: $white;
+            border-bottom: vw(1px) solid $greyscale-400;
+            @include font-14px-M;
+            padding: vw(10px) 0;
+            text-align: center;
+        }
 
-    .react-datepicker__triangle {
-      display: none;
-    }
+        .react-datepicker__day-name,
+        .react-datepicker__day {
+            width: vw(28px);
+            height: vw(28px);
+            @include font-14px;
+            color: $default;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+        }
 
-    .react-datepicker__header {
-      background: $white;
-      border-bottom: vw(1px) solid $greyscale-400;
-      @include font-14px-M;
-      padding: vw(10px) 0;
-      text-align: center;
-    }
+        .react-datepicker__day--in-selecting-range,
+        .react-datepicker__day--in-range {
+            background-color: $mint;
+            color: #fff;
+        }
+        .react-datepicker__day:hover {
+            background: $mint;
+            color: $white;
+            border-radius: 50%;
+            width: vw(28px);
+            height: vw(28px);
+        }
 
-    .react-datepicker__day-name,
-    .react-datepicker__day {
-      width: vw(28px);
-      height: vw(28px);
-      @include font-14px;
-      color: $default;
-      border-radius: 50%;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0;
-    }
-
-    .react-datepicker__day--in-selecting-range,
-    .react-datepicker__day--in-range {
-      background-color: $mint;
-      color: #fff;
-    }
-    .react-datepicker__day:hover {
-      background: $mint;
-      color: $white;
-      border-radius: 50%;
-      width: vw(28px);
-      height: vw(28px);
+        .react-datepicker__day--selected,
+        .react-datepicker__day--range-start,
+        .react-datepicker__day--range-end,
+        .react-datepicker__day--keyboard-selected,
+        .react-datepicker__day--in-range {
+            background-color: $mint;
+            color: $white;
+            border-radius: 50%;
+            width: vw(28px);
+            height: vw(28px);
+        }
     }
 
-    .react-datepicker__day--selected,
-    .react-datepicker__day--range-start,
-    .react-datepicker__day--range-end,
-    .react-datepicker__day--keyboard-selected,
-    .react-datepicker__day--in-range {
-      background-color: $mint;
-      color: $white;
-      border-radius: 50%;
-      width: vw(28px);
-      height: vw(28px);
-    }
-  }
+    @keyframes dp-fade-slide {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
 
-  @keyframes dp-fade-slide {
-    from {
-      opacity: 0;
-      transform: translateY(-20px);
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  // 반응형 미디어 쿼리
-  @media (max-width: 1024px) {
-    .airport-main-con1 .visual-bg .inner {
-      max-width: 100%;
-      padding: 0 vw(20px);
-    }
-  }
-
-  @media (max-width: 768px) {
-    .airport-main-con1 .visual-bg .inner {
-      max-width: 100%;
-      padding: 0 vw(12px);
+    // 반응형 미디어 쿼리
+    @media (max-width: 1024px) {
+        .airport-main-con1 .visual-bg .inner {
+            max-width: 100%;
+            padding: 0 vw(20px);
+        }
     }
 
-    .airport-main-con1 .visual-bg {
-      min-height: vw(300px);
-      height: auto;
-      padding: vw(40px) 0;
-    }
+    @media (max-width: 768px) {
+        .airport-main-con1 .visual-bg .inner {
+            max-width: 100%;
+            padding: 0 vw(12px);
+        }
 
-    .airport-main-con1 .visual-bg .inner .search-title {
-      @include font-20px;
-      padding-top: vw(20px);
+        .airport-main-con1 .visual-bg {
+            min-height: vw(300px);
+            height: auto;
+            padding: vw(40px) 0;
+        }
+
+        .airport-main-con1 .visual-bg .inner .search-title {
+            @include font-20px;
+            padding-top: vw(20px);
+        }
     }
-  }
 }

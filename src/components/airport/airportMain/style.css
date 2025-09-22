@@ -112,7 +112,7 @@
   margin: auto 0;
 }
 .airport-main-con1 .inner .search-title {
-  padding-top: clamp(18.75px, 5.2083333333vw, 100px);
+  padding-top: clamp(7.5px, 2.0833333333vw, 40px);
   text-align: center;
   font-size: 1.75rem;
   font-weight: 500;

@@ -32,11 +32,11 @@
   cursor: pointer;
 }
 .airport-searchbar .search-box .search-tabs button:hover {
-  background: #ff7f50;
+  background: #42bdcc;
   color: #fff;
 }
 .airport-searchbar .search-box .search-tabs button.active {
-  background: #ff7f50;
+  background: #42bdcc;
   color: #fff;
 }
 .airport-searchbar .search-box .search-form {
@@ -167,12 +167,12 @@
 }
 .airport-searchbar .search-box .search-form .form-item .dropdown .people-btn {
   border: none;
-  width: clamp(7.5px, 2.0833333333vw, 40px);
-  height: clamp(7.5px, 2.0833333333vw, 40px);
+  width: clamp(8.4375px, 2.34375vw, 45px);
+  height: clamp(6.375px, 1.7708333333vw, 34px);
   margin: 0 clamp(1.875px, 0.5208333333vw, 10px);
-  padding: clamp(1.875px, 0.5208333333vw, 10px);
-  border-radius: clamp(1.5px, 0.4166666667vw, 8px);
-  background: #ff7f50;
+  align-items: center;
+  border-radius: 50%;
+  background: #42bdcc;
   color: #fff;
   font-size: 1rem;
   font-weight: 400;
@@ -181,7 +181,7 @@
   cursor: pointer;
 }
 .airport-searchbar .search-box .search-form .form-item .dropdown .people-btn:hover {
-  background: #e67248;
+  background: #3baab8;
 }
 .airport-searchbar .search-box .search-form .form-item .dropdown .seat-control {
   margin-top: clamp(1.875px, 0.5208333333vw, 10px);
@@ -196,7 +196,7 @@
   cursor: pointer;
 }
 .airport-searchbar .search-box .search-form .form-item .dropdown .seat-control span:hover {
-  color: #e67248;
+  color: #3baab8;
 }
 .airport-searchbar .search-box .search-form .form-item .dropdown .confirm-btn {
   margin-top: clamp(1.875px, 0.5208333333vw, 10px);
@@ -204,12 +204,12 @@
   padding: clamp(1.875px, 0.5208333333vw, 10px);
   border-radius: clamp(7.5px, 2.0833333333vw, 40px);
   border: none;
-  background: #ff7f50;
+  background: #42bdcc;
   color: #fff;
   cursor: pointer;
 }
 .airport-searchbar .search-box .search-form .form-item .dropdown .confirm-btn:hover {
-  background: #e67248;
+  background: #3baab8;
 }
 .airport-searchbar .search-box .search-form .form-item .react-datepicker-wrapper,
 .airport-searchbar .search-box .search-form .form-item .react-datepicker__input-container input {
@@ -236,13 +236,13 @@
   height: clamp(8.4375px, 2.34375vw, 45px);
   padding: clamp(1.875px, 0.5208333333vw, 10px);
   border-radius: clamp(5.625px, 1.5625vw, 30px);
-  border: clamp(0.375px, 0.1041666667vw, 2px) solid #ff7f50;
+  border: clamp(0.375px, 0.1041666667vw, 2px) solid #42bdcc;
   background: transparent;
-  color: #ff7f50;
+  color: #42bdcc;
   cursor: pointer;
 }
 .airport-searchbar .search-box .search-form .search-btn:hover {
-  background: #e67248;
+  background: #3baab8;
   color: #fff;
 }
 .airport-searchbar .search-box .search-form .add-btn {
@@ -267,7 +267,7 @@
 .airport-searchbar .search-box .search-form .remove-btn {
   background: transparent;
   border: none;
-  color: #ff7f50;
+  color: #42bdcc;
   font-size: 1.125rem;
   font-weight: 400;
   letter-spacing: 0;
@@ -338,26 +338,26 @@
 }
 .airport-searchbar .react-datepicker .react-datepicker__day--in-selecting-range,
 .airport-searchbar .react-datepicker .react-datepicker__day--in-range {
-  background-color: #ff7f50;
+  background-color: #42bdcc;
   color: #fff;
 }
 .airport-searchbar .react-datepicker .react-datepicker__day:hover {
-  background: #ff7f50;
+  background: #42bdcc;
   color: #fff;
   border-radius: 50%;
-  width: clamp(5.625px, 1.5625vw, 30px);
-  height: clamp(5.625px, 1.5625vw, 30px);
+  width: clamp(5.25px, 1.4583333333vw, 28px);
+  height: clamp(5.25px, 1.4583333333vw, 28px);
 }
 .airport-searchbar .react-datepicker .react-datepicker__day--selected,
 .airport-searchbar .react-datepicker .react-datepicker__day--range-start,
 .airport-searchbar .react-datepicker .react-datepicker__day--range-end,
 .airport-searchbar .react-datepicker .react-datepicker__day--keyboard-selected,
 .airport-searchbar .react-datepicker .react-datepicker__day--in-range {
-  background-color: #ff7f50;
+  background-color: #42bdcc;
   color: #fff;
   border-radius: 50%;
-  width: clamp(5.625px, 1.5625vw, 30px);
-  height: clamp(5.625px, 1.5625vw, 30px);
+  width: clamp(5.25px, 1.4583333333vw, 28px);
+  height: clamp(5.25px, 1.4583333333vw, 28px);
 }
 @-webkit-keyframes dp-fade-slide {
   from {

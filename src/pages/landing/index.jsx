@@ -9,7 +9,7 @@ const Landing = () => {
     return (
         <section className="landingpage">
             <div className="inner">
-                {/* ✅ 외부 링크 (새 탭) */}
+                {/* 외부 링크 (새 탭) */}
                 <a
                     className="card vion"
                     href="https://ottprojectvion.vercel.app/"
