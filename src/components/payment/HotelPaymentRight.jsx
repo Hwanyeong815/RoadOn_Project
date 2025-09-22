@@ -1,31 +1,33 @@
-// HotelPaymentRight.jsx 수정된 부분
+// src/components/hotels/HotelPaymentRight.jsx
 import './style.scss';
 import { loadTossPayments } from '@tosspayments/payment-sdk';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
+import useAuthStore from '../../store/authStore';
 
 const HotelPaymentRight = ({
     hotel,
     selectedRoom,
-    totalPrice,
-    nights,
+    totalPrice, // 있으면 우선 사용, 없으면 계산
+    nights = 1,
     people,
     startDate,
     endDate,
     paymentMethod = 'card',
+    rewardState, // ⬅️ 여기! reward -> rewardState 로 받는다
 }) => {
     const [isProcessing, setIsProcessing] = useState(false);
+    const currentUser = useAuthStore((s) => s.currentUser);
+    const userId = currentUser?.id || 'u_test_1';
 
     const clientKey =
         import.meta.env.VITE_TOSS_CLIENT_KEY || 'test_ck_D5GePWvyJnrK0W0k6q8gLzN97Eoq';
 
-    // 주문 ID 생성 함수
     const generateOrderId = () => {
-        const timestamp = new Date().getTime();
+        const timestamp = Date.now();
         const randomStr = Math.random().toString(36).substring(2, 8);
         return `hotel_${timestamp}_${randomStr}`;
     };
 
-    // 결제 수단별 매핑
     const getPaymentMethodKey = (method) => {
         const methodMap = {
             card: '카드',
@@ -36,17 +38,32 @@ const HotelPaymentRight = ({
         return methodMap[method] || '카드';
     };
 
+    // 기본 금액(원금)
+    const baseAmount = useMemo(() => {
+        if (typeof totalPrice === 'number') return Math.max(0, Math.round(totalPrice));
+        const unit = Number(selectedRoom?.price ?? selectedRoom?.rate ?? hotel?.price ?? 0) || 0;
+        return Math.max(0, Math.round(unit * (Number(nights) || 1)));
+    }, [totalPrice, selectedRoom, hotel, nights]);
+
+    // ⬇️ 여기 전부 rewardState 로
+    const couponAmount = Math.max(0, Number(rewardState?.couponAmount || 0));
+    const usedPoints = Math.max(0, Number(rewardState?.usedPoints || 0));
+
+    const finalAmount = useMemo(() => {
+        const v = baseAmount - couponAmount - usedPoints;
+        return Math.max(0, Math.round(v));
+    }, [baseAmount, couponAmount, usedPoints]);
+
     const handlePayment = async () => {
         if (isProcessing) return;
-
         setIsProcessing(true);
 
         try {
-            // 결제 데이터를 localStorage에 임시 저장 (결제 완료 페이지에서 사용)
+            // 성공 페이지에서 사용할 결제/상품 데이터
             const paymentData = {
                 hotel,
                 selectedRoom,
-                totalPrice,
+                baseAmount,
                 nights,
                 people,
                 startDate,
@@ -55,36 +72,52 @@ const HotelPaymentRight = ({
             };
             localStorage.setItem('paymentData', JSON.stringify(paymentData));
 
+            // 쿠폰/포인트도 함께 저장 (성공 페이지에서 최종 반영)
+            const pendingReward = {
+                userId,
+                coupon: rewardState?.coupon
+                    ? {
+                          id: rewardState.coupon.id,
+                          amount: rewardState.coupon.amount,
+                          label: rewardState.coupon.label,
+                      }
+                    : null,
+                usedPoints,
+                couponAmount,
+                finalAmount,
+            };
+            localStorage.setItem('pendingReward', JSON.stringify(pendingReward));
+
             const tossPayments = await loadTossPayments(clientKey);
             const orderId = generateOrderId();
             const paymentMethodKey = getPaymentMethodKey(paymentMethod);
 
             await tossPayments.requestPayment(paymentMethodKey, {
-                amount: 450760, // 최종 결제 금액
-                orderId: orderId,
+                amount: finalAmount, // ✅ 쿠폰/포인트 반영된 최종 금액
+                orderId,
                 orderName: `${hotel.name} - ${selectedRoom.name} (${nights}박)`,
                 customerName: '홍길동',
                 customerEmail: 'abcd@gmail.com',
                 customerMobilePhone: '01023457890',
                 successUrl: `${window.location.origin}/payment/success`,
                 failUrl: `${window.location.origin}/payment/fail`,
-                // 추가 옵션들
-                flowMode: 'DEFAULT', // 기본 결제 플로우
-                easyPay: paymentMethod === 'tosspay' ? 'tosspay' : undefined,
-                ...(paymentMethod === 'naverpay' && { easyPay: 'naverpay' }),
-                ...(paymentMethod === 'kakaopay' && { easyPay: 'kakaopay' }),
+                flowMode: 'DEFAULT',
+                easyPay:
+                    paymentMethod === 'tosspay'
+                        ? 'tosspay'
+                        : paymentMethod === 'naverpay'
+                        ? 'naverpay'
+                        : paymentMethod === 'kakaopay'
+                        ? 'kakaopay'
+                        : undefined,
             });
         } catch (error) {
             console.error('결제 오류:', error);
             setIsProcessing(false);
 
-            if (error.code === 'USER_CANCEL') {
-                alert('결제가 취소되었습니다.');
-            } else if (error.code === 'INVALID_CARD_COMPANY') {
-                alert('유효하지 않은 카드입니다.');
-            } else {
-                alert('결제 중 오류가 발생했습니다. 다시 시도해주세요.');
-            }
+            if (error.code === 'USER_CANCEL') alert('결제가 취소되었습니다.');
+            else if (error.code === 'INVALID_CARD_COMPANY') alert('유효하지 않은 카드입니다.');
+            else alert('결제 중 오류가 발생했습니다. 다시 시도해주세요.');
         }
     };
 
@@ -102,41 +135,45 @@ const HotelPaymentRight = ({
                     <span>{selectedRoom.name}</span>
                 </div>
             </div>
+
             <div className="res-prices">
                 <ul className="price total">
                     <li>
                         <b>요금 합계</b>
-                        <b>{totalPrice.toLocaleString()}원</b>
+                        <b>{baseAmount.toLocaleString()}원</b>
                     </li>
                     <li>
                         <span>객실 1개 X {nights}박</span>
-                        <span>{totalPrice.toLocaleString()}원</span>
+                        <span>{baseAmount.toLocaleString()}원</span>
                     </li>
                 </ul>
+
                 <ul className="price discount">
                     <li>
                         <b>할인 혜택</b>
-                        <b>-11,800원</b>
+                        <b>-{(couponAmount + usedPoints).toLocaleString()}원</b>
                     </li>
                     <li>
                         <span>상품 및 쿠폰 할인</span>
-                        <span>-11,800원</span>
+                        <span>-{couponAmount.toLocaleString()}원</span>
                     </li>
                     <li>
                         <span>포인트 사용</span>
-                        <span>-0원</span>
+                        <span>-{usedPoints.toLocaleString()}원</span>
                     </li>
                 </ul>
+
                 <p>
                     <strong>총액</strong>
-                    <strong>450,760원</strong>
+                    <strong>{finalAmount.toLocaleString()}원</strong>
                 </p>
             </div>
+
             <p className="assent">
                 <span></span>개인정보 처리 및 이용약관에 동의합니다.
             </p>
             <button className="pay-btn" onClick={handlePayment} disabled={isProcessing}>
-                {isProcessing ? '결제 처리 중...' : '450,760원 결제하기'}
+                {isProcessing ? '결제 처리 중...' : `${finalAmount.toLocaleString()}원 결제하기`}
             </button>
         </div>
     );

@@ -1,7 +1,8 @@
 // src/pages/Join.jsx
 import { useState, useMemo } from 'react';
 import './style.scss';
-import useAuthStore from '../../store/authStore'; // 경로 프로젝트 구조에 맞게 조정
+import useAuthStore from '../../store/authStore';
+import useRewardStore from '../../store/rewardStore';
 import JoinConsent from '../../components/login/join/JoinConsent';
 
 const Join = () => {
@@ -37,9 +38,23 @@ const Join = () => {
 
     const handleRequestCode = () => setIsSmsRequested(true);
 
-    // auth store actions (addUser, setCurrent exist in store)
+    // auth store
     const addUser = useAuthStore((s) => s.addUser);
     const setCurrent = useAuthStore((s) => s.setCurrent);
+
+    // reward store
+    const addPointItem = useRewardStore((s) => s.addPointItem);
+    const claimWelcomePack = useRewardStore((s) => s.claimWelcomePack);
+    const grantSignupBonusAndWelcome = useRewardStore((s) => s.grantSignupBonusAndWelcome);
+
+    // KST 오늘(YYYY-MM-DD)
+    const todayKST = () => {
+        try {
+            return new Date().toLocaleString('sv-SE', { timeZone: 'Asia/Seoul' }).slice(0, 10);
+        } catch {
+            return new Date().toISOString().split('T')[0];
+        }
+    };
 
     // 개발용 아바타 빌더 (간단)
     const buildAvatar = (name) => '/images/myPage/profile-img.png';
@@ -47,25 +62,16 @@ const Join = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        // 최소 유효성 체크 (필요하면 확장)
-        if (!form.email) {
-            alert('이메일을 입력하세요.');
-            return;
-        }
-        if (!isUsernameValid) {
-            alert('아이디 형식이 맞지 않습니다. 영문/숫자/언더스코어 5~20자');
-            return;
-        }
+        // 최소 유효성
+        if (!form.email) return alert('이메일을 입력하세요.');
+        if (!isUsernameValid)
+            return alert('아이디 형식이 맞지 않습니다. 영문/숫자/언더스코어 5~20자');
         if (form.password && form.password !== form.passwordConfirm) {
-            alert('비밀번호와 비밀번호 확인이 일치하지 않습니다.');
-            return;
+            return alert('비밀번호와 비밀번호 확인이 일치하지 않습니다.');
         }
-        if (!consentOk) {
-            alert('필수 약관에 모두 동의해 주세요.');
-            return;
-        }
+        if (!consentOk) return alert('필수 약관에 모두 동의해 주세요.');
 
-        // 저장할 user 객체 (민감 정보 제외)
+        // 저장할 user 객체
         const user = {
             username: form.username || `${form.firstNameEn}${form.lastNameEn}`.toLowerCase(),
             nameKo: form.nameKo,
@@ -77,21 +83,34 @@ const Join = () => {
             gender,
             address: form.address,
             avatar: buildAvatar(form.nameKo || form.username),
-            grade: 'Family', // 기본 등급 (테스트용)
-            couponCount: 3, // 테스트용 요약값
-            points: 22222, // 테스트용 요약값
+            grade: 'Family',
+            // 요약 필드(points/couponCount)는 스토어 계산과 충돌될 수 있으니 생략 권장
             reserveCount: 0,
             wishlistCount: 0,
         };
 
-        // store에 추가(스토어가 localStorage에 persist 하도록 구현되어 있어야 함)
-        const created = addUser(user); // addUser은 생성된 user 객체(id 포함)를 반환
+        // 가입 처리
+        const created = addUser(user);
         setCurrent(created);
 
-        // UX: 간단 알림 및 콘솔(원하면 navigate로 이동)
-        alert('가입(테스트용) 완료되었습니다. 프로필에 반영됩니다.');
+        // 🔹 가입 보너스 5,000P(오늘) + 웰컴팩 즉시 지급
+        // 1) 원샷 액션이 있으면 그것부터
+        if (grantSignupBonusAndWelcome) {
+            grantSignupBonusAndWelcome(created.id, 5);
+        } else {
+            // 2) 없으면 수동 지급
+            addPointItem(created.id, {
+                date: todayKST(),
+                type: '가입 축하 포인트',
+                amount: 5000,
+                status: '적립',
+            });
+            claimWelcomePack(created.id, 5);
+        }
+
+        alert('가입(테스트용) 완료되었습니다. 웰컴 혜택이 지급되었습니다.');
         console.log('created user:', created);
-        // 예: navigate('/mypage') 하려면 react-router useNavigate 호출 후 이동
+        // 필요 시 navigate('/mypage')
     };
 
     return (
@@ -128,7 +147,6 @@ const Join = () => {
                         <div className="label">
                             영문 이름 <span />
                         </div>
-
                         <div className="fields-2col">
                             <div className="field">
                                 <div className="sublabel">성</div>
@@ -143,7 +161,6 @@ const Join = () => {
                                     onBlur={onBlur}
                                 />
                             </div>
-
                             <div className="field">
                                 <div className="sublabel">이름</div>
                                 <input
@@ -291,7 +308,6 @@ const Join = () => {
                         </div>
 
                         <div className="form-group gender">
-                            {/* <div className="label">성별</div> */}
                             <div className="gender-group">
                                 <label className={gender === 'male' ? 'active' : ''}>
                                     <input
@@ -331,16 +347,12 @@ const Join = () => {
                             onBlur={onBlur}
                         />
                     </div>
+
                     <JoinConsent onRequiredChange={(v) => setConsentOk(Boolean(v))} />
+
                     {/* 제출 */}
                     <div className="form-actions">
-                        <button
-                            type="submit"
-                            className="button g middle go"
-                            disabled={
-                                !consentOk // 기존 조건과 결합하려면 && otherChecks
-                            }
-                        >
+                        <button type="submit" className="button g middle go" disabled={!consentOk}>
                             회원가입
                         </button>
                         <button

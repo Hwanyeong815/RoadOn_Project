@@ -3,7 +3,8 @@ import DetailReviewItem from './DetailReviewItem';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { HiOutlineClipboardDocument } from 'react-icons/hi2';
 import KakaoMap from './KakaoMap';
-import DetailPromoItem from '../../../../../../0919 백업/src/components/tour/tourDetail/detailBottom/DetailPromoItem';
+import DetailPromoItem from '../../tour/tourDetail/detailBottom/DetailPromoItem';
+// import DetailPromoItem from '../../../../../../0919 백업/src/components/tour/tourDetail/detailBottom/DetailPromoItem';
 
 const DetailBottom = ({ hotel, reviews, locationRef, reviewsRef }) => {
     const [copied, setCopied] = useState(false);

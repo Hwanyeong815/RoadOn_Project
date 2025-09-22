@@ -1,19 +1,37 @@
+// src/components/hotels/HotelPaymentLeft.jsx
 import './style.scss';
 import { IoCardOutline } from 'react-icons/io5';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { useState } from 'react';
+import useAuthStore from '../../store/authStore';
+import PaymentReward from '../ui/coupon/PaymentReward';
 
 const HotelPaymentLeft = ({
     hotel,
     selectedRoom,
     startDate,
     endDate,
-    nights,
+//     nights,
+//     people,
+//     onPaymentMethodChange,
+// }) => {
+//     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('card');
+
+    nights = 1,
     people,
     onPaymentMethodChange,
+    onRewardChange, // ⬅️ 상위에서 내려옴
 }) => {
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('card');
+
+    // 현재 로그인된 사용자 id (없으면 테스트 계정)
+    const currentUser = useAuthStore((s) => s.currentUser);
+    const userId = currentUser?.id || 'u_test_1';
+
+    // 룸 가격에서 productData 생성 (PaymentReward가 내부에서 total 계산)
+    const roomPrice = Number(selectedRoom?.price ?? selectedRoom?.rate ?? hotel?.price ?? 0);
+    const productData = { roomPrice, nights };
 
     const formattedStartDate = startDate
         ? format(new Date(startDate), 'MM.dd(E)', { locale: ko })
@@ -24,7 +42,7 @@ const HotelPaymentLeft = ({
 
     const handlePaymentMethodSelect = (method) => {
         setSelectedPaymentMethod(method);
-        onPaymentMethodChange(method);
+        onPaymentMethodChange?.(method);
     };
 
     return (
@@ -35,6 +53,7 @@ const HotelPaymentLeft = ({
                     예약 확인 및 결제
                 </h3>
                 <div className="pay-box-wrap">
+                    {/* 예약 일정 */}
                     <div className="pay-schedule">
                         <h4>예약 일정</h4>
                         <div className="check-in-out">
@@ -51,10 +70,14 @@ const HotelPaymentLeft = ({
                             </div>
                         </div>
                     </div>
+
+                    {/* 예약 인원 */}
                     <div className="pay-party">
                         <h4>예약 인원</h4>
                         <p>성인 {people}명</p>
                     </div>
+
+                    {/* 예약자 정보 (더미) */}
                     <div className="pay-resname">
                         <h4>예약자 정보</h4>
                         <p>
@@ -65,26 +88,36 @@ const HotelPaymentLeft = ({
                             <span>+82 01023457890</span>
                         </p>
                     </div>
-                    <div className="pay-coupon">
-                        <h4>쿠폰</h4>
-                        <select id="coupon" name="select-coupon" defaultValue="">
-                            <option value="" disabled hidden>
-                                사용 가능한 쿠폰 1개
-                            </option>
-                            <option value="hotels">10,000원 [숙소 할인]</option>
-                            <option value="tour" disabled>
-                                30,000원 [투어 할인]
-                            </option>
-                        </select>
-                    </div>
-                    <div className="pay-point">
-                        <h4>포인트</h4>
-                        <p>
-                            RT 포인트 <span>12,000</span>P
-                        </p>
-                        <input type="number" />
-                        <button>전액 사용</button>
-                    </div>
+//                     <div className="pay-coupon">
+//                         <h4>쿠폰</h4>
+//                         <select id="coupon" name="select-coupon" defaultValue="">
+//                             <option value="" disabled hidden>
+//                                 사용 가능한 쿠폰 1개
+//                             </option>
+//                             <option value="hotels">10,000원 [숙소 할인]</option>
+//                             <option value="tour" disabled>
+//                                 30,000원 [투어 할인]
+//                             </option>
+//                         </select>
+//                     </div>
+//                     <div className="pay-point">
+//                         <h4>포인트</h4>
+//                         <p>
+//                             RT 포인트 <span>12,000</span>P
+//                         </p>
+//                         <input type="number" />
+//                         <button>전액 사용</button>
+//                     </div>
+
+                    {/* 쿠폰/포인트 (PaymentReward → 상위로 반영) */}
+                    <PaymentReward
+                        userId={userId}
+                        productType={'hotel'}
+                        productData={productData}
+                        onChange={(next) => onRewardChange?.(next)}
+                    />
+
+                    {/* 결제수단 */}
                     <div className="pay-method">
                         <h4>결제수단</h4>
                         <ul className="payments">
@@ -114,6 +147,7 @@ const HotelPaymentLeft = ({
                                 <img src="/images/icon/kakaopay.png" alt="카카오페이" />
                             </li>
                         </ul>
+
                         {selectedPaymentMethod === 'card' && (
                             <>
                                 <div className="card-types">

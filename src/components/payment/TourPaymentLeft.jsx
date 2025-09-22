@@ -1,40 +1,36 @@
 // src/components/tour/TourPaymentLeft.jsx
 import './style.scss';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { IoIosCheckmarkCircleOutline } from 'react-icons/io';
 import { IoCardOutline } from 'react-icons/io5';
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
-import useRewardStore from '../../store/rewardStore';
+import useAuthStore from '../../store/authStore';
+import PaymentReward from '../ui/coupon/PaymentReward';
 
 const TourPaymentLeft = ({
-    userId = 'u_test_1',
     segments = [],
     party = { adults: 2, children: 1, infants: 0 },
     reserver = { name: '', email: '', phone: '' },
+    /** 결제 총금액(없으면 0) */
+    totalPrice = 0,
 }) => {
+    // ✅ 로그인 사용자 → 없으면 테스트 계정으로 fallback
+    const currentUser = useAuthStore((s) => s.currentUser);
+    const userId = currentUser?.id || 'u_test_1';
+
     const [gender, setGender] = useState('male');
-    const user = { gender };
     const [isOpen, setIsOpen] = useState(false);
-    // 쿠폰/포인트
-    const getCoupons = useRewardStore?.((s) => s.getCoupons) ?? (() => []);
-    const getPoints = useRewardStore?.((s) => s.getPoints) ?? (() => ({ balance: 0, items: [] }));
-    const availableCoupons = useMemo(
-        () => (getCoupons(userId) || []).filter((c) => !c.disabled),
-        [getCoupons, userId]
-    );
-    const { balance: pointBalance } = getPoints(userId) || { balance: 0 };
+    const [payMethod, setPayMethod] = useState('card'); // 'card' | 'tosspay' | 'naverpay' | 'kakaopay'
 
-    const [selectedCouponId, setSelectedCouponId] = useState('');
-    const [usePoints, setUsePoints] = useState(0);
-    const [payMethod, setPayMethod] = useState('card');
+    // PaymentReward에서 넘어오는 값 (우측 결제 요약에서 활용)
+    const [rewardState, setRewardState] = useState({
+        coupon: null,
+        usedPoints: 0,
+        couponAmount: 0,
+        finalAmount: 0,
+    });
 
-    const handleUseAllPoints = () => setUsePoints(Number(pointBalance) || 0);
-    const handlePointChange = (e) => {
-        const v = Number(e.target.value || 0);
-        setUsePoints(Math.max(0, Math.min(v, Number(pointBalance) || 0)));
-    };
-
-    // 시안 고정 더미 (segments 없을 때 노출)
+    // 더미 세그먼트 (없을 때만 노출)
     const fallbackSegments = [
         {
             title: '가는편',
@@ -158,120 +154,13 @@ const TourPaymentLeft = ({
                         </p>
                     </div>
 
-                    {/* 탑승객 정보 */}
-                    <div className="passenger-info">
-                        <div className="pass-head">
-                            <h4>탑승객 정보</h4>
-                            <span>
-                                <IoIosCheckmarkCircleOutline
-                                    style={{ fontSize: '23px', color: '#b2b2b2' }}
-                                />
-                                예약자와 동일
-                            </span>
-                        </div>
-                        <div className="eng-name">
-                            <div className="field">
-                                <input type="text" placeholder="영문 이름" />
-                                <p className="field-help error" aria-live="polite">
-                                    여권의 영문 성을 정확히 입력해주세요.
-                                </p>
-                            </div>
-                            <div className="field">
-                                <input type="text" placeholder="영문 성" />
-                                <p className="field-help error" aria-live="polite">
-                                    여권의 영문 이름을 정확히 입력해주세요.
-                                </p>
-                            </div>
-                        </div>
-                        <div className="pass-ide">
-                            <p>
-                                <input type="text" placeholder="생년월일(숫자 8자리)" />
-                            </p>
-                            <div className="select-wrap">
-                                <select
-                                    className="nationality-country"
-                                    onClick={() => setIsOpen(!isOpen)}
-                                >
-                                    <option value="KOR"> 대한민국(KOR)</option>
-                                    <option value="USA"> 미국(USA)</option>
-                                    <option value="JAN"> 일본(JAN)</option>
-                                    <option value="CHN"> 중국(CHN)</option>
-                                    <option value="VNM"> 베트남(VNM)</option>
-                                </select>
-                                <span className="icon">
-                                    {isOpen ? <IoIosArrowUp /> : <IoIosArrowDown />}
-                                </span>
-                            </div>
-                            <div className="gender-group">
-                                <label className={gender === 'male' ? 'active' : ''}>
-                                    <p>
-                                        <input
-                                            type="radio"
-                                            name="gender"
-                                            value="male"
-                                            checked={gender === 'male'}
-                                            onChange={() => setGender('male')}
-                                        />
-                                    </p>
-                                    남성
-                                </label>
-                                <label className={gender === 'female' ? 'active' : ''}>
-                                    <p>
-                                        <input
-                                            type="radio"
-                                            name="gender"
-                                            value="female"
-                                            checked={gender === 'female'}
-                                            onChange={() => setGender('female')}
-                                        />
-                                    </p>
-                                    여성
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* 쿠폰 */}
-                    <div className="pay-coupon">
-                        <h4>쿠폰</h4>
-                        <select
-                            id="coupon"
-                            name="select-coupon"
-                            value={selectedCouponId}
-                            onChange={(e) => setSelectedCouponId(e.target.value)}
-                        >
-                            <option value="" disabled hidden>
-                                사용 가능한 쿠폰 {availableCoupons.length}개
-                            </option>
-                            {availableCoupons.map((c) => (
-                                <option key={c.id} value={String(c.id)}>
-                                    {c.label}{' '}
-                                    {c.amount ? `- ${Number(c.amount).toLocaleString()}원` : ''} (
-                                    {c.condition})
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-
-                    {/* 포인트 */}
-                    <div className="pay-point">
-                        <h4>포인트</h4>
-                        <p>
-                            RT 포인트 <span>{Number(pointBalance).toLocaleString()}</span>P
-                        </p>
-                        <div className="point-input">
-                            <input
-                                type="number"
-                                min={0}
-                                max={Number(pointBalance) || 0}
-                                value={usePoints}
-                                onChange={handlePointChange}
-                            />
-                            <button type="button" onClick={handleUseAllPoints}>
-                                전액 사용
-                            </button>
-                        </div>
-                    </div>
+                    {/* ✅ 쿠폰/포인트 (마크업 클래스 유지) */}
+                    <PaymentReward
+                        userId={userId}
+                        productType="tour" // ✅ hotel -> tour
+                        // productData={productData}       // (있으면 넘겨주세요)
+                        onChange={(next) => onRewardChange?.(next)} // ✅ 부모로 전달
+                    />
 
                     {/* 결제 수단 */}
                     <div className="pay-method">
@@ -285,20 +174,20 @@ const TourPaymentLeft = ({
                                 <span>신용/체크 카드</span>
                             </li>
                             <li
-                                className={payMethod === 'toss' ? 'on' : ''}
-                                onClick={() => setPayMethod('toss')}
+                                className={payMethod === 'tosspay' ? 'on' : ''}
+                                onClick={() => setPayMethod('tosspay')}
                             >
                                 <img src="/images/icon/tosspay.png" alt="토스페이" />
                             </li>
                             <li
-                                className={payMethod === 'naver' ? 'on' : ''}
-                                onClick={() => setPayMethod('naver')}
+                                className={payMethod === 'naverpay' ? 'on' : ''}
+                                onClick={() => setPayMethod('naverpay')}
                             >
                                 <img src="/images/icon/naverpay.png" alt="네이버페이" />
                             </li>
                             <li
-                                className={payMethod === 'kakao' ? 'on' : ''}
-                                onClick={() => setPayMethod('kakao')}
+                                className={payMethod === 'kakaopay' ? 'on' : ''}
+                                onClick={() => setPayMethod('kakaopay')}
                             >
                                 <img src="/images/icon/kakaopay.png" alt="카카오페이" />
                             </li>

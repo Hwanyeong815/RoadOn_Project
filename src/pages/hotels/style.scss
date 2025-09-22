@@ -5,31 +5,29 @@
     box-sizing: border-box;
     padding-top: vw(60px);
     .search-bar {
-            width: vw(1160px);
-            margin-top: vw(90px);
-            margin-bottom: vw(50px);
-            border: $greyscale-300;
-            box-shadow: 0 vw(4px) vw(8px) 0 rgba(0, 0, 0, 0.06);
-            box-sizing: border-box;
-            padding: vw(22.5px) vw(25px);
-            .search-item {
-                background: rgba(244, 244, 244, 0.90);
-                .icon {
-                    color: $mint;
-                    
+        width: vw(1160px);
+        margin-top: vw(90px);
+        margin-bottom: vw(50px);
+        border: $greyscale-300;
+        box-shadow: 0 vw(4px) vw(8px) 0 rgba(0, 0, 0, 0.06);
+        box-sizing: border-box;
+        padding: vw(22.5px) vw(25px);
+        .search-item {
+            background: rgba(244, 244, 244, 0.9);
+            .icon {
+                color: $mint;
+            }
+            input {
+                &::placeholder {
+                    color: $greyscale-1100;
                 }
-                input{                        
-                    &::placeholder {
-                        color: $greyscale-1100;
-                    }
-                        text-align-last: left;
-                    }
-                span {
-                    
-                        color: $greyscale-1100;
-                }
+                text-align-last: left;
+            }
+            span {
+                color: $greyscale-1100;
             }
         }
+    }
     .inner {
         display: flex;
         gap: 40px;
@@ -47,10 +45,10 @@
     }
 }
 
-
 .hotel-detail {
     .inner {
-        padding: 0;        
+        padding: 0;
+        padding-top: vw(100px);
         .search-bar {
             width: vw(1160px);
             margin-top: vw(50px);
@@ -60,20 +58,18 @@
             box-sizing: border-box;
             padding: vw(22.5px) vw(25px);
             .search-item {
-                background: rgba(244, 244, 244, 0.90);
+                background: rgba(244, 244, 244, 0.9);
                 .icon {
                     color: $mint;
-                    
                 }
-                input{                        
+                input {
                     &::placeholder {
                         color: $greyscale-1100;
                     }
-                        text-align-last: left;
-                    }
+                    text-align-last: left;
+                }
                 span {
-                    
-                        color: $greyscale-1100;
+                    color: $greyscale-1100;
                 }
             }
         }
