@@ -646,7 +646,84 @@ export default [
         optional: false,
         adult_fee: 1290000,
         child_fee: 1090000,
-        // ✅ 오늘 기준 매주 월요일 출발
         schedule: { freq: 'WEEKLY', byWeekday: ['MO'] },
+        itinerary: [
+            {
+                day: 1,
+                title: '인천 출발, 몽골 입국',
+                theme: '출발',
+                description:
+                    '인천 공항에서 출발하여 몽골 울란바토르 칭기즈 칸 국제공항에 도착합니다. 현지 가이드와 미팅 후 호텔로 이동하여 여장을 풀고, 몽골 전통 환영식과 만찬을 즐깁니다.',
+                meals: {
+                    breakfast: '불포함',
+                    lunch: '기내식',
+                    dinner: '포함',
+                },
+                accommodation: '울란바토르 시내 특급호텔',
+                highlight: '몽골 전통 만찬',
+                activities: ['공항 미팅', '호텔 체크인', '환영 만찬'],
+                transport: '전용 차량',
+                image: 'harbin-day1.jpg',
+            },
+            {
+                day: 2,
+                title: '고비사막 투어 시작',
+                theme: '고비사막',
+                description:
+                    '국내선 항공편을 이용하여 고비사막의 관문인 달란자드가드로 이동합니다. 도착 후 고비사막의 웅장함을 느끼며 영화 속 하얼빈 장면처럼 사막 트래킹을 경험합니다. 석양 아래에서 즐기는 낙타 트래킹은 잊지 못할 추억을 선사할 것입니다.',
+                meals: {
+                    breakfast: '포함',
+                    lunch: '현지식',
+                    dinner: '포함',
+                },
+                accommodation: '사막 게르 캠프',
+                highlight: '낙타 트래킹, 사막 석양',
+                activities: ['국내선 이동', '사막 트래킹', '낙타 체험', '별 관측'],
+                transport: '국내선 항공, 전용 차량',
+                image: 'harbin-day2.jpg',
+            },
+            {
+                day: 3,
+                title: '고비사막의 대자연 탐험',
+                theme: '자연',
+                description:
+                    '고비사막의 대표 명소인 홍고린 엘스와 욜링 암을 방문합니다. 거대한 모래 언덕인 홍고린 엘스에서 모래썰매를 타거나, 얼음 계곡인 욜링 암에서 신비로운 자연의 경관을 감상합니다. 밤에는 끝없이 펼쳐진 몽골의 밤하늘 아래에서 별 관측 투어를 진행합니다.',
+                meals: {
+                    breakfast: '포함',
+                    lunch: '현지식',
+                    dinner: '포함',
+                },
+                accommodation: '사막 게르 캠프',
+                highlight: '홍고린 엘스(모래 언덕), 욜링 암(얼음 계곡)',
+                activities: ['모래 언덕 체험', '욜링 암 탐험', '별 관측 투어'],
+                transport: '전용 차량',
+                image: 'harbin-day3.jpg',
+            },
+        ],
+
+        flight_info: [
+            {
+                leg: 1,
+                from: '인천 (ICN)',
+                to: '울란바토르 (ULN)',
+                flight_num: 'KE867',
+                airline: '대한항공',
+                departure_time: '13:00',
+                arrival_time: '16:00',
+                duration: '3시간 30분',
+                note: '현지 시간 기준',
+            },
+            {
+                leg: 2,
+                from: '울란바토르 (ULN)',
+                to: '인천 (ICN)',
+                flight_num: 'KE868',
+                airline: '대한항공',
+                departure_time: '17:00',
+                arrival_time: '21:00',
+                duration: '3시간',
+                note: '현지 시간 기준',
+            },
+        ],
     },
 ];

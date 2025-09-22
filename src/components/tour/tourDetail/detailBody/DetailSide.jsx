@@ -11,17 +11,17 @@ const DetailSide = ({ tourData }) => {
     if (!tourData) return null;
 
     const { subtitle, adult_fee = 0, child_fee = 0, posterImg } = tourData;
-    
-    const totalPrice = (adultCount * adult_fee) + (childCount * child_fee);
+
+    const totalPrice = adultCount * adult_fee + childCount * child_fee;
 
     const handleCountChange = (type, operation) => {
         if (type === 'child') {
-            setChildCount(prev => {
+            setChildCount((prev) => {
                 const newCount = operation === 'plus' ? prev + 1 : Math.max(0, prev - 1);
                 return newCount;
             });
         } else {
-            setAdultCount(prev => {
+            setAdultCount((prev) => {
                 const newCount = operation === 'plus' ? prev + 1 : Math.max(0, prev - 1);
                 return newCount;
             });
@@ -34,16 +34,15 @@ const DetailSide = ({ tourData }) => {
             adultCount: adultCount,
             childCount: childCount,
             totalPrice: totalPrice,
-            productType: 'tour'
+            productType: 'tour',
         };
 
         navigate('/payment', {
-            state: reservationData
+            state: reservationData,
         });
 
-         console.log("전달할 데이터:", reservationData);
+        console.log('전달할 데이터:', reservationData);
     };
-    
 
     return (
         <section className="detail-side">
@@ -60,14 +59,14 @@ const DetailSide = ({ tourData }) => {
                         <p className="price">{child_fee.toLocaleString()}원</p>
                     </div>
                     <div className="step">
-                        <button 
+                        <button
                             className="button minus"
                             onClick={() => handleCountChange('child', 'minus')}
                         >
                             <FiMinus />
                         </button>
                         <span>{childCount}</span>
-                        <button 
+                        <button
                             className="button plus"
                             onClick={() => handleCountChange('child', 'plus')}
                         >
@@ -81,14 +80,14 @@ const DetailSide = ({ tourData }) => {
                         <p className="price">{adult_fee.toLocaleString()}원</p>
                     </div>
                     <div className="step">
-                        <button 
+                        <button
                             className="button minus"
                             onClick={() => handleCountChange('adult', 'minus')}
                         >
                             <FiMinus />
                         </button>
                         <span>{adultCount}</span>
-                        <button 
+                        <button
                             className="button plus"
                             onClick={() => handleCountChange('adult', 'plus')}
                         >
@@ -103,7 +102,7 @@ const DetailSide = ({ tourData }) => {
             </div>
             <div className="btn-wrap">
                 {/* adultCount와 childCount가 모두 0일 때 버튼 비활성 */}
-               <button 
+                <button
                     className="button large o reserve"
                     disabled={adultCount === 0 && childCount === 0}
                     onClick={handleReservation}

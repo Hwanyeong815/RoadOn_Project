@@ -673,14 +673,14 @@
             justify-content: space-between;
             position: relative;
             margin-top: vw(16px);
-            &::before {
-                content: '';
-                width: vw(351px);
-                height: vw(1px);
-                background-color: $greyscale-600;
-                position: absolute;
-                top: vw(-60px);
-            }
+            // &::before {
+            //     content: '';
+            //     width: vw(351px);
+            //     height: vw(1px);
+            //     background-color: $greyscale-600;
+            //     position: absolute;
+            //     top: vw(-60px);
+            // }
             strong {
                 @include font-20px-M;
             }
@@ -785,7 +785,7 @@
 
 .detail-right {
     width: vw(455px);
-    height: vw(477px);
+    // height: vw(477px);
     .detail-side {
         width: 100%;
         height: vw(460px);
@@ -929,6 +929,14 @@
                     border-radius: vw(8px);
                 }
             }
+        }
+    }
+}
+
+.payment-reward {
+    .pay-coupon {
+        // margin-bottom: vw(80px);
+        select {
         }
     }
 }

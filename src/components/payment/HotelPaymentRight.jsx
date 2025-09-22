@@ -13,7 +13,7 @@ const HotelPaymentRight = ({
     startDate,
     endDate,
     paymentMethod = 'card',
-    rewardState, // ⬅️ 여기! reward -> rewardState 로 받는다
+    rewardState,
 }) => {
     const [isProcessing, setIsProcessing] = useState(false);
     const currentUser = useAuthStore((s) => s.currentUser);
@@ -38,14 +38,12 @@ const HotelPaymentRight = ({
         return methodMap[method] || '카드';
     };
 
-    // 기본 금액(원금)
     const baseAmount = useMemo(() => {
         if (typeof totalPrice === 'number') return Math.max(0, Math.round(totalPrice));
         const unit = Number(selectedRoom?.price ?? selectedRoom?.rate ?? hotel?.price ?? 0) || 0;
         return Math.max(0, Math.round(unit * (Number(nights) || 1)));
     }, [totalPrice, selectedRoom, hotel, nights]);
 
-    // ⬇️ 여기 전부 rewardState 로
     const couponAmount = Math.max(0, Number(rewardState?.couponAmount || 0));
     const usedPoints = Math.max(0, Number(rewardState?.usedPoints || 0));
 
@@ -69,6 +67,11 @@ const HotelPaymentRight = ({
                 startDate,
                 endDate,
                 productType: 'hotel',
+                rewardState: {
+                    coupon: rewardState?.coupon,
+                    usedPoints: rewardState?.usedPoints,
+                    couponAmount: rewardState?.couponAmount,
+                },
             };
             localStorage.setItem('paymentData', JSON.stringify(paymentData));
 
@@ -170,7 +173,8 @@ const HotelPaymentRight = ({
             </div>
 
             <p className="assent">
-                <span></span>개인정보 처리 및 이용약관에 동의합니다.
+                <input type="checkbox" />
+                개인정보 처리 및 이용약관에 동의합니다.
             </p>
             <button className="pay-btn" onClick={handlePayment} disabled={isProcessing}>
                 {isProcessing ? '결제 처리 중...' : `${finalAmount.toLocaleString()}원 결제하기`}

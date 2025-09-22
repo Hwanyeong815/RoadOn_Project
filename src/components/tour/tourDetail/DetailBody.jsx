@@ -7,13 +7,13 @@ const DetailBody = ({ tourData, buildingRef, descriptionRef, locationRef, review
     return (
         <section id="DetailBody">
             <DetailThum tourData={tourData} />
-              <DetailBodyInfo
+            <DetailBodyInfo
                 tourData={tourData}
                 buildingRef={buildingRef}
                 descriptionRef={descriptionRef}
                 locationRef={locationRef}
                 reviewsRef={reviewsRef}
-            />  
+            />
         </section>
     );
 };
