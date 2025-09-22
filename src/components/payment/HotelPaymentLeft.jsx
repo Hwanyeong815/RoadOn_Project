@@ -15,6 +15,7 @@ const HotelPaymentLeft = ({
     nights = 1,
     people,
     onPaymentMethodChange,
+    onRewardChange, // ⬅️ 상위에서 내려옴
 }) => {
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('card');
 
@@ -22,7 +23,7 @@ const HotelPaymentLeft = ({
     const currentUser = useAuthStore((s) => s.currentUser);
     const userId = currentUser?.id || 'u_test_1';
 
-    // 룸 가격에서 productData 생성 (PaymentReward가 내부 계산)
+    // 룸 가격에서 productData 생성 (PaymentReward가 내부에서 total 계산)
     const roomPrice = Number(selectedRoom?.price ?? selectedRoom?.rate ?? hotel?.price ?? 0);
     const productData = { roomPrice, nights };
 
@@ -38,14 +39,6 @@ const HotelPaymentLeft = ({
         onPaymentMethodChange?.(method);
     };
 
-    // rewardState: PaymentReward의 onChange에서 업데이트 (결제 시 사용)
-    const [rewardState, setRewardState] = useState({
-        coupon: null,
-        usedPoints: 0,
-        couponAmount: 0,
-        finalAmount: 0,
-    });
-
     return (
         <div className="pay payment-left">
             <div className="pay-detail">
@@ -54,7 +47,7 @@ const HotelPaymentLeft = ({
                     예약 확인 및 결제
                 </h3>
                 <div className="pay-box-wrap">
-                    {/* ... (기존 블록 유지) */}
+                    {/* 예약 일정 */}
                     <div className="pay-schedule">
                         <h4>예약 일정</h4>
                         <div className="check-in-out">
@@ -72,11 +65,13 @@ const HotelPaymentLeft = ({
                         </div>
                     </div>
 
+                    {/* 예약 인원 */}
                     <div className="pay-party">
                         <h4>예약 인원</h4>
                         <p>성인 {people}명</p>
                     </div>
 
+                    {/* 예약자 정보 (더미) */}
                     <div className="pay-resname">
                         <h4>예약자 정보</h4>
                         <p>
@@ -88,16 +83,15 @@ const HotelPaymentLeft = ({
                         </p>
                     </div>
 
-                    {/* PaymentReward: totalAmount prop 제거. 대신 productData 전달 */}
+                    {/* 쿠폰/포인트 (PaymentReward → 상위로 반영) */}
                     <PaymentReward
                         userId={userId}
                         productType={'hotel'}
                         productData={productData}
-                        onChange={({ coupon, usedPoints, couponAmount, finalAmount }) => {
-                            setRewardState({ coupon, usedPoints, couponAmount, finalAmount });
-                        }}
+                        onChange={(next) => onRewardChange?.(next)}
                     />
 
+                    {/* 결제수단 */}
                     <div className="pay-method">
                         <h4>결제수단</h4>
                         <ul className="payments">
