@@ -90,7 +90,7 @@ const Head = () => {
 
   return (
     <section className="inner" ref={headerRef}>
-      <div>
+      <div className="con-header">
         <h1 ref={titleRef}>
           <span className="lead">BEST&nbsp;</span>
           <span className="grayhead">
