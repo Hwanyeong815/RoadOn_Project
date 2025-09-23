@@ -43,6 +43,7 @@ const DetailSide = ({ tourData }) => {
 
         console.log('전달할 데이터:', reservationData);
     };
+    console.log('DetailSide로 넘어온 데이터:', tourData);
 
     return (
         <section className="detail-side">

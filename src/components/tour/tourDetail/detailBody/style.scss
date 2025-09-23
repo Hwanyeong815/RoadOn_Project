@@ -77,6 +77,12 @@
                         height: vw(50px);
                         cursor: pointer;
                     }
+                    .wish-hotel-btn {
+                        width: vw(50px);
+                        height: vw(50px);
+                        border-radius: 50%;
+                        background-color: $greyscale-300;
+                    }
                 }
                 em {
                     @include font-16px;
@@ -580,3 +586,4 @@
         object-fit: cover;
     }
 }
+

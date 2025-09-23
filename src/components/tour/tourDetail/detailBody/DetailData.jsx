@@ -1,8 +1,16 @@
+import useAuthStore from '../../../../store/authStore';
 import DetailCon2 from './detailData/DetailCon2';
 import DetailDataTab from './detailData/DetailDataTab';
 import './style.scss';
 
 const DetailData = ({tourData, buildingRef, descriptionRef, locationRef, reviewsRef  }) => {
+    const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+    const handleAdClick = () =>
+            openAndNavigate('loginRequired', {
+                confirmTo: '/login',
+                navigate,
+            });
+    
     return (
         <section className="detail-data">
             <DetailDataTab 
@@ -36,10 +44,18 @@ const DetailData = ({tourData, buildingRef, descriptionRef, locationRef, reviews
                     </li>
                 </ul>
             </div>
-            <div className="con advertise">
-                <img src="/images/tour/detail/advertise.png" alt="advertise.png" />
-                {/* 광고 배너 */}
-            </div>
+           {!isLoggedIn && (
+                        <div
+                            className="con advertise"
+                            onClick={handleAdClick}
+                            style={{ cursor: 'pointer' }}
+                        >
+                            <img
+                                src="/images/hotels/detail/login_first.png"
+                                alt="login_first.png"
+                            />
+                        </div>
+                    )}
             <div className="con con2 description" ref={descriptionRef}>
                 <h2>여행 상세 정보</h2>
 
