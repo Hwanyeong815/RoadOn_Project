@@ -13,3 +13,5 @@ yarn add react-copy-to-clipboard
 yarn add sweetalert2
 
 yarn add @tosspayments/payment-sdk
+
+yarn add split-type

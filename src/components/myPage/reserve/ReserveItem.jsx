@@ -6,7 +6,7 @@ import airportListData from '../../../api/airportListData';
 import hotelsListData from '../../../api/hotelsListData';
 import packagesData from '../../../api/packagesData';
 
-// format helpers
+// ---------- format helpers ----------
 const formatDateShort = (input) => {
     if (!input) return '';
     const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(input);
@@ -24,7 +24,7 @@ const formatDateShort = (input) => {
 
 const formatPrice = (v) => (v == null ? '-' : `${Number(v).toLocaleString()}원`);
 
-// 시간차 계산: 'HH:mm' 문자열 2개 -> "N시간 M분"
+// 시간차 계산: 'HH:mm' 2개 -> "N시간 M분"
 const computeDurationFromTimes = (dep, arr) => {
     if (!dep || !arr) return '';
     const toMinutes = (t) => {
@@ -36,13 +36,66 @@ const computeDurationFromTimes = (dep, arr) => {
     const b = toMinutes(arr);
     if (a == null || b == null) return '';
     let diff = b - a;
-    if (diff < 0) diff += 24 * 60; // 다음날 도착 처리
+    if (diff < 0) diff += 24 * 60; // 다음날 도착
     const h = Math.floor(diff / 60);
     const m = diff % 60;
     return `${h > 0 ? `${h}시간` : ''}${m > 0 ? ` ${m}분` : ''}`.trim();
 };
 
-// API에서 상품 찾기 (productData가 이미 있으면 우선 사용)
+// ---------- 느슨한 호텔 매칭 유틸 (한글 제목 보장용) ----------
+const _slugify = (s) =>
+    String(s || '')
+        .trim()
+        .toLowerCase()
+        .replace(/[ _./]+/g, '-')
+        .replace(/-+/g, '-');
+
+const _candidatesFromRaw = (raw) => {
+    const s = String(raw || '');
+    const cleaned = s
+        .replace(/숙소$/g, '') // 접미사 제거
+        .replace(/^hotels?[_-]?/i, '') // prefix 제거
+        .replace(/[_-][a-z0-9]{4,}$/i, ''); // 랜덤 토큰 제거
+    const cand = [s, cleaned, _slugify(cleaned), _slugify(s)].filter(Boolean);
+    return Array.from(new Set(cand));
+};
+
+const _findHotelLoose = (tid) => {
+    if (!tid) return null;
+
+    // 1) 숫자 id
+    const asNum = Number(tid);
+    if (!Number.isNaN(asNum)) {
+        const byId = hotelsListData.find((h) => Number(h.id) === asNum);
+        if (byId) return byId;
+    }
+
+    const cands = _candidatesFromRaw(tid);
+    const candsLc = cands.map((x) => String(x).toLowerCase());
+
+    // 2) slug 정확 매칭
+    let found = hotelsListData.find((h) => candsLc.includes(String(h.slug).toLowerCase()));
+    if (found) return found;
+
+    // 3) 한글/영문 이름 정확 매칭
+    found = hotelsListData.find(
+        (h) =>
+            candsLc.includes(String(h.name).toLowerCase()) ||
+            candsLc.includes(String(h.engName).toLowerCase())
+    );
+    if (found) return found;
+
+    // 4) 포함 매칭
+    found = hotelsListData.find((h) => {
+        const n = String(h.name || '').toLowerCase();
+        const e = String(h.engName || '').toLowerCase();
+        const sg = String(h.slug || '').toLowerCase();
+        return candsLc.some((c) => n.includes(c) || e.includes(c) || sg.includes(c));
+    });
+    return found || null;
+};
+
+// ---------- API에서 상품 찾기 (productData가 있으면 우선) ----------
 const findProductFromApis = (type, productData, fallbackId) => {
     if (productData && typeof productData === 'object') return productData;
 
@@ -73,6 +126,7 @@ const findProductFromApis = (type, productData, fallbackId) => {
             hotelsListData.find(
                 (h) => (h.name || '').toString().toLowerCase() === String(tid).toLowerCase()
             ) ||
+            _findHotelLoose(tid) || // ✅ 느슨 매칭
             null
         );
     }
@@ -91,7 +145,7 @@ const findProductFromApis = (type, productData, fallbackId) => {
     return null;
 };
 
-// 보조 정보 렌더링 (호텔/항공/패키지)
+// ---------- 보조 정보 렌더링 ----------
 const renderProductSubInfo = (type, productData, fallbackId) => {
     const resolved = findProductFromApis(type, productData, fallbackId) || productData || null;
     if (!resolved) return null;
@@ -206,25 +260,42 @@ const ReserveItem = ({ data = null }) => {
     // resolved product (from API) - used for name if available
     const resolved = findProductFromApis(typeKey, productData, fallbackId) || productData || null;
 
-    // product name selection by type (한국어 우선)
+    // ---------- product name selection (KO 우선) ----------
     let productName = '';
     if (resolved) {
-        if (typeKey === 'hotel')
-            productName = resolved.name || resolved.title || resolved.hotelName || '';
-        else if (typeKey === 'flight') {
-            const airline = resolved.airline || resolved.name || '';
-            const flightNo = resolved.flightNo ? ` ${resolved.flightNo}` : '';
-            productName = `${airline}${flightNo}`.trim();
-            if (!productName && (resolved.departureAirport || resolved.arrivalAirport)) {
-                productName = `${resolved.departureAirport || ''} → ${
-                    resolved.arrivalAirport || ''
-                }`;
+        if (typeKey === 'hotel') {
+            productName =
+                resolved.titleKo ||
+                resolved.displayName ||
+                resolved.productTitle ||
+                resolved.name ||
+                resolved.title ||
+                resolved.hotelName ||
+                '';
+        } else if (typeKey === 'flight') {
+            if (resolved.titleKo || resolved.displayName || resolved.productTitle) {
+                productName = resolved.titleKo || resolved.displayName || resolved.productTitle;
+            } else {
+                const airline = resolved.airline || resolved.name || '';
+                const flightNo = resolved.flightNo ? ` ${resolved.flightNo}` : '';
+                productName = `${airline}${flightNo}`.trim();
+                if (!productName && (resolved.departureAirport || resolved.arrivalAirport)) {
+                    productName = `${resolved.departureAirport || ''} → ${
+                        resolved.arrivalAirport || ''
+                    }`;
+                }
             }
         } else if (typeKey === 'package' || typeKey === 'tour') {
-            productName = resolved.title || resolved.name || resolved.subtitle || '';
+            productName =
+                resolved.titleKo ||
+                resolved.displayName ||
+                resolved.productTitle ||
+                resolved.title ||
+                resolved.name ||
+                resolved.subtitle ||
+                '';
         }
     }
-
     if (!productName) {
         productName = productData?.name || data?.id || reservationId || '상품 정보 없음';
     }
