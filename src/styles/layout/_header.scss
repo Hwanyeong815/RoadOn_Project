@@ -8,11 +8,11 @@ html.is-active {
     z-index: 10000;
     top: 0;
     width: 100%;
-    height: 95px;
+    height: vw(95px);
 
     .inner {
-        height: 100px;
-        width: 1705px;
+        width: vw(1705px);
+        height: vw(95px);
     }
     h1 {
         position: absolute;
@@ -26,12 +26,15 @@ html.is-active {
             height: vw(33px);
 
             img {
-                height: 100%;
+                width: 100%;
+                height: vw(33px);
             }
         }
     }
 
     .nav {
+        // border: 1px solid #000;
+        width: 100%;
         box-sizing: border-box;
         height: 95px;
         display: flex;
@@ -168,7 +171,7 @@ html.is-active {
         background: pink;
         .inner {
             height: 70px;
-            width: 100%;
+            // width: 100%;
         }
         h1 {
             left: 10px;

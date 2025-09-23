@@ -3,9 +3,10 @@ import { create } from 'zustand';
 import hotelsListData from '../api/hotelsListData';
 import airportListData from '../api/airportListData';
 import packagesData from '../api/packagesData';
+import useAuthStore from './authStore'; // ✅ 계정 연동
 
 const STORAGE_KEY = 'app:wishlist_v1';
-
+/*
 // --- 개발용 샘플 데이터 ---
 const SAMPLE_ITEMS = [
     {
@@ -30,11 +31,10 @@ const SAMPLE_ITEMS = [
             slug: 'mandarin-oriental-bangkok',
         },
     },
-
     {
         uid: 'tour-younskitchen2-tenerife',
         type: 'tour',
-        id: 'younskitchen2-tenerife', // slug 기반 id
+        id: 'younskitchen2-tenerife',
         data: {
             title: '윤식당 스페인 투어',
             subtitle: '스페인 가라치코 3박 4일',
@@ -45,31 +45,35 @@ const SAMPLE_ITEMS = [
         },
     },
 ];
+*/
 
+// === 🧠 유저별 키 네임스페이스 ===
+const getCurrentUID = () => useAuthStore.getState().currentUser?.id || 'guest';
+const keyFor = (uid) => `${STORAGE_KEY}:${uid || 'guest'}`;
+
+// === Storage I/O ===
 const loadFromStorage = () => {
     try {
         const raw = localStorage.getItem(STORAGE_KEY);
-        if (!raw) {
-            return SAMPLE_ITEMS.map((it) => {
-                const uid = it.uid || `${it.type}-${it.id ?? it.slug}`;
-                return { ...it, uid };
-            });
-        }
-        return JSON.parse(raw);
+        if (!raw) return []; // ✅ 스토리지 없으면 빈 배열
+        const parsed = JSON.parse(raw);
+        return Array.isArray(parsed) ? parsed : []; // ✅ 형식 방어
     } catch (e) {
         console.warn('wishStore load error', e);
-        return SAMPLE_ITEMS;
+        return []; // ✅ 파싱 실패도 빈 배열
     }
 };
 
-const saveToStorage = (items) => {
+const saveToStorage = (uid, items) => {
+    const key = keyFor(uid);
     try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+        localStorage.setItem(key, JSON.stringify(items));
     } catch (e) {
         console.warn('wishStore save error', e);
     }
 };
 
+// === Lookups ===
 const findHotel = (idOrSlug) => {
     if (idOrSlug == null) return null;
     const asNum = Number(idOrSlug);
@@ -83,9 +87,7 @@ const findHotel = (idOrSlug) => {
 const findFlight = (id) => {
     if (id == null) return null;
     const asNum = Number(id);
-    if (!Number.isNaN(asNum)) {
-        return airportListData.find((f) => Number(f.id) === asNum);
-    }
+    if (!Number.isNaN(asNum)) return airportListData.find((f) => Number(f.id) === asNum);
     return airportListData.find((f) => f.slug === id || String(f.id) === String(id));
 };
 
@@ -99,35 +101,40 @@ const findPackage = (idOrSlug) => {
     return packagesData.find((p) => p.slug === idOrSlug || String(p.id) === String(idOrSlug));
 };
 
-const hydrateItemsDetailed = (items) => {
-    return items.map((it) => {
+const hydrateItemsDetailed = (items) =>
+    items.map((it) => {
         const type = (it.type || '').toString().toLowerCase();
         let data = it.data ?? null;
-
         try {
             if (!data) {
-                if (type === 'hotel') {
-                    data = findHotel(it.id ?? it.slug) || null;
-                } else if (type === 'flight' || type === 'air' || type === 'airport') {
+                if (type === 'hotel') data = findHotel(it.id ?? it.slug) || null;
+                else if (type === 'flight' || type === 'air' || type === 'airport')
                     data = findFlight(it.id ?? it.slug) || null;
-                } else if (type === 'package' || type === 'tour') {
+                else if (type === 'package' || type === 'tour')
                     data = findPackage(it.id ?? it.slug) || null;
-                }
             }
         } catch (e) {
             console.warn('hydrateItemsDetailed error for item', it, e);
         }
-
         const uid = it.uid || `${type}-${it.id ?? it.slug}`;
         return { ...it, uid, type, data };
     });
+
+// === 🧮 선택사항: 유저의 wishlistCount 동기화(프로필 뱃지 등) ===
+const syncWishlistCount = (uid, count) => {
+    const auth = useAuthStore.getState();
+    const user = auth.users.find((u) => u.id === uid);
+    if (user && typeof auth.updateUser === 'function')
+        auth.updateUser(uid, { wishlistCount: count });
 };
 
 const useWishStore = create((set, get) => {
-    const initialItems = loadFromStorage();
+    const bootUID = getCurrentUID();
+    const initialItems = loadFromStorage(bootUID);
     const initialItemsDetailed = hydrateItemsDetailed(initialItems);
 
     return {
+        // state
         items: initialItems,
         itemsDetailed: initialItemsDetailed,
 
@@ -135,11 +142,14 @@ const useWishStore = create((set, get) => {
         airports: airportListData,
         packages: packagesData,
 
+        // selectors
         getHotelById: (idOrSlug) => findHotel(idOrSlug),
         getAirportById: (id) => findFlight(id),
         getPackageById: (idOrSlug) => findPackage(idOrSlug),
 
+        // actions
         add: (item) => {
+            const uidOwner = getCurrentUID();
             const type = (item.type || '').toString().toLowerCase();
             const id = item.id ?? item.slug;
             const uid = item.uid || `${type}-${id}`;
@@ -148,12 +158,16 @@ const useWishStore = create((set, get) => {
                     it.uid === uid || (it.type === type && String(it.id ?? it.slug) === String(id))
             );
             if (exists) return;
+
             const next = [...get().items, { uid, type, id, data: item.data ?? null }];
-            set({ items: next, itemsDetailed: hydrateItemsDetailed(next) });
-            saveToStorage(next);
+            const nextDetailed = hydrateItemsDetailed(next);
+            set({ items: next, itemsDetailed: nextDetailed });
+            saveToStorage(uidOwner, next);
+            syncWishlistCount(uidOwner, next.length);
         },
 
         remove: (type, idOrSlug) => {
+            const uidOwner = getCurrentUID();
             const t = (type || '').toString().toLowerCase();
             const id = idOrSlug;
             const uid = `${t}-${id}`;
@@ -161,11 +175,14 @@ const useWishStore = create((set, get) => {
                 (it) =>
                     it.uid !== uid && !(it.type === t && String(it.id ?? it.slug) === String(id))
             );
-            set({ items: next, itemsDetailed: hydrateItemsDetailed(next) });
-            saveToStorage(next);
+            const nextDetailed = hydrateItemsDetailed(next);
+            set({ items: next, itemsDetailed: nextDetailed });
+            saveToStorage(uidOwner, next);
+            syncWishlistCount(uidOwner, next.length);
         },
 
         toggle: (item) => {
+            const uidOwner = getCurrentUID();
             const type = (item.type || '').toString().toLowerCase();
             const id = item.id ?? item.slug;
             const uid = item.uid || `${type}-${id}`;
@@ -173,21 +190,23 @@ const useWishStore = create((set, get) => {
                 (it) =>
                     it.uid === uid || (it.type === type && String(it.id ?? it.slug) === String(id))
             );
+
+            let next;
             if (exists) {
-                const next = get().items.filter(
+                next = get().items.filter(
                     (it) =>
                         !(
                             it.uid === uid ||
                             (it.type === type && String(it.id ?? it.slug) === String(id))
                         )
                 );
-                set({ items: next, itemsDetailed: hydrateItemsDetailed(next) });
-                saveToStorage(next);
             } else {
-                const next = [...get().items, { uid, type, id, data: item.data ?? null }];
-                set({ items: next, itemsDetailed: hydrateItemsDetailed(next) });
-                saveToStorage(next);
+                next = [...get().items, { uid, type, id, data: item.data ?? null }];
             }
+            const nextDetailed = hydrateItemsDetailed(next);
+            set({ items: next, itemsDetailed: nextDetailed });
+            saveToStorage(uidOwner, next);
+            syncWishlistCount(uidOwner, next.length);
         },
 
         isSaved: (type, idOrSlug) => {
@@ -201,5 +220,20 @@ const useWishStore = create((set, get) => {
         },
     };
 });
+
+// === 🔄 계정 전환/로그아웃 시 자동 재하이드레이트 ===
+const rehydrateForUser = (uid) => {
+    const items = loadFromStorage(uid);
+    useWishStore.setState({
+        items,
+        itemsDetailed: hydrateItemsDetailed(items),
+    });
+    if (uid) syncWishlistCount(uid, items.length);
+};
+
+useAuthStore.subscribe(
+    (s) => s.currentUser?.id, // 바뀐 값 추적
+    (uid) => rehydrateForUser(uid) // uid 변경 시 위시리스트 교체
+);
 
 export default useWishStore;
