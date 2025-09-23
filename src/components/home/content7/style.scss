@@ -1,6 +1,7 @@
 @use "../../../styles/utils" as *;
 
 .bottom-text-container {
+  margin-top: 120px;
   width: 100%;
   background-color: #ffffff;
   padding: 60px 0;
@@ -11,7 +12,7 @@
   width: 100%;
   overflow: hidden;
   margin-bottom: 30px;
-  
+
   &:last-child {
     margin-bottom: 0;
   }
@@ -21,7 +22,7 @@
   display: flex;
   width: max-content;
   animation: scroll 40s linear infinite;
-  
+
   img {
     height: 100px;
     width: auto;
@@ -31,11 +32,11 @@
 }
 
 .text-row-1 .text-content {
-  animation: scroll-right 40s linear infinite;
+  animation: scroll-right 120s linear infinite;
 }
 
 .text-row-2 .text-content {
-  animation: scroll-left 40s linear infinite;
+  animation: scroll-left 120s linear infinite;
 }
 
 @keyframes scroll-right {
@@ -61,11 +62,11 @@
   .bottom-text-container {
     padding: 40px 0;
   }
-  
+
   .text-content img {
     height: 70px;
   }
-  
+
   .text-row {
     margin-bottom: 20px;
   }

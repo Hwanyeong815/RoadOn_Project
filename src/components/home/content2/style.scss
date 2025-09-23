@@ -1,9 +1,10 @@
-// CouponEvent.scss
+@use "../../../styles/utils" as *;
+
 .coupon-event-container {
   padding: 60px 20px;
   margin: 0 auto;
   position: relative;
-  height: 100vw;
+  width: 100vw;
   .coupon-header {
     margin-bottom: 50px;
     .head {
@@ -31,16 +32,19 @@
       width: 180px;
       height: 45px;
       border-radius: 50px;
-      background: #ff7f50;
+      background: $mint;
       color: white;
       font-size: 20px;
       font-weight: 400;
-      box-shadow: 0 8px 25px rgba(255, 107, 53, 0.3);
       cursor: pointer;
 
       position: absolute;
       right: 0;
       top: 50px;
+    }
+    .coupon_down {
+      position: absolute;
+      right: 0;
     }
   }
   .couponbg {
@@ -98,10 +102,10 @@
 }
 
 .marquee-wrapper {
+  position: relative;
   overflow: hidden;
   width: 100%;
-  height: 100vw;
-  position: relative;
+  height: 40.25rem;
 }
 .marquee {
   display: flex;
