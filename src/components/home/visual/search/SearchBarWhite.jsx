@@ -91,7 +91,7 @@ const SearchBarWhite = () => {
                     {selectedLocation ? (
                         <span className="selected-location">{selectedLocation}</span>
                     ) : (
-                        <span className="placeholder">여행지를 검색해보세요</span>
+                        <span className="placeholder-w">여행지를 검색해보세요</span>
                     )}
                 </div>
                 {openDropdown === 'location' && (
