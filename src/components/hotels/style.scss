@@ -1110,7 +1110,6 @@ strong {
     }
 
     .search-bar {
-        
     }
     // 여행지 검색 부분 스타일
     .search-location {
@@ -1397,6 +1396,7 @@ strong {
 
 .filter-wrap {
     width: 15.625vw;
+    z-index: 1;
     .map-modal {
         height: 7.2917vw;
         border-radius: 10px;
