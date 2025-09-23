@@ -21,7 +21,6 @@ import {
 import AirportDetail from '../components/airport/airportSearch/AirportDetail';
 import ScrollToTop from '../common/ScrollToTop';
 import EditProfile from '../components/login/editProfile';
-import TourPaymentLeft from '../components/payment/TourPaymentLeft';
 import Logout from '../components/logout';
 import Test from '../components/ui/swal/Test';
 import { useLayoutEffect } from 'react';
