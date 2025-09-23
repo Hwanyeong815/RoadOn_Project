@@ -2,8 +2,6 @@
 import React from 'react';
 import './style.scss';
 
-// API 데이터 경로: 필요 시 경로 조정하세요.
-// 현재 경로 기준: src/components/myPage/* -> ../../api/*
 import airportListData from '../../../api/airportListData';
 import hotelsListData from '../../../api/hotelsListData';
 import packagesData from '../../../api/packagesData';
