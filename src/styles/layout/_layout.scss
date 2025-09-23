@@ -2,12 +2,13 @@
 .site-header {
     will-change: transform, opacity;
     z-index: 10000;
-    // position: absolute;
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    transition: background-color 0.24s ease, box-shadow 0.24s ease, color 0.16s ease;
+    transition: 0.24s ease;
     background-color: transparent;
+
     box-shadow: none;
 
     &.bg-on {
