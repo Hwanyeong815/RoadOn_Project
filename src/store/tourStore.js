@@ -66,6 +66,10 @@ function normalizePackagesToTours(packagesArr) {
             guide_fee: p.guide_fee || '',
             optional: p.optional ?? null, // 상세 페이지용 원본 보존
 
+             adult_fee: p.adult_fee,
+            child_fee: p.child_fee,
+
+
             schedule: p.schedule,
             itinerary: p.itinerary,
             flight_info: p.flight_info,

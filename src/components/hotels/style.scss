@@ -1128,6 +1128,9 @@ strong {
             .placeholder {
                 color: $white; // placeholder 색상
             }
+            .placeholder-w {
+                color: $greyscale-1100;
+            }
         }
 
         input {
