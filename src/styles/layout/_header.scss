@@ -192,11 +192,12 @@ html.is-active {
 #floating-btn {
     opacity: 0;
     position: fixed;
-    top: vw(260px);
+    top: vw(760px);
     right: vw(65px);
-    width: vw(60px);
-    height: vw(120px);
+    width: vw(40px);
+    height: vw(80px);
     background-color: $greyscale-0;
+    z-index: 50000;
     @include circle;
     .floating-btn-wrap {
         height: 100%;
