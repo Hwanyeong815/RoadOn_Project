@@ -99,8 +99,8 @@
             &.phone,
             &.phoneAuth {
                 button {
-                    @include font-24px;
-                    min-width: vw(250px);
+                    @include font-16px;
+                    min-width: vw(160px);
                     height: vw(52px);
                     border-radius: vw(10px);
                     color: $white;
@@ -204,6 +204,7 @@
 
             button {
                 @include font-20px;
+                // padding: 20px;
 
                 &.back {
                     color: $greyscale-1000;
@@ -336,6 +337,7 @@
     .login-wrap .login-group {
         position: relative;
         z-index: 2; /* content above background pseudo elements */
+        margin: auto;
     }
 
     .login {
@@ -439,7 +441,7 @@
             }
 
             &.left {
-                padding: vw(90px) vw(50px);
+                padding: vw(90px) vw(80px);
                 border-radius: vw(20px) 0 0 vw(20px);
 
                 .login-group-form input {
@@ -449,8 +451,7 @@
                     border: 1px solid $greyscale-400;
                     background: transparent;
                     color: $white;
-                    width: vw(380px);
-                    margin: auto;
+                    // width: vw(380px);
                 }
                 .login-group-find {
                     display: none;
