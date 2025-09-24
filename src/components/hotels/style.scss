@@ -30,6 +30,12 @@
             padding: vw(20px) vw(24px);
             box-sizing: border-box;
             cursor: pointer;
+            transition: transform 0.2s ease;
+            box-shadow: 0 vw(6px) vw(12px) rgba(0, 0, 0, 0.05);
+            &:hover {
+                transform: translateY(-4px);
+                box-shadow: 0 vw(4px) vw(8px) rgba(0, 0, 0, 0.08);
+            }
             .hotel-image {
                 width: vw(290px);
                 height: vw(240px);
