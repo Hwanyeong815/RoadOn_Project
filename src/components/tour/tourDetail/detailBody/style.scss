@@ -23,6 +23,11 @@
         width: vw(456px);
         background-color: aqua;
     }
+    .gallery-icon {
+        position: absolute;
+        width: vw(24px) !important;
+        height: vw(24px) !important;
+    }
 }
 .detail-body-info {
     // height: vw(3000px);

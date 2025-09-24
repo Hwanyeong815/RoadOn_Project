@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import './style.scss';
-// import GalleryModal from '../../../hotels/hotelsDetail/GalleryModal';
+import GalleryModal from '../../../hotels/hotelsDetail/GalleryModal';
 
 const DetailThum = ({ tourData }) => {
     if (!tourData) return null;
@@ -57,6 +57,7 @@ const DetailThum = ({ tourData }) => {
                     </div>
                 )}
             </section>
+            <img src="/images/icon/gallery.svg" alt="갤러리" className="gallery-icon" />
 
             {isGalleryOpen && (
                 <GalleryModal images={modalImages} hotelName={title} onClose={handleCloseGallery} />

@@ -58,7 +58,7 @@ const DetailBottom = ({ hotel, reviews, locationRef, reviewsRef }) => {
 
     return (
         <section className="detail-bottom-info">
-            <section id="detail-loaction" ref={locationRef}>
+            <section id="detail-location" ref={locationRef}>
                 <h2 className="title">숙소 위치</h2>
                 <div className="map">
                     <KakaoMap address={hotel?.address} name={hotel?.name} />

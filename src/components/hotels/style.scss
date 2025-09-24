@@ -902,7 +902,6 @@ strong {
             display: flex;
             flex-direction: column;
             height: calc(90vh - 80px);
-            
 
             .big-img {
                 flex: 1;
@@ -981,6 +980,7 @@ strong {
                     padding: 0;
                     overflow-x: auto;
                     justify-content: center;
+                    position: relative;
 
                     li {
                         flex-shrink: 0;
@@ -1007,6 +1007,7 @@ strong {
                             display: block;
                         }
                     }
+                   
                 }
             }
         }
@@ -1121,8 +1122,6 @@ strong {
         }
     }
 
-    .search-bar {
-    }
     // 여행지 검색 부분 스타일
     .search-location {
         width: vw(260px);
@@ -1582,3 +1581,11 @@ strong {
 }
 
 // .react-datepicker__input-container
+
+.detail-bottom-info {
+    #detail-location {
+        h2 {
+            // margin-bottom: 30px;
+        }
+    }
+}
