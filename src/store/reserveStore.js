@@ -6,10 +6,8 @@ import packagesData from '../api/packagesData';
 
 const STORAGE_KEY = 'app:reserve_v1';
 
-// --- 개발용 시드(샘플) 데이터: 예약 항목 예시 ---
-// 항공(flight) 3개, 패키지(package) 3개, 투어(tour) 3개
+// --- 개발용 시드(샘플) 데이터 ---
 const SAMPLE_RESERVATIONS = [
-    // --- hotels (숙소) ---
     {
         uid: 'res-hotel-001',
         reservationId: 'HOTEL-20250901-001',
@@ -29,7 +27,6 @@ const SAMPLE_RESERVATIONS = [
         },
         isUsed: false,
     },
-    // --- flights (항공) ---
     {
         uid: 'res-flight-001',
         reservationId: 'FLIGHT-20250901-001',
@@ -44,8 +41,6 @@ const SAMPLE_RESERVATIONS = [
         data: null,
         isUsed: false,
     },
-
-    // --- packages (패키지) ---
     {
         uid: 'res-package-001',
         reservationId: 'PKG-20250903-001',
@@ -74,8 +69,6 @@ const SAMPLE_RESERVATIONS = [
         data: null,
         isUsed: true,
     },
-
-    // --- tours (투어) ---
     {
         uid: 'res-tour-001',
         reservationId: 'TOUR-20250905-001',
@@ -97,7 +90,6 @@ const loadFromStorage = () => {
     try {
         const raw = localStorage.getItem(STORAGE_KEY);
         if (!raw) {
-            // 개발용 시드 반환 (운영 시에는 빈 배열([])로 바꾸세요.)
             return SAMPLE_RESERVATIONS.map((it) => {
                 const uid = it.uid || `${it.type}-${it.id}`;
                 return { ...it, uid };
@@ -119,44 +111,36 @@ const saveToStorage = (items) => {
 };
 
 // helpers: find product by id/slug
-// 🔧 helper
 const _slugify = (s) =>
     String(s || '')
         .trim()
         .toLowerCase()
-        .replace(/[ _./]+/g, '-') // 구분자 통일
+        .replace(/[ _./]+/g, '-')
         .replace(/-+/g, '-');
 
-// 결제에서 들어온 임시 키 정리 (ex: "hotel_1758..._dvwxpk숙소")
 const _candidatesFromRaw = (raw) => {
     const s = String(raw || '');
     const cleaned = s
-        .replace(/숙소$/g, '') // 한국어 접미사 제거
-        .replace(/^hotels?[_-]?/i, '') // prefix 제거
-        .replace(/[_-][a-z0-9]{4,}$/i, ''); // 랜덤토큰 제거
+        .replace(/숙소$/g, '')
+        .replace(/^hotels?[_-]?/i, '')
+        .replace(/[_-][a-z0-9]{4,}$/i, '');
     const cand = [s, cleaned, _slugify(cleaned), _slugify(s)].filter(Boolean);
     return Array.from(new Set(cand));
 };
 
-// ✅ 관대한 매칭: 숫자 id → slug → (한글/영문)정확 → 부분 포함
 const findHotel = (idOrSlugOrName) => {
     if (!idOrSlugOrName) return null;
-
-    // 1) 숫자 id
     const asNum = Number(idOrSlugOrName);
     if (!Number.isNaN(asNum)) {
         const byId = hotelsListData.find((h) => Number(h.id) === asNum);
         if (byId) return byId;
     }
-
     const cands = _candidatesFromRaw(idOrSlugOrName);
     const candsLc = cands.map((x) => String(x).toLowerCase());
 
-    // 2) slug 정확 매칭
     let found = hotelsListData.find((h) => candsLc.includes(String(h.slug).toLowerCase()));
     if (found) return found;
 
-    // 3) (한글/영문) 이름 정확 매칭
     found = hotelsListData.find(
         (h) =>
             candsLc.includes(String(h.name).toLowerCase()) ||
@@ -164,7 +148,6 @@ const findHotel = (idOrSlugOrName) => {
     );
     if (found) return found;
 
-    // 4) 느슨한 포함 매칭 (slug/이름에 포함)
     found = hotelsListData.find((h) => {
         const n = String(h.name || '').toLowerCase();
         const e = String(h.engName || '').toLowerCase();
@@ -194,19 +177,15 @@ const findPackage = (idOrSlug) => {
     return packagesData.find((p) => p.slug === idOrSlug || String(p.id) === String(idOrSlug));
 };
 
-// ---------- 사용여부 추론 유틸 ----------
-// YYYY-MM-DD -> Date at end of day (local)
+// ---------- 사용여부 추론 ----------
 const parseDateEndOfDay = (ymd) => {
     if (!ymd) return null;
     const parts = String(ymd).split('-');
     if (parts.length !== 3) return null;
     const [y, m, d] = parts.map((p) => Number(p));
-    // monthIndex is 0-based
     return new Date(y, m - 1, d, 23, 59, 59, 999);
 };
 
-// 단순 추론: status==='completed' 이면 사용 완료,
-// 아니면 endDate가 오늘 이전이면 사용 완료
 const inferIsUsed = (item) => {
     try {
         if (!item) return false;
@@ -219,28 +198,23 @@ const inferIsUsed = (item) => {
     }
 };
 
-// hydrate: merge item -> itemDetailed (data filled) AND compute isUsed
 const hydrateReservationsDetailed = (items) =>
-    items.map((it) => {
+    (items || []).map((it) => {
         const type = (it.type || '').toString().toLowerCase();
         let data = it.data ?? null;
 
         try {
             if (!data) {
-                if (type === 'hotel') {
-                    data = findHotel(it.id) || null;
-                } else if (type === 'flight' || type === 'air' || type === 'airport') {
+                if (type === 'hotel') data = findHotel(it.id) || null;
+                else if (type === 'flight' || type === 'air' || type === 'airport')
                     data = findFlight(it.id) || null;
-                } else if (type === 'package' || type === 'tour') {
-                    data = findPackage(it.id) || null;
-                }
+                else if (type === 'package' || type === 'tour') data = findPackage(it.id) || null;
             }
         } catch (e) {
             console.warn('hydrateReservationsDetailed error for item', it, e);
         }
 
         const uid = it.uid || `${type}-${it.id}` || `${it.reservationId || Date.now()}`;
-        // isUsed: explicit 필드가 있으면 우선 사용, 없으면 자동 추론
         const isUsed = typeof it.isUsed === 'boolean' ? it.isUsed : inferIsUsed(it);
 
         return { ...it, uid, type, data, isUsed };
@@ -251,35 +225,39 @@ const useReserveStore = create((set, get) => {
     const initialDetailed = hydrateReservationsDetailed(initialItems);
 
     return {
-        // raw reservations
+        // raw
         items: initialItems,
-        // hydrated reservations (with product data merged)
+        // hydrated
         itemsDetailed: initialDetailed,
 
-        // 원본 참조 데이터
+        // refs
         hotels: hotelsListData,
         airports: airportListData,
         packages: packagesData,
 
-        // 편의 조회
+        // selectors
         getByReservationId: (reservationId) =>
             (get().itemsDetailed || []).find((r) => r.reservationId === reservationId),
+
+        getByOrderId: (orderId) =>
+            (get().itemsDetailed || []).find((r) => r?.payment?.orderId === String(orderId)),
+
         getByUid: (uid) => (get().itemsDetailed || []).find((r) => r.uid === uid),
+
         getByType: (type) =>
             (get().itemsDetailed || []).filter(
                 (r) => (r.type || '').toString().toLowerCase() === String(type).toLowerCase()
             ),
 
         // actions
+        // ✅ 업서트(있으면 merge, 없으면 추가)
         addReservation: (reservation) => {
             const type = (reservation.type || '').toString().toLowerCase();
             const id = reservation.id;
-            // uid는 가능한 한 안정적으로(동일 예약에 동일 uid 유지)
             const fallbackUid = `${type}-${id || 'unknown'}`;
             const uid = reservation.uid || reservation.reservationId || fallbackUid;
             const rid = reservation.reservationId || '';
 
-            // 기존 아이템 인덱스 찾기: reservationId 우선, 없으면 uid
             const items = get().items || [];
             const idx = items.findIndex(
                 (it) =>
@@ -289,12 +267,10 @@ const useReserveStore = create((set, get) => {
 
             let next;
             if (idx >= 0) {
-                // ✅ 업서트: 기존 레코드와 병합 (새로 들어온 필드 우선)
                 const merged = { ...items[idx], ...reservation, uid: items[idx].uid || uid };
                 next = [...items];
                 next[idx] = merged;
             } else {
-                // 신규 추가
                 next = [...items, { ...reservation, uid }];
             }
 
@@ -302,24 +278,7 @@ const useReserveStore = create((set, get) => {
             saveToStorage(next);
         },
 
-        removeReservation: (reservationIdOrUid) => {
-            const next = get().items.filter(
-                (it) => it.uid !== reservationIdOrUid && it.reservationId !== reservationIdOrUid
-            );
-            set({ items: next, itemsDetailed: hydrateReservationsDetailed(next) });
-            saveToStorage(next);
-        },
-
-        updateReservation: (reservationIdOrUid, patch) => {
-            const next = get().items.map((it) => {
-                if (it.uid === reservationIdOrUid || it.reservationId === reservationIdOrUid) {
-                    return { ...it, ...patch };
-                }
-                return it;
-            });
-            set({ items: next, itemsDetailed: hydrateReservationsDetailed(next) });
-            saveToStorage(next);
-        },
+        // ✅ 결제 정보만 갱신
         updatePayment: (reservationIdOrUid, paymentPatch) => {
             const next = (get().items || []).map((it) => {
                 if (it.reservationId === reservationIdOrUid || it.uid === reservationIdOrUid) {
@@ -332,8 +291,27 @@ const useReserveStore = create((set, get) => {
             saveToStorage(next);
         },
 
+        removeReservation: (reservationIdOrUid) => {
+            const next = (get().items || []).filter(
+                (it) => it.uid !== reservationIdOrUid && it.reservationId !== reservationIdOrUid
+            );
+            set({ items: next, itemsDetailed: hydrateReservationsDetailed(next) });
+            saveToStorage(next);
+        },
+
+        updateReservation: (reservationIdOrUid, patch) => {
+            const next = (get().items || []).map((it) => {
+                if (it.uid === reservationIdOrUid || it.reservationId === reservationIdOrUid) {
+                    return { ...it, ...patch };
+                }
+                return it;
+            });
+            set({ items: next, itemsDetailed: hydrateReservationsDetailed(next) });
+            saveToStorage(next);
+        },
+
         changeStatus: (reservationIdOrUid, status) => {
-            const next = get().items.map((it) => {
+            const next = (get().items || []).map((it) => {
                 if (it.uid === reservationIdOrUid || it.reservationId === reservationIdOrUid) {
                     return {
                         ...it,
@@ -350,9 +328,8 @@ const useReserveStore = create((set, get) => {
             saveToStorage(next);
         },
 
-        // 새로 추가: 수동으로 사용 상태 설정 (예: 체크인 처리)
         markAsUsed: (reservationIdOrUid, used = true) => {
-            const next = get().items.map((it) => {
+            const next = (get().items || []).map((it) => {
                 if (it.uid === reservationIdOrUid || it.reservationId === reservationIdOrUid) {
                     return { ...it, isUsed: !!used };
                 }
@@ -363,13 +340,12 @@ const useReserveStore = create((set, get) => {
         },
 
         isReserved: (reservationIdOrUid) =>
-            get().items.some(
+            (get().items || []).some(
                 (it) => it.uid === reservationIdOrUid || it.reservationId === reservationIdOrUid
             ),
 
         getCount: () => (get().items || []).length,
 
-        // 조회 + 페이징 유틸 (간단)
         listPaged: (page = 1, pageSize = 10, type = null) => {
             const all = get().itemsDetailed || [];
             const filtered = type ? all.filter((r) => r.type === type) : all;

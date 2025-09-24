@@ -1,44 +1,64 @@
 // src/components/hotels/PaymentSuccessRight.jsx
 import './style.scss';
 import { IoDownloadOutline, IoShareOutline } from 'react-icons/io5';
-import { format } from 'date-fns';
-import { ko } from 'date-fns/locale';
 import { useMemo, useState, useEffect } from 'react';
 
-const IMG_BASE = '/images/hotels/detail/hotelsList';
+// 🔥 API의 한국어 데이터로 강제 매핑
+//   프로젝트 구조에 따라 경로가 다르면 '../../api/hotelsListData'를 맞춰주세요.
+import hotelsListData from '../../api/hotelsListData';
 
+const IMG_BASE = '/images/hotels/detail/hotelsList';
 const pickFirst = (val) => (Array.isArray(val) ? val[0] : val);
 
-/** 파일명이 이미 절대경로(/images/...)면 그대로, 아니면 BASE와 합침 */
 const joinImagePath = (name) => {
     if (!name) return null;
-    if (name.startsWith('/')) return name;
+    if (String(name).startsWith('/')) return name;
     return `${IMG_BASE}/${name}`;
 };
 
-/** hotel.image / hotel.images / hotel.id 어느 쪽이든 받아서 파일명 결정 */
-const resolveInitialName = (hotel) => {
-    const raw = pickFirst(hotel?.image ?? hotel?.images); // 'ht-6-a.webp' 같은 형태 기대
-    if (raw) return raw;
+// id/slug/name 어느걸 받아도 hotelsListData의 한국어 name/type/star/price로 보정
+const resolveHotelKR = (rawHotel) => {
+    if (!rawHotel) return null;
+    const id = Number(rawHotel.id);
+    const slug = rawHotel.slug?.trim();
+    const name = (rawHotel.name || rawHotel.engName || '').trim();
 
-    // 파일명이 아예 없다면 id 기반 기본 규칙으로 추정 (예: ht-6-a.webp)
+    // 1) id 우선
+    let found = Number.isFinite(id) ? hotelsListData.find((h) => Number(h.id) === id) : null;
+    // 2) slug
+    if (!found && slug) found = hotelsListData.find((h) => h.slug === slug);
+    // 3) 이름(한/영) 정확 매칭
+    if (!found && name) {
+        found = hotelsListData.find((h) => h.name === name || h.engName === name);
+    }
+    // 아무것도 못 찾으면 원본 반환(최소한 렌더는 되도록)
+    return found || rawHotel;
+};
+
+const resolveInitialName = (hotel) => {
+    const raw = pickFirst(hotel?.image ?? hotel?.images);
+    if (raw) return raw;
     if (hotel?.id) return `ht-${hotel.id}-a.webp`;
     return null;
 };
 
+const toNumber = (v, d = 0) => {
+    const n = Number(v);
+    return Number.isFinite(n) ? n : d;
+};
+
 const PaymentSuccessRight = ({ reservationData }) => {
-    // ...finalData useMemo는 기존 코드 유지
+    // 우측 카드에서 사용할 최종 데이터
     const finalData = useMemo(() => {
         if (reservationData) return reservationData;
         try {
             const storedData = localStorage.getItem('paymentData');
             const parsed = storedData ? JSON.parse(storedData) : null;
-            if (parsed && parsed.hotel && parsed.selectedRoom) return parsed;
-            return null;
+            if (parsed && parsed.hotel) return parsed;
         } catch (e) {
             console.error('Failed to parse localStorage data', e);
-            return null;
         }
+        return null;
     }, [reservationData]);
 
     if (!finalData) {
@@ -50,38 +70,59 @@ const PaymentSuccessRight = ({ reservationData }) => {
         );
     }
 
-    const { hotel, selectedRoom, nights, paymentInfo, rewardState, reservationNumber, baseAmount } =
-        finalData;
+    const {
+        hotel: hotelRaw,
+        selectedRoom,
+        nights: nightsRaw = 1,
+        paymentInfo,
+        rewardState: rewardRaw,
+        reservationNumber,
+        baseAmount: baseAmountRaw,
+    } = finalData;
 
-    // ----- 이미지 경로 처리 (webp 우선, 실패 시 jpg 폴백) -----
-    const initialName = resolveInitialName(hotel); // 예: 'ht-6-a.webp' 또는 'ht-1-a.jpg'
-    const [imgSrc, setImgSrc] = useState(() => joinImagePath(initialName));
+    // ✅ 호텔 정보를 API의 한국어 데이터로 보정
+    const hotel = useMemo(() => resolveHotelKR(hotelRaw), [hotelRaw]);
 
-    // 데이터가 바뀌면 초기화
-    useEffect(() => {
-        setImgSrc(joinImagePath(resolveInitialName(hotel)));
-    }, [hotel]);
-
+    // ----- 이미지 경로 처리 -----
+    const [imgSrc, setImgSrc] = useState(() => joinImagePath(resolveInitialName(hotel)));
+    useEffect(() => setImgSrc(joinImagePath(resolveInitialName(hotel))), [hotel]);
     const handleImgError = (e) => {
         const cur = e.currentTarget.getAttribute('src') || '';
-        // webp가 404 나면 같은 파일명의 jpg로 한번 더 시도
         if (cur.endsWith('.webp')) {
             setImgSrc(cur.replace('.webp', '.jpg'));
             return;
         }
-        // jpg도 실패하면 숨김 (새 에셋 추가 없이 처리)
         e.currentTarget.style.display = 'none';
     };
 
-    // ----- 가격/할인 계산 -----
-    const couponAmount = rewardState?.couponAmount || 0;
-    const usedPoints = rewardState?.usedPoints || 0;
+    // ----- 금액/할인 계산 -----
+    const nights = toNumber(nightsRaw, 1);
+
+    // rewardState는 없을 수도 있으니 안전하게
+    const couponAmount = toNumber(rewardRaw?.couponAmount, 0);
+    const usedPoints = toNumber(rewardRaw?.usedPoints, 0);
     const totalDiscount = couponAmount + usedPoints;
 
-    const handleDownloadReceipt = () => {
-        alert('영수증 다운로드 기능은 준비 중입니다.');
-    };
+    // ✅ baseAmount 우선순위:
+    //    1) 전달받은 baseAmount
+    //    2) 호텔 단가(price) × 숙박수(nights)  ← API 기반 보정
+    //    3) (그래도 없으면) paymentInfo.amount 로 대체(표시 일관성 유지)
+    const baseAmount =
+        toNumber(baseAmountRaw, 0) ||
+        toNumber(hotel?.price, 0) * nights ||
+        toNumber(paymentInfo?.amount, 0);
 
+    // ✅ 최종 결제금액:
+    //    1) PG에서 넘어온 paymentInfo.amount가 최우선
+    //    2) 없으면 baseAmount - 할인
+    const finalAmount = (() => {
+        const amt = toNumber(paymentInfo?.amount, NaN);
+        if (Number.isFinite(amt) && amt > 0) return amt;
+        const calc = baseAmount - totalDiscount;
+        return calc > 0 ? calc : 0;
+    })();
+
+    const handleDownloadReceipt = () => alert('영수증 다운로드 기능은 준비 중입니다.');
     const handleShareReservation = () => {
         if (navigator.share) {
             navigator.share({
@@ -107,6 +148,7 @@ const PaymentSuccessRight = ({ reservationData }) => {
                         ) : null}
                     </div>
                     <div className="text">
+                        {/* ✅ 한국어 타입/성급/호텔명 보장 */}
                         <span>
                             {hotel?.type} {hotel?.star}
                         </span>
@@ -119,35 +161,45 @@ const PaymentSuccessRight = ({ reservationData }) => {
                     <ul className="price total">
                         <li>
                             <b>요금 합계</b>
-                            <b>{baseAmount?.toLocaleString()}원</b>
+                            <b>{toNumber(baseAmount, 0).toLocaleString()}원</b>
                         </li>
                         <li>
                             <span>객실 1개 X {nights}박</span>
-                            <span>{baseAmount?.toLocaleString()}원</span>
+                            <span>{toNumber(baseAmount, 0).toLocaleString()}원</span>
                         </li>
                     </ul>
 
                     <ul className="price discount">
                         <li>
                             <b>할인 혜택</b>
-                            <b>-{totalDiscount.toLocaleString()}원</b>
+                            <b>-{toNumber(totalDiscount, 0).toLocaleString()}원</b>
                         </li>
                         <li>
                             <span>상품 및 쿠폰 할인</span>
-                            <span>-{couponAmount.toLocaleString()}원</span>
+                            <span>-{toNumber(couponAmount, 0).toLocaleString()}원</span>
                         </li>
                         <li>
                             <span>포인트 사용</span>
-                            <span>-{usedPoints.toLocaleString()}원</span>
+                            <span>-{toNumber(usedPoints, 0).toLocaleString()}원</span>
                         </li>
                     </ul>
 
                     <div className="final-amount">
                         <p>
                             <strong>결제 완료 금액</strong>
-                            <strong>{paymentInfo?.amount?.toLocaleString()}원</strong>
+                            <strong>{toNumber(finalAmount, 0).toLocaleString()}원</strong>
                         </p>
                     </div>
+
+                    {/* 필요 시 버튼 노출 */}
+                    {/* <div className="act">
+            <button className="btn-outline" onClick={handleDownloadReceipt}>
+              <IoDownloadOutline /> 영수증 다운로드
+            </button>
+            <button className="btn-outline" onClick={handleShareReservation}>
+              <IoShareOutline /> 예약 공유
+            </button>
+          </div> */}
                 </div>
             </div>
         </div>
