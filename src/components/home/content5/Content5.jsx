@@ -8,24 +8,24 @@ const Content5 = () => {
   const slides = [
     { id: 0, image: "./images/main/road1.png", alt: "리조트" },
     { id: 1, image: "./images/main/road2.png", alt: "세인트존스 호텔" },
-    { id: 2, image: "./images/main/road3.png", alt: "고층 건물" }
+    { id: 2, image: "./images/main/road3.png", alt: "고층 건물" },
   ];
 
   // 슬라이드 위치 계산
   const getSlidePosition = (index) => {
     const totalSlides = slides.length;
     const centerIndex = currentSlide;
-    
+
     // 현재 슬라이드 기준으로 상대적 위치 계산
     let relativePosition = index - centerIndex;
-    
+
     // 순환 처리
     if (relativePosition > totalSlides / 2) {
       relativePosition -= totalSlides;
     } else if (relativePosition < -totalSlides / 2) {
       relativePosition += totalSlides;
     }
-    
+
     return relativePosition;
   };
 
@@ -66,7 +66,13 @@ const Content5 = () => {
           {/* 좌측 화살표 */}
           <div className="left-arrow" onClick={goToPrevious}>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-              <path d="M15 18L9 12L15 6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path
+                d="M15 18L9 12L15 6"
+                stroke="white"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
             </svg>
           </div>
 
@@ -74,13 +80,13 @@ const Content5 = () => {
           <div className="slider-content">
             {slides.map((slide, index) => {
               const position = getSlidePosition(index);
-              let positionClass = '';
-              
-              if (position === -1) positionClass = 'position-2'; // 좌측
-              else if (position === 0) positionClass = 'position-3'; // 중앙
-              else if (position === 1) positionClass = 'position-4'; // 우측
-              else positionClass = 'position-none'; // 숨김
-              
+              let positionClass = "";
+
+              if (position === -1) positionClass = "position-2"; // 좌측
+              else if (position === 0) positionClass = "position-3"; // 중앙
+              else if (position === 1) positionClass = "position-4"; // 우측
+              else positionClass = "position-none"; // 숨김
+
               return (
                 <div key={slide.id} className={`slide ${positionClass}`}>
                   <div className="media">
@@ -97,16 +103,23 @@ const Content5 = () => {
                         </div>
                         {/* 하단 카테고리 */}
                         <div className="category-tags">
-                          <svg viewBox="0 0 100 100" width="150" height="150" className="category-svg">
+                          <svg
+                            viewBox="0 0 100 100"
+                            width="150"
+                            height="150"
+                            className="category-svg"
+                          >
                             <defs>
-                              <path id="circle"
+                              <path
+                                id="circle"
                                 d="
                                   M 50, 50
                                   m -37, 0
                                   a 37,37 0 1,1 74,0
-                                  a 37,37 0 1,1 -74,0"/>
+                                  a 37,37 0 1,1 -74,0"
+                              />
                             </defs>
-                            <text font-size="20">
+                            {/* <text font-size="20">
                               <textPath href="#circle" startOffset="0%">
                                 <tspan fill={currentSlide === 0 ? "#42BDCC" : "#666"}>빌라</tspan>
                                 <tspan fill="#666"> · </tspan>
@@ -114,7 +127,7 @@ const Content5 = () => {
                                 <tspan fill="#666"> · </tspan>
                                 <tspan fill={currentSlide === 2 ? "#42BDCC" : "#666"}>펜션</tspan>
                               </textPath>
-                            </text>
+                            </text> */}
                           </svg>
                         </div>
                       </div>
@@ -130,7 +143,13 @@ const Content5 = () => {
           {/* 우측 화살표 */}
           <div className="right-arrow" onClick={goToNext}>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-              <path d="M9 18L15 12L9 6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path
+                d="M9 18L15 12L9 6"
+                stroke="white"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
             </svg>
           </div>
         </div>

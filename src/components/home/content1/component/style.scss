@@ -27,7 +27,12 @@
       height: vw(45px);
       border-radius: vw(30px);
       font-size: vw(18px);
-      font-weight: bold;
+      font-weight: 400;
+      text-align: center;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
       cursor: pointer;
       border: none;
       pointer-events: auto;

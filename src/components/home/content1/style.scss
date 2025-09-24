@@ -4,11 +4,13 @@
   width: 100%;
 
   .inner {
+    margin-bottom: 0;
     .title-wrap {
       position: relative;
       display: inline-block;
 
       .title-img {
+        width: 90%;
         position: relative;
         z-index: 2;
         margin-bottom: 2.94rem;
@@ -16,9 +18,9 @@
 
       .highlight {
         position: absolute;
-        bottom: 55px; // 글씨 높이에 맞춰 조정
-        right: 0;
-        width: 35%;
+        bottom: 50px; // 글씨 높이에 맞춰 조정
+        right: 58px;
+        width: 33%;
         height: 20%; // 박스 높이
         background: #ffd6cc;
         z-index: 1; // 이미지 아래
@@ -33,7 +35,7 @@
 
       li {
         position: relative; // ::after 위치 기준
-        font-size: 2.1875rem;
+        font-size: 30px;
         font-weight: 700;
         color: #a7a7a7;
         cursor: pointer;
