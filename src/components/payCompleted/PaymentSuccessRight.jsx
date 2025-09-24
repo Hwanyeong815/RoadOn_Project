@@ -3,22 +3,37 @@ import './style.scss';
 import { IoDownloadOutline, IoShareOutline } from 'react-icons/io5';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect } from 'react';
+
+const IMG_BASE = '/images/hotels/detail/hotelsList';
+
+const pickFirst = (val) => (Array.isArray(val) ? val[0] : val);
+
+/** 파일명이 이미 절대경로(/images/...)면 그대로, 아니면 BASE와 합침 */
+const joinImagePath = (name) => {
+    if (!name) return null;
+    if (name.startsWith('/')) return name;
+    return `${IMG_BASE}/${name}`;
+};
+
+/** hotel.image / hotel.images / hotel.id 어느 쪽이든 받아서 파일명 결정 */
+const resolveInitialName = (hotel) => {
+    const raw = pickFirst(hotel?.image ?? hotel?.images); // 'ht-6-a.webp' 같은 형태 기대
+    if (raw) return raw;
+
+    // 파일명이 아예 없다면 id 기반 기본 규칙으로 추정 (예: ht-6-a.webp)
+    if (hotel?.id) return `ht-${hotel.id}-a.webp`;
+    return null;
+};
 
 const PaymentSuccessRight = ({ reservationData }) => {
-    // localStorage에서 데이터를 안전하게 불러오기
+    // ...finalData useMemo는 기존 코드 유지
     const finalData = useMemo(() => {
-        if (reservationData) {
-            return reservationData;
-        }
+        if (reservationData) return reservationData;
         try {
             const storedData = localStorage.getItem('paymentData');
-            const parsedData = storedData ? JSON.parse(storedData) : null;
-
-            // 필수 데이터(hotel, selectedRoom)가 존재하는지 확인
-            if (parsedData && parsedData.hotel && parsedData.selectedRoom) {
-                return parsedData;
-            }
+            const parsed = storedData ? JSON.parse(storedData) : null;
+            if (parsed && parsed.hotel && parsed.selectedRoom) return parsed;
             return null;
         } catch (e) {
             console.error('Failed to parse localStorage data', e);
@@ -27,7 +42,6 @@ const PaymentSuccessRight = ({ reservationData }) => {
     }, [reservationData]);
 
     if (!finalData) {
-        // 데이터가 없는 경우를 처리
         return (
             <div className="pay payment-right success">
                 <p>예약 정보를 불러오는 중 오류가 발생했거나, 정보가 존재하지 않습니다.</p>
@@ -36,23 +50,35 @@ const PaymentSuccessRight = ({ reservationData }) => {
         );
     }
 
-    const {
-        hotel,
-        selectedRoom,
-        nights,
-        paymentInfo,
-        rewardState,
-        reservationNumber, // reservationNumber 추가
-        baseAmount, // baseAmount 추가
-    } = finalData;
+    const { hotel, selectedRoom, nights, paymentInfo, rewardState, reservationNumber, baseAmount } =
+        finalData;
 
-    // 할인 금액 계산
+    // ----- 이미지 경로 처리 (webp 우선, 실패 시 jpg 폴백) -----
+    const initialName = resolveInitialName(hotel); // 예: 'ht-6-a.webp' 또는 'ht-1-a.jpg'
+    const [imgSrc, setImgSrc] = useState(() => joinImagePath(initialName));
+
+    // 데이터가 바뀌면 초기화
+    useEffect(() => {
+        setImgSrc(joinImagePath(resolveInitialName(hotel)));
+    }, [hotel]);
+
+    const handleImgError = (e) => {
+        const cur = e.currentTarget.getAttribute('src') || '';
+        // webp가 404 나면 같은 파일명의 jpg로 한번 더 시도
+        if (cur.endsWith('.webp')) {
+            setImgSrc(cur.replace('.webp', '.jpg'));
+            return;
+        }
+        // jpg도 실패하면 숨김 (새 에셋 추가 없이 처리)
+        e.currentTarget.style.display = 'none';
+    };
+
+    // ----- 가격/할인 계산 -----
     const couponAmount = rewardState?.couponAmount || 0;
     const usedPoints = rewardState?.usedPoints || 0;
     const totalDiscount = couponAmount + usedPoints;
 
     const handleDownloadReceipt = () => {
-        console.log('영수증 다운로드');
         alert('영수증 다운로드 기능은 준비 중입니다.');
     };
 
@@ -76,10 +102,9 @@ const PaymentSuccessRight = ({ reservationData }) => {
             <div className="reservation-summary">
                 <div className="res-title">
                     <div className="ht-img">
-                        <img
-                            src={`/images/hotels/detail/hotelsList/${hotel?.image?.[0]}`}
-                            alt={hotel?.name}
-                        />
+                        {imgSrc ? (
+                            <img src={imgSrc} alt={hotel?.name} onError={handleImgError} />
+                        ) : null}
                     </div>
                     <div className="text">
                         <span>

@@ -30,6 +30,7 @@
         "react-icons": "^5.5.0",
         "react-redux": "^9.2.0",
         "react-router-dom": "^7.6.3",
+        "split-type": "^0.3.4",
         "styled-components": "^6.1.19",
         "styled-reset": "^4.5.2",
         "sweetalert2": "^11.23.0",
@@ -49,5 +50,4 @@
         "sass": "^1.92.1",
         "vite": "^7.0.4"
     }
-    
 }

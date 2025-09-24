@@ -1,6 +1,7 @@
 @use '../../styles/utils' as *;
 
 .payment {
+    padding-top: vw(180px);
     .inner {
         display: flex;
         gap: vw(54px);

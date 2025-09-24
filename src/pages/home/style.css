@@ -1,0 +1,44 @@
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  clip: rect(0, 0, 0, 0);
+  overflow: hidden;
+}
+
+.home {
+  width: 100%;
+}
+.home .inner {
+  padding: 100px 0;
+}
+.home h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 1.3125rem;
+}
+@media (max-width: 1023px) {
+  .home .inner {
+    padding: 3rem 0;
+    background-color: skyblue;
+  }
+  .home h2 {
+    font-size: 3rem;
+  }
+}
+
+/*
+@include tablet {
+    .home {
+        .inner {
+            padding: 50px 0;
+            background-color: pink;
+        }
+        h2 {
+            @include font-18px-B;
+        }
+    }
+}
+    *//*# sourceMappingURL=style.css.map */

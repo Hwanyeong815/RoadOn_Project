@@ -1,29 +1,234 @@
-import "./style.scss";
+import { useEffect } from "react";
+import { gsap } from "gsap";
 
 const Component1 = () => {
+  // 텍스트를 매우 길게 만들어서 끊어지지 않게 함
+  const LINE =
+    "OSAKA TOKYO NHA TRANG FUKUOKA DANANG GUAM SAPPORO BALI PHUKET MANILA THAILAND OSAKA TOKYO NHA TRANG FUKUOKA DANANG GUAM SAPPORO BALI PHUKET MANILA THAILAND OSAKA TOKYO NHA TRANG FUKUOKA DANANG GUAM SAPPORO BALI PHUKET MANILA THAILAND  OSAKA TOKYO NHA TRANG FUKUOKA DANANG GUAM SAPPORO BALI PHUKET MANILA THAILAND" +
+    "OSAKA TOKYO NHA TRANG FUKUOKA DANANG GUAM SAPPORO BALI PHUKET MANILA THAILAND  OSAKA TOKYO NHA TRANG FUKUOKA DANANG GUAM SAPPORO BALI PHUKET MANILA THAILAND" +
+    "OSAKA TOKYO NHA TRANG FUKUOKA DANANG GUAM SAPPORO BALI PHUKET MANILA THAILAND  OSAKA TOKYO NHA TRANG FUKUOKA DANANG GUAM SAPPORO BALI PHUKET MANILA THAILAND";
+
+  useEffect(() => {
+    // 한 줄만 사용해서 무한 루프
+    const dur = 20; // 긴 텍스트에 맞춰 시간 증가
+
+    gsap.fromTo(
+      "#tp1",
+      { attr: { startOffset: "0%" } },
+      {
+        attr: { startOffset: "-100%" },
+        duration: dur,
+        ease: "linear",
+        repeat: -1,
+      }
+    );
+  }, []);
+
   return (
-    <div>
+    <div
+      className="flow-container"
+      style={{
+        position: "absolute",
+        top: "600px", // 더 아래로 이동
+        left: 0,
+        width: "100%",
+        height: "100%",
+        zIndex: 10, // content4_top보다 높게 설정
+        pointerEvents: "none",
+      }}
+    >
       <svg
+        className="flow-svg"
         xmlns="http://www.w3.org/2000/svg"
-        width="1920"
-        height="797"
-        viewBox="0 0 1920 797"
-        fill="none"
+        viewBox="-1000 4100 3000 1500" // 높이를 1200에서 1500으로 늘리고 Y 위치를 조정
+        aria-hidden
+        style={{ width: "100%", height: "auto" }}
       >
-        <path
-          id="flowPath"
-          d="M914.792 797C848.299 797 783.017 785.111 723.778 762.011C650.69 733.52 590.073 690.998 533.026 628.208C475.019 564.362 425.371 483.382 384.449 412.579C281.981 235.282 209.539 166.693 119.032 108.155C85.3319 86.3608 46.6116 74.6176 3.94621 73.249C-28.9713 72.1937 -51.9947 78.034 -52.2139 78.0967L-52.0469 78.0549L-71 7.41823C-66.126 6.10182 36 -22 158.681 46.7223C217.76 79.8162 259.667 120.65 301.748 167.184C349.517 219.997 395.887 286.34 447.685 375.96C544.413 543.331 621.279 643.566 750.288 693.861C872.387 741.461 1020.67 732.235 1137.28 669.769C1181.84 645.906 1215.05 621.542 1250.22 595.757C1321.63 543.394 1395.46 489.254 1564.32 438.698L1565.72 438.28L1567.15 437.977C1575.72 436.149 1779.05 393.48 1944 428.741L1928.74 500.266C1785.78 469.707 1601.28 505.667 1583.73 509.23C1428.04 556.025 1362.62 603.99 1293.38 654.766C1257.72 680.916 1220.85 707.955 1171.75 734.262C1108.29 768.259 1034.48 789.374 958.302 795.308C943.785 796.436 929.257 797 914.792 797Z"
-          fill="#FF7F50"
+        <defs>
+          {/* 새로운 패스로 변경 - 띠가 완전히 보이도록 조정 */}
+          <path
+            id="flowPath"
+            d="M-1000,4250s200-80,400-100S-200,4280,200,4600s500,350,800,300,600-400,1500-200"
+            fill="none"
+          />
+        </defs>
+
+        {/* 주황 띠 */}
+        <use
+          href="#flowPath"
+          stroke="#FF7F50"
+          strokeWidth="80"
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="band"
         />
 
-        <text fill="#000" fontSize="24" fontWeight="bold">
-          <textPath href="#flowPath" startOffset="100%" id="scrollText">
-            OSAKA TOKYO NHA TRANG FUKUOKA DANANG GUAM SAPPORO BALI PHUKET MANILA
-            THAILAND · OSAKA TOKYO NHA TRANG FUKUOKA DANANG GUAM SAPPORO BALI
-            PHUKET MANILA THAILAND ·
+        {/* 마스크 없이 텍스트 직접 표시 */}
+        <text
+          className="band-text"
+          style={{
+            fontSize: "28px", // 글자 크기를 더 크게
+            fontWeight: "700", // 글자 굵기도 더 굵게
+            fill: "black",
+            letterSpacing: "2px", // 글자 간격도 더 넓게
+            fontFamily: "Arial, sans-serif",
+          }}
+        >
+          {/* 한 줄만 사용 */}
+          <textPath
+            id="tp1"
+            href="#flowPath"
+            startOffset="0%"
+            textAnchor="start"
+            dominantBaseline="middle"
+          >
+            {LINE}
           </textPath>
         </text>
+
+        {/* DEALS 이미지를 리본 중간쪽 오른쪽 끝에 배치 */}
+        <image
+          href="/images/main/DEALS.png"
+          x="1000"
+          y="4200"
+          width="1200"
+          height="480"
+          style={{ pointerEvents: "none" }}
+        />
       </svg>
+
+      {/* 상품카드들 - 리본 가운데 배치 */}
+      <div className="product-cards" style={{ 
+        position: "absolute", 
+        top: "25%", 
+        left: "50%", 
+        transform: "translate(-50%, -50%)", 
+        zIndex: 20,
+        display: "flex",
+        flexDirection: "column",
+        gap: "30px"
+      }}>
+        {/* 싱가포르 상품카드 */}
+        <div className="product-card" style={{ 
+          position: "relative", 
+          width: "880px", 
+          height: "300px", 
+          borderRadius: "20px", 
+          overflow: "hidden"
+        }}>
+          {/* 배경 이미지 */}
+          <img 
+            src="./images/main/ticket3.png" 
+            alt="싱가포르" 
+            style={{ 
+              position: "absolute", 
+              top: 0, 
+              left: 0, 
+              width: "100%", 
+              height: "100%", 
+              objectFit: "cover",
+              borderRadius: "20px"
+            }} 
+          />
+          
+          {/* 텍스트 내용 */}
+          <div style={{ 
+            position: "absolute", 
+            left: "30px", 
+            top: "30px", 
+            width: "400px",
+            color: "#333",
+            fontSize: "16px",
+            lineHeight: "1.4",
+            backgroundColor: "rgba(255, 255, 255, 0.9)",
+            padding: "20px",
+            borderRadius: "15px"
+          }}>
+            <div style={{ textDecoration: "line-through", color: "#999", fontSize: "14px" }}>500,000원</div>
+            <div style={{ color: "#FF6B6B", fontWeight: "bold", fontSize: "24px", marginBottom: "15px" }}>349,000원~</div>
+            <div style={{ fontWeight: "bold", fontSize: "20px", marginBottom: "12px" }}>싱가포르 6일</div>
+            <div style={{ fontSize: "14px", color: "#666", marginBottom: "15px" }}>
+              인천,부산 | 5,6일 | 왕복항공권 | 4성급 | 여행자보험
+            </div>
+            <div style={{ fontSize: "12px", color: "#888" }}>
+              #마리나베이샌즈 #게스트룸 #공항근처 1박 #자유여행
+            </div>
+          </div>
+        </div>
+
+        {/* 오사카 상품카드 */}
+        <div className="product-card" style={{ 
+          position: "relative", 
+          width: "880px", 
+          height: "300px", 
+          borderRadius: "20px", 
+          overflow: "hidden"
+        }}>
+          {/* 배경 이미지 */}
+          <img 
+            src="./images/main/ticket1.png" 
+            alt="오사카" 
+            style={{ 
+              position: "absolute", 
+              top: 0, 
+              left: 0, 
+              width: "100%", 
+              height: "100%", 
+              objectFit: "cover",
+              borderRadius: "20px"
+            }} 
+          />
+          
+          {/* 텍스트 내용 */}
+          <div style={{ 
+            position: "absolute", 
+            left: "30px", 
+            top: "30px", 
+            width: "400px",
+            color: "#333",
+            fontSize: "16px",
+            lineHeight: "1.4",
+            backgroundColor: "rgba(255, 255, 255, 0.9)",
+            padding: "20px",
+            borderRadius: "15px"
+          }}>
+            <div style={{ textDecoration: "line-through", color: "#999", fontSize: "14px" }}>349,000원</div>
+            <div style={{ color: "#FF6B6B", fontWeight: "bold", fontSize: "24px", marginBottom: "15px" }}>279,000원~</div>
+            <div style={{ fontWeight: "bold", fontSize: "20px", marginBottom: "12px" }}>오사카 4일</div>
+            <div style={{ fontSize: "14px", color: "#666", marginBottom: "15px" }}>
+              인천,부산 | 3,4일 | 왕복항공권 | 3성급 | 여행자보험
+            </div>
+            <div style={{ fontSize: "12px", color: "#888" }}>
+              #오사카 후지야 호텔 #시내중심 비즈니스급 호텔 #자유여행
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 더보기 버튼 */}
+      <button
+        className="more-button"
+        style={{
+          position: "absolute",
+          top: "700px",
+          left: "50%",
+          transform: "translateX(-50%)",
+          backgroundColor: "#FF7F50",
+          color: "white",
+          width: "180px",
+          height: "45px",
+          borderRadius: "30px",
+          fontSize: "18px",
+          fontWeight: "bold",
+          cursor: "pointer",
+          border: "none",
+          zIndex: 30,
+          pointerEvents: "auto",
+        }}
+      >
+        더보기
+      </button>
     </div>
   );
 };

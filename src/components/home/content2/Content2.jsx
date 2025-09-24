@@ -1,8 +1,8 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import "./style.scss";
-
+import CouponButton from "../../ui/coupon/CouponButton";
 gsap.registerPlugin(ScrollTrigger);
 
 const coupons = [
@@ -20,7 +20,7 @@ const CouponEvent = () => {
   const marqueeRef = useRef(null);
 
   useEffect(() => {
-    // 타이틀 애니메이션 등 기존 코드 유지
+    // 타이틀 애니메이션
     gsap.fromTo(
       titleRef.current,
       { opacity: 0, y: -30, scale: 0.8 },
@@ -41,7 +41,7 @@ const CouponEvent = () => {
     const marquee = marqueeRef.current;
     const totalWidth = marquee.scrollWidth / 2;
 
-    gsap.to(marquee, {
+    const marqueeTween = gsap.to(marquee, {
       x: -totalWidth,
       duration: 30,
       ease: "sine.inOut",
@@ -50,18 +50,40 @@ const CouponEvent = () => {
         x: gsap.utils.unitize((x) => parseFloat(x) % -totalWidth),
       },
     });
+
+    // 쿠폰 출렁 애니메이션 모아두기
+    const couponTweens = [];
+
     gsap.utils.toArray(".coupon-item").forEach((item, i) => {
-      gsap.to(item, {
-        y: 80, // 위아래 이동 범위
-        duration: 2,
+      const tween = gsap.to(item, {
+        y: 200, // 더 크게 출렁
+        duration: 1.2,
         repeat: -1,
         yoyo: true,
         ease: "sine.inOut",
-        delay: i * 0.1, // 살짝씩 시간차를 줘서 자연스럽게
+        delay: i * 0.1,
       });
+      couponTweens.push(tween);
     });
+
+    // hover 이벤트는 wrapper에 걸어서 전체 멈춤
+    const wrapper = document.querySelector(".marquee-wrapper");
+    const handleEnter = () => {
+      marqueeTween.pause();
+      couponTweens.forEach((t) => t.pause());
+    };
+    const handleLeave = () => {
+      marqueeTween.resume();
+      couponTweens.forEach((t) => t.resume());
+    };
+
+    wrapper.addEventListener("mouseenter", handleEnter);
+    wrapper.addEventListener("mouseleave", handleLeave);
+
     return () => {
       gsap.killTweensOf(marquee);
+      wrapper.removeEventListener("mouseenter", handleEnter);
+      wrapper.removeEventListener("mouseleave", handleLeave);
     };
   }, []);
 
@@ -73,7 +95,10 @@ const CouponEvent = () => {
             SPECIAL <span>EVENT</span>
           </h2>
           <p className="subhead">뭘 좋아할지 몰라 다 준비했어요!</p>
-          <span className="special-event-badge">쿠폰 전체 받기</span>
+          {/* <span className="special-event-badge">쿠폰 전체 받기</span> */}
+          <div className="coupon_down">
+            <CouponButton />
+          </div>
         </div>
         <div className="couponbg">
           <img src="./images/main/couponbg.png" alt="couponbg" />

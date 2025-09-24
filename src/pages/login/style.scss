@@ -402,6 +402,7 @@
                     cursor: pointer;
                     display: none;
                     gap: vw(20px);
+                    width: 80%;
                 }
                 &-item {
                     width: vw(50px);
@@ -415,6 +416,24 @@
                         top: 50%;
 
                         transform: translate(-50%, -50%);
+                    }
+                    // 카카오 로그인 css
+                    &.kakao {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        width: 100%;
+                        margin: 0 vw(50px);
+
+                        p {
+                            height: 50%;
+                        }
+                        img {
+                            height: 50%;
+                            position: relative;
+                            top: 25%;
+                            left: 0;
+                        }
                     }
                 }
             }

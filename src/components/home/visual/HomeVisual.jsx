@@ -23,7 +23,7 @@ const HomeVisual = () => {
     <div className="mainvisual">
       {/* 배경 */}
       <video autoPlay muted loop playsInline>
-        <source src="/videos/main/hotStay.mp4" type="video/mp4" />
+        <source src="/videos/main/visual_bg.mp4" type="video/mp4" />
         브라우저가 비디오 태그를 지원하지 않습니다.
       </video>
       {/* 오버레이 */}

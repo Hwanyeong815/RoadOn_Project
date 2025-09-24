@@ -1,0 +1,109 @@
+.rolling-section {
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  justify-content: right;
+  margin-right: 2.56rem;
+}
+
+.rolling-columns {
+  display: flex;
+  height: 100%;
+  gap: 2rem;
+}
+
+.rolling-column {
+  flex: 0 0 26.25rem;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.rolling-track {
+  display: flex;
+  flex-direction: column;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+
+  &.rolling-up {
+    animation: scrollUp 40s linear infinite;
+  }
+
+  &.rolling-down {
+    animation: scrollDown 40s linear infinite;
+  }
+
+  &:hover {
+    animation-play-state: paused;
+    //멈춤
+  }
+}
+
+.rolling-item {
+  flex: none;
+  width: 26.25rem;
+  height: 35rem;
+  margin-bottom: 20px;
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+  cursor: pointer;
+
+  &:hover {
+    transform: scale(1.02);
+
+    .rolling-image {
+      transform: scale(1.05);
+    }
+
+    .rolling-overlay {
+      transform: translateY(0);
+    }
+  }
+}
+
+.rolling-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.rolling-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+  padding: 20px 15px 15px;
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
+
+  h3 {
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    margin: 0;
+  }
+}
+
+// 세로 애니메이션 정의
+@keyframes scrollUp {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-33.333%);
+  }
+}
+
+@keyframes scrollDown {
+  0% {
+    transform: translateY(-33.333%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}

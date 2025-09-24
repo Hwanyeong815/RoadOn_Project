@@ -118,15 +118,16 @@ const Login = () => {
                         <div className="login-group-find">아이디 찾기 ｜ 비밀번호 찾기</div>
 
                         <div className="login-sns-icons-wrap" aria-hidden={mode !== 'login'}>
-                            <div className="login-sns-icons-item">
+                            {/* <div className="login-sns-icons-item">
                                 <img src="/images/icon/google.svg" alt="google" />
-                            </div>
-                            <div className="login-sns-icons-item">
+                            </div> */}
+                            <div className="login-sns-icons-item kakao">
                                 <img src="/images/icon/kakao.svg" alt="kakao" />
+                                <p>카카오톡으로 로그인</p>
                             </div>
-                            <div className="login-sns-icons-item">
+                            {/* <div className="login-sns-icons-item">
                                 <img src="/images/icon/apple.svg" alt="apple" />
-                            </div>
+                            </div> */}
                         </div>
                     </div>
 
@@ -144,15 +145,16 @@ const Login = () => {
                         </button>
 
                         <div className="login-sns-icons-wrap" aria-hidden={mode !== 'register'}>
-                            <div className="login-sns-icons-item">
+                            {/* <div className="login-sns-icons-item">
                                 <img src="/images/icon/google.svg" alt="google" />
-                            </div>
-                            <div className="login-sns-icons-item">
+                            </div> */}
+                            <div className="login-sns-icons-item kakao">
                                 <img src="/images/icon/kakao.svg" alt="kakao" />
+                                <p>카카오톡으로 로그인</p>
                             </div>
-                            <div className="login-sns-icons-item">
+                            {/* <div className="login-sns-icons-item">
                                 <img src="/images/icon/apple.svg" alt="apple" />
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                 </div>

@@ -119,14 +119,60 @@ const saveToStorage = (items) => {
 };
 
 // helpers: find product by id/slug
-const findHotel = (idOrSlug) => {
-    if (idOrSlug == null) return null;
-    const asNum = Number(idOrSlug);
+// 🔧 helper
+const _slugify = (s) =>
+    String(s || '')
+        .trim()
+        .toLowerCase()
+        .replace(/[ _./]+/g, '-') // 구분자 통일
+        .replace(/-+/g, '-');
+
+// 결제에서 들어온 임시 키 정리 (ex: "hotel_1758..._dvwxpk숙소")
+const _candidatesFromRaw = (raw) => {
+    const s = String(raw || '');
+    const cleaned = s
+        .replace(/숙소$/g, '') // 한국어 접미사 제거
+        .replace(/^hotels?[_-]?/i, '') // prefix 제거
+        .replace(/[_-][a-z0-9]{4,}$/i, ''); // 랜덤토큰 제거
+    const cand = [s, cleaned, _slugify(cleaned), _slugify(s)].filter(Boolean);
+    return Array.from(new Set(cand));
+};
+
+// ✅ 관대한 매칭: 숫자 id → slug → (한글/영문)정확 → 부분 포함
+const findHotel = (idOrSlugOrName) => {
+    if (!idOrSlugOrName) return null;
+
+    // 1) 숫자 id
+    const asNum = Number(idOrSlugOrName);
     if (!Number.isNaN(asNum)) {
         const byId = hotelsListData.find((h) => Number(h.id) === asNum);
         if (byId) return byId;
     }
-    return hotelsListData.find((h) => h.slug === idOrSlug || String(h.id) === String(idOrSlug));
+
+    const cands = _candidatesFromRaw(idOrSlugOrName);
+    const candsLc = cands.map((x) => String(x).toLowerCase());
+
+    // 2) slug 정확 매칭
+    let found = hotelsListData.find((h) => candsLc.includes(String(h.slug).toLowerCase()));
+    if (found) return found;
+
+    // 3) (한글/영문) 이름 정확 매칭
+    found = hotelsListData.find(
+        (h) =>
+            candsLc.includes(String(h.name).toLowerCase()) ||
+            candsLc.includes(String(h.engName).toLowerCase())
+    );
+    if (found) return found;
+
+    // 4) 느슨한 포함 매칭 (slug/이름에 포함)
+    found = hotelsListData.find((h) => {
+        const n = String(h.name || '').toLowerCase();
+        const e = String(h.engName || '').toLowerCase();
+        const sg = String(h.slug || '').toLowerCase();
+        return candsLc.some((c) => n.includes(c) || e.includes(c) || sg.includes(c));
+    });
+
+    return found || null;
 };
 
 const findFlight = (id) => {
