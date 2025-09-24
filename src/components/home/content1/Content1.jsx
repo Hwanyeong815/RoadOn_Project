@@ -65,6 +65,7 @@ const Content1 = () => {
           desc={themeData[activeIdx].desc}
         />
       </div>
+    
     </section>
   );
 };
