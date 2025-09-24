@@ -27,7 +27,7 @@
     &-item {
         background: #fff;
         border-radius: 8px;
-        padding: vw(12px);
+        // padding: vw(12px);
         box-sizing: border-box;
     }
 
@@ -50,6 +50,7 @@
     }
 
     &-content {
+        padding-top: 20px;
         @include font-14px;
         color: $greyscale-900;
         height: max-content;

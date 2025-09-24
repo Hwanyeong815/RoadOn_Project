@@ -3,6 +3,7 @@ import React, { useState, useRef } from 'react';
 import './style.scss';
 import { useNavigate } from 'react-router-dom';
 import useAuthStore from '../../store/authStore';
+import KakaoLoginButton from '../../components/ui/kakaoLogin/KakaoLoginButton';
 
 const Login = () => {
     const [mode, setMode] = useState('login'); // 'login' | 'register'
@@ -101,7 +102,6 @@ const Login = () => {
                                 disabled={mode !== 'login'}
                                 aria-disabled={mode !== 'login'}
                             />
-
                             {/* 버튼은 항상 클릭 가능하지만 내부 로직이 처리함 */}
                             <button
                                 className="button g middle button-login"
@@ -110,7 +110,7 @@ const Login = () => {
                                 aria-pressed={mode === 'login'}
                             >
                                 {loading ? '로그인 중…' : '로그인'}
-                            </button>
+                            </button>{' '}
                         </form>
 
                         {err && <p className="help-text error">{err}</p>}
@@ -121,10 +121,11 @@ const Login = () => {
                             {/* <div className="login-sns-icons-item">
                                 <img src="/images/icon/google.svg" alt="google" />
                             </div> */}
-                            <div className="login-sns-icons-item kakao">
+                            <KakaoLoginButton />
+                            {/* <div className="login-sns-icons-item kakao">
                                 <img src="/images/icon/kakao.svg" alt="kakao" />
                                 <p>카카오톡으로 로그인</p>
-                            </div>
+                            </div> */}
                             {/* <div className="login-sns-icons-item">
                                 <img src="/images/icon/apple.svg" alt="apple" />
                             </div> */}
@@ -148,10 +149,10 @@ const Login = () => {
                             {/* <div className="login-sns-icons-item">
                                 <img src="/images/icon/google.svg" alt="google" />
                             </div> */}
-                            <div className="login-sns-icons-item kakao">
+                            {/* <div className="login-sns-icons-item kakao">
                                 <img src="/images/icon/kakao.svg" alt="kakao" />
                                 <p>카카오톡으로 로그인</p>
-                            </div>
+                            </div> */}
                             {/* <div className="login-sns-icons-item">
                                 <img src="/images/icon/apple.svg" alt="apple" />
                             </div> */}

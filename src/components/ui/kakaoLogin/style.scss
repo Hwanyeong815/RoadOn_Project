@@ -1,0 +1,14 @@
+#kakaoBtn {
+    width: 500px;
+    padding: 12px 20px;
+
+    background: #fff;
+    border: 1px solid #f7e600;
+
+    cursor: pointer;
+    border-radius: 50px;
+    &:hover {
+        box-shadow: 0 0 4px rgba(0, 0, 5, 0.2);
+        background: #f7e600;
+    }
+}
