@@ -16,11 +16,12 @@
       width: 100%;
       height: auto;
       object-fit: cover;
+      position: relative;
     }
     .re-button {
       position: absolute;
-      top: vw(660px);
-      left: 32%;
+      top: vw(730px);
+      left: 25%;
       background: $mint;
       color: $white;
       width: vw(180px);
@@ -43,8 +44,8 @@
 
   .right {
     position: absolute;
-    right: 240px;
-    top: -70px;
+    right: 280px;
+    top: 70px;
     .display-img {
       width: 700px;
       height: auto;
