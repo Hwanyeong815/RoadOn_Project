@@ -1,93 +1,96 @@
-@use "../../../styles/utils/" as *;
+@use '../../../styles/utils/' as *;
 
 .coupon-ticket {
-  display: flex;
-  border-radius: 14px;
-  background-color: $white;
-  height: vw(186px);
-
-  &__left {
-    width: vw(64px);
-    display: grid;
-    place-items: center;
-    color: #fff;
-    border-radius: vw(10px) 0 0 vw(10px);
-    position: relative;
-    span {
-      @include font-16px;
-      transform: rotate(-90deg);
-      position: absolute;
-    }
-
-    -webkit-mask-image: url("/images/myPage/ticket-mask.png");
-    mask-image: url("/images/myPage/ticket-mask.png");
-
-    -webkit-mask-repeat: no-repeat;
-    mask-repeat: no-repeat;
-
-    -webkit-mask-position: center;
-    mask-position: center;
-
-    -webkit-mask-size: cover;
-    mask-size: cover;
-  }
-  &__right {
-    border: 1px solid $greyscale-800;
-    min-width: vw(260px);
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: vw(10px);
-    border-radius: 0px vw(10px) vw(10px) 0;
+    border-radius: 14px;
+    background-color: $white;
+    height: vw(186px);
 
-    // flex: 1;
-    padding: 16px 18px;
-  }
-  &__price {
-    @include font-36px-B;
-  }
-  &__cond {
-    @include font-14px;
-  }
-  &__date {
-    @include font-12px;
-    color: $greyscale-600;
-  }
-  &.c-tour &__left {
-    background-color: $orange;
-  }
-  &.c-hotel &__left {
-    background-color: $mint;
-  }
-  &.is-disabled {
-    // opacity: 0.5;
-    .coupon-ticket {
-      &__left {
-        filter: saturate(0.7) brightness(0.6);
-        // opacity: 0.5;
-        // background-color: $black;
-      }
-      &__right {
-      }
-      &__price {
-        filter: opacity(0.6);
-      }
-      &__cond {
-        filter: opacity(0.6);
-      }
-      &__date {
-      }
+    &__left {
+        width: vw(64px);
+        display: grid;
+        place-items: center;
+        color: #fff;
+        border-radius: vw(10px) 0 0 vw(10px);
+        position: relative;
+        span {
+            @include font-16px;
+            transform: rotate(-90deg);
+            position: absolute;
+        }
+
+        -webkit-mask-image: url('/images/myPage/ticket-mask.png');
+        mask-image: url('/images/myPage/ticket-mask.png');
+
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+
+        -webkit-mask-position: center;
+        mask-position: center;
+
+        -webkit-mask-size: cover;
+        mask-size: cover;
     }
-  }
+    &__right {
+        border: 1px solid $greyscale-800;
+        min-width: vw(260px);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: vw(10px);
+        border-radius: 0px vw(10px) vw(10px) 0;
+
+        // flex: 1;
+        padding: 16px 18px;
+    }
+    &__price {
+        @include font-36px-B;
+    }
+    &__cond {
+        @include font-14px;
+    }
+    &__date {
+        @include font-12px;
+        color: $greyscale-600;
+    }
+    &.c-tour &__left {
+        background-color: $orange;
+    }
+    &.c-hotel &__left {
+        background-color: $mint;
+    }
+    &.is-disabled {
+        // opacity: 0.5;
+        .coupon-ticket {
+            &__left {
+                filter: saturate(0.7) brightness(0.6);
+                // opacity: 0.5;
+                // background-color: $black;
+            }
+            &__right {
+            }
+            &__price {
+                filter: opacity(0.6);
+            }
+            &__cond {
+                filter: opacity(0.6);
+            }
+            &__date {
+            }
+        }
+    }
 }
 
 .coupon-button-wrap {
   width: vw(180px);
   height: vw(45px);
   .coupon-btn {
-    padding: 10px;
+    width: vw(280px);
+    padding: 10px !important;
     cursor: pointer;
-    font-size: vw(20px) !important;
+    @include font-20px;
+    background-color: $mint;
+    border: none;
   }
 }
