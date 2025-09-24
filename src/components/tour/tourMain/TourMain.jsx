@@ -6,14 +6,7 @@ import TourMainCon3 from './TourMainCon3';
 const TourMain = () => {
     return (
         <main id="TourMain">
-            <TourMainCon1
-                titleInitPx={450}
-                titleInitColor="#ffb703"
-                subInitColor="#ffffff" // p 초기 색
-                hold={1.4}
-                speed={0.5}
-            />
-
+            <TourMainCon1 />
             <TourMainCon2 />
             <TourMainCon3 />
         </main>

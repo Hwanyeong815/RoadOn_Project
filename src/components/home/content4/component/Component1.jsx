@@ -70,7 +70,7 @@ const Component1 = () => {
           style={{
             fontSize: "28px", // 글자 크기를 더 크게
             fontWeight: "700", // 글자 굵기도 더 굵게
-            fill: "black",
+            fill: "white",
             letterSpacing: "2px", // 글자 간격도 더 넓게
             fontFamily: "Arial, sans-serif",
           }}
@@ -99,107 +99,174 @@ const Component1 = () => {
       </svg>
 
       {/* 상품카드들 - 리본 가운데 배치 */}
-      <div className="product-cards" style={{ 
-        position: "absolute", 
-        top: "25%", 
-        left: "50%", 
-        transform: "translate(-50%, -50%)", 
-        zIndex: 20,
-        display: "flex",
-        flexDirection: "column",
-        gap: "30px"
-      }}>
+      <div
+        className="product-cards"
+        style={{
+          position: "absolute",
+          top: "25%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          zIndex: 20,
+          display: "flex",
+          flexDirection: "column",
+          gap: "30px",
+        }}
+      >
         {/* 싱가포르 상품카드 */}
-        <div className="product-card" style={{ 
-          position: "relative", 
-          width: "880px", 
-          height: "300px", 
-          borderRadius: "20px", 
-          overflow: "hidden"
-        }}>
+        <div
+          className="product-card"
+          style={{
+            position: "relative",
+            width: "880px",
+            height: "300px",
+            borderRadius: "20px",
+            overflow: "hidden",
+          }}
+        >
           {/* 배경 이미지 */}
-          <img 
-            src="./images/main/ticket3.png" 
-            alt="싱가포르" 
-            style={{ 
-              position: "absolute", 
-              top: 0, 
-              left: 0, 
-              width: "100%", 
-              height: "100%", 
+          <img
+            src="./images/main/ticket3.png"
+            alt="싱가포르"
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
               objectFit: "cover",
-              borderRadius: "20px"
-            }} 
+              borderRadius: "20px",
+            }}
           />
-          
+
           {/* 텍스트 내용 */}
-          <div style={{ 
-            position: "absolute", 
-            left: "30px", 
-            top: "30px", 
-            width: "400px",
-            color: "#333",
-            fontSize: "16px",
-            lineHeight: "1.4",
-            backgroundColor: "rgba(255, 255, 255, 0.9)",
-            padding: "20px",
-            borderRadius: "15px"
-          }}>
-            <div style={{ textDecoration: "line-through", color: "#999", fontSize: "14px" }}>500,000원</div>
-            <div style={{ color: "#FF6B6B", fontWeight: "bold", fontSize: "24px", marginBottom: "15px" }}>349,000원~</div>
-            <div style={{ fontWeight: "bold", fontSize: "20px", marginBottom: "12px" }}>싱가포르 6일</div>
-            <div style={{ fontSize: "14px", color: "#666", marginBottom: "15px" }}>
+          <div
+            style={{
+              position: "absolute",
+              left: "30px",
+              top: "30px",
+              width: "400px",
+              color: "#333",
+              fontSize: "16px",
+              lineHeight: "1.4",
+              backgroundColor: "rgba(255, 255, 255, 0.9)",
+              padding: "30px 30px 20px 30px",
+              borderRadius: "15px",
+            }}
+          >
+            <div
+              style={{
+                textDecoration: "line-through",
+                color: "#999",
+                fontSize: "22px",
+              }}
+            >
+              500,000원
+            </div>
+            <div
+              style={{
+                color: "#FF6B6B",
+                fontWeight: "bold",
+                fontSize: "30px",
+                marginBottom: "10px",
+              }}
+            >
+              349,000원~
+            </div>
+            <div
+              style={{
+                fontWeight: "bold",
+                fontSize: "25px",
+                marginBottom: "10px",
+              }}
+            >
+              싱가포르 6일
+            </div>
+            <div
+              style={{ fontSize: "16px", color: "#666", marginBottom: "10px" }}
+            >
               인천,부산 | 5,6일 | 왕복항공권 | 4성급 | 여행자보험
             </div>
-            <div style={{ fontSize: "12px", color: "#888" }}>
+            <div style={{ fontSize: "14px", color: "#888" }}>
               #마리나베이샌즈 #게스트룸 #공항근처 1박 #자유여행
             </div>
           </div>
         </div>
 
         {/* 오사카 상품카드 */}
-        <div className="product-card" style={{ 
-          position: "relative", 
-          width: "880px", 
-          height: "300px", 
-          borderRadius: "20px", 
-          overflow: "hidden"
-        }}>
+        <div
+          className="product-card"
+          style={{
+            position: "relative",
+            width: "880px",
+            height: "300px",
+            borderRadius: "20px",
+            overflow: "hidden",
+          }}
+        >
           {/* 배경 이미지 */}
-          <img 
-            src="./images/main/ticket1.png" 
-            alt="오사카" 
-            style={{ 
-              position: "absolute", 
-              top: 0, 
-              left: 0, 
-              width: "100%", 
-              height: "100%", 
+          <img
+            src="./images/main/ticket1.png"
+            alt="오사카"
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
               objectFit: "cover",
-              borderRadius: "20px"
-            }} 
+              borderRadius: "20px",
+            }}
           />
-          
+
           {/* 텍스트 내용 */}
-          <div style={{ 
-            position: "absolute", 
-            left: "30px", 
-            top: "30px", 
-            width: "400px",
-            color: "#333",
-            fontSize: "16px",
-            lineHeight: "1.4",
-            backgroundColor: "rgba(255, 255, 255, 0.9)",
-            padding: "20px",
-            borderRadius: "15px"
-          }}>
-            <div style={{ textDecoration: "line-through", color: "#999", fontSize: "14px" }}>349,000원</div>
-            <div style={{ color: "#FF6B6B", fontWeight: "bold", fontSize: "24px", marginBottom: "15px" }}>279,000원~</div>
-            <div style={{ fontWeight: "bold", fontSize: "20px", marginBottom: "12px" }}>오사카 4일</div>
-            <div style={{ fontSize: "14px", color: "#666", marginBottom: "15px" }}>
+          <div
+            style={{
+              position: "absolute",
+              left: "30px",
+              top: "30px",
+              width: "400px",
+              color: "#333",
+              fontSize: "16px",
+              lineHeight: "1.4",
+              backgroundColor: "rgba(255, 255, 255, 0.9)",
+              padding: "30px 30px 20px 30px",
+              borderRadius: "15px",
+            }}
+          >
+            <div
+              style={{
+                textDecoration: "line-through",
+                color: "#999",
+                fontSize: "22px",
+              }}
+            >
+              349,000원
+            </div>
+            <div
+              style={{
+                color: "#FF6B6B",
+                fontWeight: "bold",
+                fontSize: "30px",
+                marginBottom: "10px",
+              }}
+            >
+              279,000원~
+            </div>
+            <div
+              style={{
+                fontWeight: "bold",
+                fontSize: "25px",
+                marginBottom: "10px",
+              }}
+            >
+              오사카 4일
+            </div>
+            <div
+              style={{ fontSize: "16px", color: "#666", marginBottom: "10px" }}
+            >
               인천,부산 | 3,4일 | 왕복항공권 | 3성급 | 여행자보험
             </div>
-            <div style={{ fontSize: "12px", color: "#888" }}>
+            <div style={{ fontSize: "14px", color: "#888" }}>
               #오사카 후지야 호텔 #시내중심 비즈니스급 호텔 #자유여행
             </div>
           </div>
@@ -214,13 +281,13 @@ const Component1 = () => {
           top: "700px",
           left: "50%",
           transform: "translateX(-50%)",
-          backgroundColor: "#FF7F50",
+          backgroundColor: "#42BDCC",
           color: "white",
           width: "180px",
           height: "45px",
           borderRadius: "30px",
           fontSize: "18px",
-          fontWeight: "bold",
+          fontWeight: "400",
           cursor: "pointer",
           border: "none",
           zIndex: 30,

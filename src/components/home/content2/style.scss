@@ -8,22 +8,20 @@
   .coupon-header {
     margin-bottom: 50px;
     .head {
-      h2 {
-        color: var(--greyscale-1200, #444);
-        font-size: 6.25rem;
-        font-weight: 600;
-
-        span {
-          font-weight: 400;
-        }
+      color: var(--greyscale-1200, #444);
+      font-size: 55px;
+      font-weight: 600;
+      margin-bottom: 30px;
+      span {
+        font-weight: 400;
       }
-      .subhead {
-        color: var(--default, #353535);
-        font-family: SUIT;
-        font-size: 1.5625rem;
-        font-weight: 500;
-        line-height: 150%;
-      }
+    }
+    .subhead {
+      color: var(--default, #353535);
+      font-family: SUIT;
+      font-size: 20px;
+      font-weight: 500;
+      line-height: 150%;
     }
     .special-event-badge {
       display: flex;
@@ -45,10 +43,12 @@
     .coupon_down {
       position: absolute;
       right: 0;
+      top: 40px;
     }
   }
   .couponbg {
     position: absolute;
+    top: 290px;
     right: -20rem;
   }
   .coupons-wrapper {

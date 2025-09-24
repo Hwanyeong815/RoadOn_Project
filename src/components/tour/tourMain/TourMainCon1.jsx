@@ -14,33 +14,33 @@ const arrTour = [
     { id: 8, img: '/images/tour/main/con1_08.png', alt: 'con8' },
 ];
 
-const W = 290,
-    BASE_GAP = 16,
-    MAX_SCALE = 1.25;
+const W = 290;
+const BASE_GAP = 16;
+const MAX_SCALE = 1.25;
+
 const scaleByDistance = (d) => Math.max(0.88, MAX_SCALE - 0.15 * Math.abs(d));
 const over = (s) => ((s - 1) * W) / 2;
 
-export default function TourMainCon1({
-    titleInitPx = 150,
-    titleInitColor = '#ffb703',
-    subInitPx = 72,
-    subInitColor = '#ffffff',
+const TourMainCon1 = ({
+    titleInitPx = 80,
+    titleInitColor = '#fff',
+    subInitPx = 60, // ← 서브타이틀 "시작 크기" 여기서 조절
+    subInitColor = '#fff',
     hold = 0.35,
     speed = 0.9,
-    titleInitWeight = 700, // (사용 안함) 초기 두께 트윈 제거됨
-    titleFinalWeight = null, // 최종 두께(없으면 CSS값 사용)
 
     // 타이밍 컨트롤
-    titleSoloHoldSec = 0.8, // 제목만 잠시 머무는 시간
-    subDelayAfterTitle = 0.1, // 제목+대기 후 서브 텍스트 지연
-    slideAppearAfterSec = 0.25, // 서브 뒤 슬라이드 지연
-    headerDurationSec = 0.9, // 헤더 등장 속도(슬라이드와 동시)
-}) {
+    titlePreHoldSec = 0.3, // 처음 크게 정지
+    titleSoloHoldSec = 0, // 이후 정지(기본 0)
+    subDelayAfterTitle = 0.1, // 타이틀 축소 시작 후 0.1s에 서브 시작
+    slideAppearAfterSec = 0.1, // 타이틀 축소 시작 후 0.1s에 슬라이드/헤더 시작
+    headerDurationSec = 0.8,
+}) => {
     const [hoverIndex, setHoverIndex] = useState(null);
 
     const rootRef = useRef(null);
     const titleRef = useRef(null);
-    const titleStrongRef = useRef(null); // 첫 줄(span)
+    const titleStrongRef = useRef(null); // span은 유지하지만 두께 트윈은 제거됨
     const subRef = useRef(null);
     const slideRef = useRef(null);
 
@@ -53,19 +53,15 @@ export default function TourMainCon1({
         const ctx = gsap.context(() => {
             const headerEl = document.querySelector('.site-header');
             const titleEl = titleRef.current;
-            const titleStrongEl = titleStrongRef.current;
+            const subEl = subRef.current;
+            const slideEl = slideRef.current;
 
-            // 최종 스타일
+            // 최종 스타일 읽기
             const titleCS = getComputedStyle(titleEl);
             const titleFinalColor = titleCS.color;
             const titleFinalPx = parseFloat(titleCS.fontSize) || 50;
 
-            const strongCS = titleStrongEl ? getComputedStyle(titleStrongEl) : titleCS;
-            const titleFinalW =
-                titleFinalWeight ??
-                (parseInt(strongCS.fontWeight, 10) || parseInt(titleCS.fontWeight, 10) || 700);
-
-            const subCS = getComputedStyle(subRef.current);
+            const subCS = getComputedStyle(subEl);
             const subFinalColor = subCS.color;
             const subFinalPx = parseFloat(subCS.fontSize) || 24;
 
@@ -73,26 +69,20 @@ export default function TourMainCon1({
             const titleInitScale = Math.max(0.1, titleInitPx / titleFinalPx);
             const subInitScale = Math.max(0.1, subInitPx / subFinalPx);
 
-            // 초기 상태
+            // 초기 상태 세팅
             if (headerEl)
-                gsap.set(headerEl, { autoAlpha: 0, y: -24, willChange: 'transform, opacity' });
+                gsap.set(headerEl, { autoAlpha: 0, y: -24, willChange: 'transform,opacity' });
 
-            // 타이틀: 두께를 애니메이션 전 '최종값'으로 고정 (가변 폰트 & 일반 모두)
+            // 타이틀: 처음부터 "큼 + 보임" 상태로 고정(정지용)
             gsap.set(titleEl, {
                 scale: titleInitScale,
                 color: titleInitColor,
-                autoAlpha: 0,
+                autoAlpha: 1,
                 transformOrigin: '50% 50%',
                 willChange: 'transform, opacity',
             });
-            if (titleStrongEl) {
-                gsap.set(titleStrongEl, {
-                    fontWeight: titleFinalW, // ✅ 최종 두께로 고정
-                    fontVariationSettings: `"wght" ${titleFinalW}`, // ✅ 가변 폰트도 고정
-                });
-            }
 
-            gsap.set(subRef.current, {
+            gsap.set(subEl, {
                 scale: subInitScale,
                 color: subInitColor,
                 autoAlpha: 0,
@@ -100,50 +90,51 @@ export default function TourMainCon1({
                 transformOrigin: '50% 50%',
                 willChange: 'transform, opacity',
             });
-            gsap.set(slideRef.current, { autoAlpha: 0, y: 24, willChange: 'transform, opacity' });
+            gsap.set(slideEl, { autoAlpha: 0, y: 24, willChange: 'transform, opacity' });
 
             // ===== 타임라인 =====
             const TITLE_DUR = 1.2;
-            const SUB_DUR = 1.05;
+            const SUB_DUR = 1.3;
             const SLIDE_DUR = 0.7;
 
             const tl = gsap.timeline({ defaults: { ease: 'power3.out' } }).timeScale(speed);
 
-            // (1) 타이틀 등장 (두께 트윈 없음)
-            tl.to(
-                titleEl,
-                { autoAlpha: 1, scale: 1, color: titleFinalColor, duration: TITLE_DUR },
-                0
-            );
+            // (0) 큰 타이틀 "정지"
+            tl.to({}, { duration: titlePreHoldSec, ease: 'none' }, 0);
 
-            // (1.5) 타이틀만 잠깐 유지
-            tl.to({}, { duration: titleSoloHoldSec }, '>');
+            // 기준 라벨: 타이틀 축소 시작 시점(정지 직후)
+            tl.addLabel('titleStart');
 
-            // (2) 서브: 타이틀+대기 이후
+            // (1) 타이틀 축소 & 컬러 전환
+            tl.to(titleEl, { scale: 1, color: titleFinalColor, duration: TITLE_DUR }, 'titleStart');
+
+            // (1.5) 선택: 이후 정지(기본 0초)
+            if (titleSoloHoldSec > 0) tl.to({}, { duration: titleSoloHoldSec }, '>');
+
+            // (2) 서브: 타이틀 시작 subDelayAfterTitle 뒤에 겹쳐서 시작
             tl.to(
-                subRef.current,
+                subEl,
                 { autoAlpha: 1, y: 0, scale: 1, color: subFinalColor, duration: SUB_DUR },
-                `>${subDelayAfterTitle}`
+                `titleStart+=${subDelayAfterTitle}`
             );
 
-            // (3) 슬라이드 & 헤더 동시
-            tl.addLabel('slideStart', `>${slideAppearAfterSec}`);
-
-            tl.to(slideRef.current, { autoAlpha: 1, y: 0, duration: SLIDE_DUR }, 'slideStart').from(
-                slideRef.current.querySelectorAll('.img-wrap'),
-                { y: 30, autoAlpha: 0, duration: 0.5, stagger: 0.07 },
+            // (3) 슬라이드 & 헤더: 동일 타이밍에 겹쳐 시작
+            tl.addLabel('slideStart', `titleStart+=${slideAppearAfterSec}`);
+            tl.to(slideEl, { autoAlpha: 1, y: 0, duration: SLIDE_DUR }, 'slideStart').from(
+                slideEl.querySelectorAll('.img-wrap') || [],
+                {
+                    y: 30,
+                    autoAlpha: 0,
+                    duration: 0.5,
+                    stagger: 0.07,
+                },
                 '<'
             );
 
             if (headerEl) {
                 tl.to(
                     headerEl,
-                    {
-                        autoAlpha: 1,
-                        y: 0,
-                        duration: headerDurationSec,
-                        ease: 'power2.out',
-                    },
+                    { autoAlpha: 1, y: 0, duration: headerDurationSec, ease: 'power2.out' },
                     'slideStart'
                 );
             }
@@ -155,8 +146,7 @@ export default function TourMainCon1({
             tl.add(() => {
                 const clear = { clearProps: 'will-change' };
                 if (headerEl) gsap.set(headerEl, clear);
-                gsap.set([titleEl, subRef.current, slideRef.current], clear);
-                if (titleStrongEl) gsap.set(titleStrongEl, { clearProps: 'fontVariationSettings' });
+                gsap.set([titleEl, subEl, slideEl], clear);
             });
         }, rootRef);
 
@@ -164,11 +154,11 @@ export default function TourMainCon1({
     }, [
         titleInitPx,
         titleInitColor,
-        subInitPx,
+        subInitPx, // 서브 시작 크기 의존
         subInitColor,
         hold,
         speed,
-        titleFinalWeight, // 최종 두께만 의존
+        titlePreHoldSec,
         titleSoloHoldSec,
         subDelayAfterTitle,
         slideAppearAfterSec,
@@ -217,4 +207,6 @@ export default function TourMainCon1({
             </ul>
         </section>
     );
-}
+};
+
+export default TourMainCon1;

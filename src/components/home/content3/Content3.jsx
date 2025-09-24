@@ -142,7 +142,6 @@ const Carousel = () => {
           <div key={d.id} className="carousel-item">
             <div className="carousel-box">
               <div className="title">{d.title}</div>
-              <div className="num">{d.num}</div>
               <img src={d.img} alt={d.title} />
             </div>
           </div>
