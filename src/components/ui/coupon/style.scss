@@ -86,8 +86,11 @@
   width: vw(180px);
   height: vw(45px);
   .coupon-btn {
-    padding: 10px;
+    width: vw(280px);
+    padding: 10px !important;
     cursor: pointer;
-    font-size: vw(20px) !important;
+    @include font-20px;
+    background-color: $mint;
+    border: none;
   }
 }

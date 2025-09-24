@@ -129,7 +129,7 @@ const CouponButton = ({
       {!claimed ? (
         <button
           type="button"
-          className="button g coupon-claim-btn"
+          className="coupon-btn button g coupon-claim-btn"
           onClick={handleClaim}
           disabled={loading}
           aria-busy={loading}
@@ -139,7 +139,7 @@ const CouponButton = ({
       ) : (
         <button
           type="button"
-          className={`button g coupon-reset-btn ${
+          className={`coupon-btn button g coupon-reset-btn ${
             justClaimed ? highlightClassName : ""
           }`}
           onClick={handleReset}
