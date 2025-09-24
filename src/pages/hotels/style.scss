@@ -232,7 +232,8 @@
                                 @include font-16px;
                                 color: $greyscale-1100;
                                 &.on {
-                                    border-bottom: vw(2px) solid $greyscale-1100;
+                                    border-bottom: vw(2px) solid $mint;
+                                    color: $mint;
                                 }
                             }
                         }
@@ -272,7 +273,7 @@
                                 gap: vw(24px);
                                 .more {
                                     width: vw(180px);
-                                    height: vw(38px);
+                                    height: vw(48px);
                                     border: 1px solid $greyscale-800;
                                     color: $greyscale-800;
                                     @include font-16px-M;

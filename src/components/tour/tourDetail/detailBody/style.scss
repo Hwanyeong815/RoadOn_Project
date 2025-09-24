@@ -23,6 +23,11 @@
         width: vw(456px);
         background-color: aqua;
     }
+    .gallery-icon {
+        position: absolute;
+        width: vw(24px) !important;
+        height: vw(24px) !important;
+    }
 }
 .detail-body-info {
     // height: vw(3000px);
@@ -189,7 +194,8 @@
                         @include font-16px;
                         color: $greyscale-1100;
                         &.on {
-                            border-bottom: vw(2px) solid $greyscale-1100;
+                            border-bottom: vw(2px) solid $mint;
+                            color: $mint;
                         }
                     }
                 }
@@ -227,9 +233,9 @@
                                 gap: vw(50px);
                                 align-items: center;
                                 height: vw(50px);
-                                border-bottom: vw(2px) solid $default;
+                                border-bottom: vw(1px) solid $greyscale-900;
                                 p {
-                                    @include font-20px-B;
+                                    @include font-20px-SB;
                                     padding: vw(10px);
                                 }
                             }
@@ -549,7 +555,6 @@
     gap: vw(24px);
     .img-box {
         height: vw(425px);
-        background-color: #ff0;
         border-radius: vw(15px);
     }
     .big-img-1 {
@@ -586,4 +591,3 @@
         object-fit: cover;
     }
 }
-

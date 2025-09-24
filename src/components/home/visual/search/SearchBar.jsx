@@ -8,6 +8,15 @@ import useHotelStore from '../../../../store/hotelStore';
 import './style.scss';
 
 const locations = [
+    '서울',
+    '제주',
+    '부산',
+    '경주',
+    '강원',
+    '전주',
+    '대전',
+    '여수',
+    '수원',
     '방콕',
     '괌',
     '싱가포르',
@@ -16,15 +25,6 @@ const locations = [
     '오사카',
     '후쿠오카',
     '코타키나발루',
-    '전주',
-    '경주',
-    '제주',
-    '서울',
-    '부산',
-    '강원',
-    '대전',
-    '여수',
-    '수원',
 ];
 
 const SearchBar = () => {
@@ -107,7 +107,7 @@ const SearchBar = () => {
                 <FaSearch className="icon" />
                 <div className="location-display">
                     {selectedLocation ? (
-                        <span className="selected-location">{selectedLocation}</span>
+                        <span className="selected-location-o">{selectedLocation}</span>
                     ) : (
                         <span className="placeholder">여행지를 검색해보세요</span>
                     )}

@@ -499,7 +499,7 @@ export default [
         subtitle: '콘서트/뮤직비디오 패키지',
         subtitle2: '콘서트/뮤직비디오',
         desc: '글로벌 스타 블랙핑크의 무대와 뮤비 촬영지를 직접 방문하는 특별한 투어',
-        backgroundImg: '/images/tour/main/blackpink-bg.png',
+        backgroundImg: '/images/tour/main/blackpink-3.png',
         posterImg: '/images/tour/main/blackpink.png',
         thumbImg: '/images/tour/main/blackpink_thumb.png',
         benefits: [

@@ -218,6 +218,7 @@
                 border-radius: vw(50px);
                 border: none;
                 transform: translateY(vw(18px));
+                transition: all 0.2s ease;
                 &:hover {
                     background-color: $foundation-mint-normalhover;
                 }
@@ -745,6 +746,10 @@
                     width: 100%;
                     border-radius: vw(50px) !important;
                     background-color: $foundation-mint-normal;
+                    &:hover {
+                        box-shadow: none;
+                        background-color: $foundation-mint-normalhover;
+                    }
                 }
             }
         }
@@ -975,6 +980,7 @@ strong {
                     padding: 0;
                     overflow-x: auto;
                     justify-content: center;
+                    position: relative;
 
                     li {
                         flex-shrink: 0;
@@ -1001,6 +1007,7 @@ strong {
                             display: block;
                         }
                     }
+                   
                 }
             }
         }
@@ -1115,8 +1122,6 @@ strong {
         }
     }
 
-    .search-bar {
-    }
     // 여행지 검색 부분 스타일
     .search-location {
         width: vw(260px);
@@ -1128,6 +1133,9 @@ strong {
 
             .selected-location {
                 color: $greyscale-1100; // 선택된 위치 색상
+                &-o {
+                    color: $white;
+                }
             }
 
             .placeholder {
@@ -1381,6 +1389,7 @@ strong {
         .vector {
             margin-top: vw(17px);
             li {
+                // @include font-16px;
                 position: relative;
                 &::after {
                     content: '';
@@ -1563,6 +1572,20 @@ strong {
     }
     .price-slider {
         .ranges {
+        }
+    }
+}
+
+.react-datepicker-ignore-onclickoutside {
+    // color: $white !important;
+}
+
+// .react-datepicker__input-container
+
+.detail-bottom-info {
+    #detail-location {
+        h2 {
+            // margin-bottom: 30px;
         }
     }
 }
