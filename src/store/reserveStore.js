@@ -274,13 +274,30 @@ const useReserveStore = create((set, get) => {
         addReservation: (reservation) => {
             const type = (reservation.type || '').toString().toLowerCase();
             const id = reservation.id;
-            const uid =
-                reservation.uid || reservation.reservationId || `${type}-${id}-${Date.now()}`;
-            const exists = get().items.some(
-                (it) => it.uid === uid || it.reservationId === reservation.reservationId
+            // uid는 가능한 한 안정적으로(동일 예약에 동일 uid 유지)
+            const fallbackUid = `${type}-${id || 'unknown'}`;
+            const uid = reservation.uid || reservation.reservationId || fallbackUid;
+            const rid = reservation.reservationId || '';
+
+            // 기존 아이템 인덱스 찾기: reservationId 우선, 없으면 uid
+            const items = get().items || [];
+            const idx = items.findIndex(
+                (it) =>
+                    (rid && it.reservationId === rid) ||
+                    (!rid && (it.uid === uid || it.uid === fallbackUid))
             );
-            if (exists) return;
-            const next = [...get().items, { ...reservation, uid }];
+
+            let next;
+            if (idx >= 0) {
+                // ✅ 업서트: 기존 레코드와 병합 (새로 들어온 필드 우선)
+                const merged = { ...items[idx], ...reservation, uid: items[idx].uid || uid };
+                next = [...items];
+                next[idx] = merged;
+            } else {
+                // 신규 추가
+                next = [...items, { ...reservation, uid }];
+            }
+
             set({ items: next, itemsDetailed: hydrateReservationsDetailed(next) });
             saveToStorage(next);
         },
@@ -297,6 +314,17 @@ const useReserveStore = create((set, get) => {
             const next = get().items.map((it) => {
                 if (it.uid === reservationIdOrUid || it.reservationId === reservationIdOrUid) {
                     return { ...it, ...patch };
+                }
+                return it;
+            });
+            set({ items: next, itemsDetailed: hydrateReservationsDetailed(next) });
+            saveToStorage(next);
+        },
+        updatePayment: (reservationIdOrUid, paymentPatch) => {
+            const next = (get().items || []).map((it) => {
+                if (it.reservationId === reservationIdOrUid || it.uid === reservationIdOrUid) {
+                    const prevPay = it.payment || {};
+                    return { ...it, payment: { ...prevPay, ...paymentPatch } };
                 }
                 return it;
             });
