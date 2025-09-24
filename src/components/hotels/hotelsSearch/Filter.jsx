@@ -213,7 +213,7 @@ const Filter = () => {
                             <p>숙소 유형</p>
                             <div className="redo" onClick={handleReset}>
                                 <img
-                                    src="../../../../public/images/hotels/search/uim_redo.svg"
+                                    src="/images/hotels/search/uim_redo.svg"
                                     alt="초기화"
                                 />
                                 <span>초기화</span>
