@@ -24,7 +24,7 @@ const Header = () => {
         if (!img) return;
 
         const defaultSrc = img.dataset.srcDefault || '/images/CI.png';
-        const greySrc = img.dataset.srcGrey || '/images/ci-grey.png';
+        const greySrc = img.dataset.srcGrey || '/images/CI-grey.png';
 
         const preload = (src) => {
             const p = new Image();
@@ -82,7 +82,7 @@ const Header = () => {
                             src="/images/CI.png"
                             alt="Brand"
                             data-src-default="/images/CI.png"
-                            data-src-grey="/images/ci-grey.png"
+                            data-src-grey="/images/CI-grey.png"
                             data-current-src="/images/CI.png"
                             width="140"
                             height="auto"
