@@ -38,7 +38,7 @@ const TourCon3Item = ({ pack }) => {
                     <div className="txt-row txt-row4">
                         <div className="txt-group">
                             <p>{duration}</p>
-                            <p>전문 가이드, 촬영지 투어</p>
+                            <p>전문 가이드</p>
                         </div>
                         <div className="txt-group">
                             <p>1인 기준</p>
