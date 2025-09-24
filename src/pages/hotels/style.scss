@@ -262,14 +262,17 @@
                                     border-radius: vw(40px);
                                     cursor: pointer;
                                 }
+                                .active {
+                                    background-color: $greyscale-500;
+                                }
                             }
                             .room-box-list {
                                 display: flex;
                                 flex-direction: column;
                                 gap: vw(24px);
                                 .more {
-                                    width: vw(200px);
-                                    height: vw(54px);
+                                    width: vw(180px);
+                                    height: vw(38px);
                                     border: 1px solid $greyscale-800;
                                     color: $greyscale-800;
                                     @include font-16px-M;
@@ -280,6 +283,9 @@
                                     padding: vw(15px) 0;
                                     transform: translateX(vw(360px));
                                     margin-top: vw(30px);
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
                                 }
                             }
                         }
@@ -441,5 +447,16 @@
     .inner {
         display: flex;
         gap: vw(55px);
+    }
+}
+
+.hotel-filter {
+    width: vw(302px);
+    .filter-wrap {
+        .map-modal {
+            width: vw(302px);
+        }
+        // position: sticky;
+        // top: vw(30px);
     }
 }
