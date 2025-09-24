@@ -18,7 +18,9 @@ function hotelsSearch() {
         <main className="hotel">
             <SearchBarWhite />
             <div className="inner">
-                <Filter />
+                <div className='hotel-filter'>
+                    <Filter />
+                </div>
                 <div className="list-wrap">
                     <div className="list-top">
                         <p>총 {hotels.length}개 숙소</p>

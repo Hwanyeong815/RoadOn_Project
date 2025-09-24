@@ -211,6 +211,7 @@
                 }
             }
             button {
+                @include font-16px;
                 color: $white;
                 padding: vw(10px) vw(15px);
                 background-color: $mint;
@@ -625,7 +626,6 @@
             &-thum {
                 width: vw(60px);
                 height: vw(55px);
-                background-color: red;
                 img {
                 }
             }
@@ -739,7 +739,7 @@
         .btn-wrap {
             button {
                 margin-top: vw(20px);
-                @include font-20px;
+                @include font-16px-M;
                 height: vw(52px);
                 &.reserve {
                     width: 100%;
