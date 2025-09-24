@@ -218,6 +218,7 @@
                 border-radius: vw(50px);
                 border: none;
                 transform: translateY(vw(18px));
+                transition: all 0.2s ease;
                 &:hover {
                     background-color: $foundation-mint-normalhover;
                 }
@@ -745,6 +746,10 @@
                     width: 100%;
                     border-radius: vw(50px) !important;
                     background-color: $foundation-mint-normal;
+                    &:hover {
+                        box-shadow: none;
+                        background-color: $foundation-mint-normalhover;
+                    }
                 }
             }
         }
@@ -897,6 +902,7 @@ strong {
             display: flex;
             flex-direction: column;
             height: calc(90vh - 80px);
+            
 
             .big-img {
                 flex: 1;
@@ -1128,6 +1134,9 @@ strong {
 
             .selected-location {
                 color: $greyscale-1100; // 선택된 위치 색상
+                &-o {
+                    color: $white;
+                }
             }
 
             .placeholder {
@@ -1381,6 +1390,7 @@ strong {
         .vector {
             margin-top: vw(17px);
             li {
+                // @include font-16px;
                 position: relative;
                 &::after {
                     content: '';
@@ -1566,3 +1576,9 @@ strong {
         }
     }
 }
+
+.react-datepicker-ignore-onclickoutside {
+    // color: $white !important;
+}
+
+// .react-datepicker__input-container

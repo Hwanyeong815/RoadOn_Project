@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import './style.scss';
-import GalleryModal from '../../../hotels/hotelsDetail/GalleryModal';
+// import GalleryModal from '../../../hotels/hotelsDetail/GalleryModal';
 
 const DetailThum = ({ tourData }) => {
     if (!tourData) return null;
