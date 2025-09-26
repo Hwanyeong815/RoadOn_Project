@@ -1,10 +1,10 @@
+// src/components/ui/searchBar/index.jsx
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import { ko } from 'date-fns/locale';
 import 'react-datepicker/dist/react-datepicker.css';
 import { FaSearch, FaUser, FaCalendarAlt } from 'react-icons/fa';
-// import useHotelStore from '../../../../store/hotelStore';
 import './style.scss';
 import useHotelStore from '../../../store/hotelStore';
 
@@ -28,7 +28,7 @@ const locations = [
     '코타키나발루',
 ];
 
-const SearchBar = () => {
+const SearchBar = ({ className = '' }) => {
     const navigate = useNavigate();
     const setSearchParams = useHotelStore((state) => state.setSearchParams);
 
@@ -43,20 +43,14 @@ const SearchBar = () => {
 
     useEffect(() => {
         const handleClickOutside = (event) => {
-            // 인원 드롭다운 외 클릭 시 닫기
             if (peopleDropdownRef.current && !peopleDropdownRef.current.contains(event.target)) {
-                if (openDropdown === 'people') {
-                    setOpenDropdown(null);
-                }
+                if (openDropdown === 'people') setOpenDropdown(null);
             }
-            // 위치 드롭다운 외 클릭 시 닫기
             if (
                 locationDropdownRef.current &&
                 !locationDropdownRef.current.contains(event.target)
             ) {
-                if (openDropdown === 'location') {
-                    setOpenDropdown(null);
-                }
+                if (openDropdown === 'location') setOpenDropdown(null);
             }
         };
         document.addEventListener('mousedown', handleClickOutside);
@@ -66,10 +60,7 @@ const SearchBar = () => {
     const handleSelectLocation = (location) => {
         setSelectedLocation(location);
         setSearchTerm('');
-        // 위치 선택 후 드롭다운 닫기
-        setTimeout(() => {
-            setOpenDropdown(null);
-        }, 10);
+        setTimeout(() => setOpenDropdown(null), 10);
     };
 
     const handleDecreasePeople = (e) => {
@@ -87,18 +78,14 @@ const SearchBar = () => {
             location: selectedLocation,
             startDate: dates[0],
             endDate: dates[1],
-            people: people,
+            people,
         };
-
-        // store에 검색 파라미터 저장
         setSearchParams(searchData);
-
-        // /hotels/search로 이동
         navigate('/hotels/search');
     };
 
     return (
-        <div className="search-bar">
+        <div className={`search-bar ${className}`.trim()}>
             {/* 여행지 검색 부분 */}
             <div
                 className="search-item search-location"
@@ -135,7 +122,6 @@ const SearchBar = () => {
                                         onClick={(e) => {
                                             e.preventDefault();
                                             e.stopPropagation();
-                                            console.log('li 클릭됨:', loc); // 디버깅용
                                             handleSelectLocation(loc);
                                         }}
                                         style={{
