@@ -410,8 +410,21 @@
             }
         }
     }
+    .airport-main-con2 h3,
+    .airport-main-con2 h4,
+    .airport-main-con3 h3,
+    .airport-main-con3 h4,
+    .airport-main-con4 h3,
+    .airport-main-con4 h4,
+    .airport-main-con5 h3,
+    .airport-main-con5 h4 {
+        white-space: normal;
+        word-break: keep-all;
+        line-height: 1.4;
+        text-align: left;
+    }
 
-    /* Con2, Con3  */
+    /* Con2, Con3 */
     .airport-main-con2 .inner .promo-list,
     .airport-main-con3 .promo-list {
         display: flex !important;
