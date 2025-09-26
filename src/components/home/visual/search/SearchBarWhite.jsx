@@ -8,8 +8,23 @@ import useHotelStore from '../../../../store/hotelStore'; // ✅ useHotelStore i
 import './style.scss';
 
 const locations = [
-  '방콕', '괌', '싱가포르', '나트랑', '다낭', '오사카', '후쿠오카', '코타키나발루',
-  '전주', '경주', '제주', '서울', '부산', '강원', '대전', '여수', '수원'
+    '방콕',
+    '괌',
+    '싱가포르',
+    '나트랑',
+    '다낭',
+    '오사카',
+    '후쿠오카',
+    '코타키나발루',
+    '전주',
+    '경주',
+    '제주',
+    '서울',
+    '부산',
+    '강원',
+    '대전',
+    '여수',
+    '수원',
 ];
 
 const SearchBarWhite = () => {
@@ -17,7 +32,7 @@ const SearchBarWhite = () => {
     // ✅ store에서 setSearchParams와 searchParams를 모두 가져옵니다.
     const setSearchParams = useHotelStore((state) => state.setSearchParams);
     const searchParams = useHotelStore((state) => state.searchParams);
-    
+
     // ✅ store의 searchParams로 초기 상태 설정
     const [openDropdown, setOpenDropdown] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
@@ -35,7 +50,10 @@ const SearchBarWhite = () => {
                     setOpenDropdown(null);
                 }
             }
-            if (locationDropdownRef.current && !locationDropdownRef.current.contains(event.target)) {
+            if (
+                locationDropdownRef.current &&
+                !locationDropdownRef.current.contains(event.target)
+            ) {
                 if (openDropdown === 'location') {
                     setOpenDropdown(null);
                 }
@@ -55,12 +73,12 @@ const SearchBarWhite = () => {
 
     const handleDecreasePeople = (e) => {
         e.stopPropagation();
-        setPeople(prev => (prev > 1 ? prev - 1 : 1));
+        setPeople((prev) => (prev > 1 ? prev - 1 : 1));
     };
 
     const handleIncreasePeople = (e) => {
         e.stopPropagation();
-        setPeople(prev => prev + 1);
+        setPeople((prev) => prev + 1);
     };
 
     const handleSearch = () => {
@@ -70,10 +88,10 @@ const SearchBarWhite = () => {
             endDate: dates[1],
             people: people,
         };
-        
+
         // store에 검색 파라미터 저장
         setSearchParams(searchData);
-        
+
         // /hotels/search로 이동
         navigate('/hotels/search');
     };
@@ -81,7 +99,7 @@ const SearchBarWhite = () => {
     return (
         <div className="search-bar">
             {/* 여행지 검색 부분 */}
-            <div 
+            <div
                 className="search-item search-location"
                 onClick={() => setOpenDropdown('location')}
                 ref={locationDropdownRef}
@@ -95,7 +113,10 @@ const SearchBarWhite = () => {
                     )}
                 </div>
                 {openDropdown === 'location' && (
-                    <div className="dropdown location-dropdown" onClick={(e) => e.stopPropagation()}>
+                    <div
+                        className="dropdown location-dropdown"
+                        onClick={(e) => e.stopPropagation()}
+                    >
                         <input
                             type="text"
                             placeholder="여행지 검색"
@@ -106,10 +127,10 @@ const SearchBarWhite = () => {
                         />
                         <ul className="location-list">
                             {locations
-                                .filter(loc => loc.includes(searchTerm))
-                                .map(loc => (
-                                    <li 
-                                        key={loc} 
+                                .filter((loc) => loc.includes(searchTerm))
+                                .map((loc) => (
+                                    <li
+                                        key={loc}
                                         onClick={(e) => {
                                             e.preventDefault();
                                             e.stopPropagation();
@@ -120,7 +141,7 @@ const SearchBarWhite = () => {
                                             cursor: 'pointer',
                                             margin: '2px 0',
                                             textAlign: 'left',
-                                            textIndent: '10px'
+                                            textIndent: '10px',
                                         }}
                                     >
                                         {loc}
@@ -139,8 +160,8 @@ const SearchBarWhite = () => {
                     startDate={dates[0]}
                     endDate={dates[1]}
                     onChange={(update) => {
-                      setDates(update);
-                      setOpenDropdown(null);
+                        setDates(update);
+                        setOpenDropdown(null);
                     }}
                     selectsRange
                     locale={ko}
@@ -163,16 +184,24 @@ const SearchBarWhite = () => {
                 {openDropdown === 'people' && (
                     <div className="dropdown people-dropdown" onClick={(e) => e.stopPropagation()}>
                         <div className="people-control">
-                            <button className="people-btn" onClick={handleDecreasePeople}>-</button>
+                            <button className="people-btn" onClick={handleDecreasePeople}>
+                                -
+                            </button>
                             <span>{people}</span>
-                            <button className="people-btn" onClick={handleIncreasePeople}>+</button>
+                            <button className="people-btn" onClick={handleIncreasePeople}>
+                                +
+                            </button>
                         </div>
-                        <button className="confirm-btn" onClick={() => setOpenDropdown(null)}>선택완료</button>
+                        <button className="confirm-btn" onClick={() => setOpenDropdown(null)}>
+                            선택완료
+                        </button>
                     </div>
                 )}
             </div>
 
-            <button className="search-btn" onClick={handleSearch}>검색</button>
+            <button className="search-btn" onClick={handleSearch}>
+                검색
+            </button>
         </div>
     );
 };

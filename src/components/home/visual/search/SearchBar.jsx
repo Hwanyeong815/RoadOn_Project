@@ -157,7 +157,7 @@ const SearchBar = () => {
             <div className="search-item search-date">
                 <FaCalendarAlt className="icon" />
                 <DatePicker
-                className='date-picker'
+                    className="date-picker"
                     selectsRange
                     startDate={dates[0]}
                     endDate={dates[1]}

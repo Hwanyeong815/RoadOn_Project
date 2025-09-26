@@ -1,64 +1,64 @@
-@use "../../../../styles/utils" as *;
+@use '../../../../styles/utils' as *;
 .search-bar {
-  width: 72.5rem;
-  height: 5.625rem;
-  z-index: 10;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: rgba(217, 217, 217, 0.1);
-  border-radius: 8.75rem;
-  padding: 1.5rem;
-  width: fit-content;
-  backdrop-filter: blur(6px);
-
-  .search-item {
+    width: 72.5rem;
+    height: 5.625rem;
+    z-index: 10;
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    width: 17.5rem;
-    height: 2.8125rem;
-    border-radius: 2.1875rem;
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(217, 217, 217, 0.1);
+    border-radius: 8.75rem;
+    padding: 1.5rem;
+    width: fit-content;
+    backdrop-filter: blur(6px);
 
-    border-radius: 30px;
-    padding: 10px 16px;
-    margin-right: 8px;
-    color: #fff;
-    color: var(--0, #fff3ee);
-    text-align: center;
-    font-family: SUIT;
-    font-size: 1rem;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
+    .search-item {
+        display: flex;
+        align-items: center;
+        width: 17.5rem;
+        height: 2.8125rem;
+        border-radius: 2.1875rem;
+        background: rgba(255, 255, 255, 0.15);
 
-    .icon {
-      margin-right: 0.94rem;
-      font-size: 14px;
-      opacity: 0.9;
-    }
-
-    input {
-      border: none;
-      outline: none;
-      background: transparent;
-      color: #fff;
-      font-size: 14px;
-      width: 200px;
-
-      &::placeholder {
+        border-radius: 30px;
+        padding: 10px 16px;
+        margin-right: 8px;
+        color: #fff;
         color: var(--0, #fff3ee);
-
+        text-align: center;
         font-family: SUIT;
         font-size: 1rem;
         font-style: normal;
-        font-weight: 400;
+        font-weight: 700;
         line-height: normal;
-      }
+
+        .icon {
+            margin-right: 0.94rem;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        input {
+            border: none;
+            outline: none;
+            background: transparent;
+            color: #fff;
+            font-size: 14px;
+            width: 200px;
+
+            &::placeholder {
+                color: var(--0, #fff3ee);
+
+                font-family: SUIT;
+                font-size: 1rem;
+                font-style: normal;
+                font-weight: 400;
+                line-height: normal;
+            }
+        }
+        &.search-location {
+            width: 21.25rem;
+            height: 2.8125rem;
+        }
     }
-    &.search-location {
-      width: 21.25rem;
-      height: 2.8125rem;
-    }
-  }
 }
