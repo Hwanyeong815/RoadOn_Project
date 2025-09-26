@@ -101,7 +101,7 @@ html.is-active {
                 li {
                     margin: 0;
                     display: flex;
-                    &:not(.none-line) {
+                    &.line {
                         a {
                             &:last-child {
                                 padding-left: vw(20px);
@@ -110,9 +110,9 @@ html.is-active {
                                     position: absolute;
                                     content: '';
                                     background-color: $white;
-                                    width: 1px;
+                                    width: vw(1px);
                                     height: 80%;
-                                    left: 10px;
+                                    left: 0;
                                     top: 50%;
                                     transform: translateY(-50%);
                                 }

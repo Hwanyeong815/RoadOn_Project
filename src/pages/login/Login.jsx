@@ -1,12 +1,27 @@
 // src/pages/Login.jsx
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import './style.scss';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import useAuthStore from '../../store/authStore';
 import KakaoLoginButton from '../../components/ui/kakaoLogin/KakaoLoginButton';
 
-const Login = () => {
-    const [mode, setMode] = useState('login'); // 'login' | 'register'
+const KAKAO_CLIENT_ID = import.meta.env.VITE_KAKAO_REST_API_KEY; // REST API 키
+const KAKAO_REDIRECT_URI = import.meta.env.VITE_KAKAO_REDIRECT_URI; // 로컬/배포 각각 .env.local / .env
+
+const Login = ({ initialMode = '' }) => {
+    const navigate = useNavigate();
+    const location = useLocation();
+    const [searchParams] = useSearchParams();
+
+    const pickMode = () => {
+        const p = (initialMode || '').toLowerCase();
+        const s = (location.state?.mode || '').toLowerCase();
+        const q = (searchParams.get('mode') || '').toLowerCase();
+        const m = p || s || q || 'login';
+        return m === 'register' ? 'register' : 'login';
+    };
+
+    const [mode, setMode] = useState(pickMode);
     const [identifier, setIdentifier] = useState('');
     const [password, setPassword] = useState('');
     const [err, setErr] = useState('');
@@ -14,9 +29,6 @@ const Login = () => {
 
     const validate = useAuthStore((s) => s.validateCredentials);
     const setCurrent = useAuthStore((s) => s.setCurrent);
-    const navigate = useNavigate();
-
-    // form ref so we can trigger submit programmatically
     const formRef = useRef(null);
 
     const handleSubmit = async (e) => {
@@ -24,7 +36,6 @@ const Login = () => {
         setErr('');
         if (!identifier.trim()) return setErr('아이디(또는 이메일)를 입력하세요.');
         if (!password) return setErr('비밀번호를 입력하세요.');
-
         setLoading(true);
         try {
             const user = validate(identifier, password);
@@ -38,7 +49,6 @@ const Login = () => {
         }
     };
 
-    // 오른쪽 버튼: 1번 클릭 → 슬라이드, 2번 클릭 → /join 이동
     const handleGoRegister = () => {
         if (mode !== 'register') {
             setMode('register');
@@ -47,16 +57,58 @@ const Login = () => {
         navigate('/join');
     };
 
-    // 왼쪽 버튼: 첫 클릭이면 패널 활성화, 활성 상태면 폼 submit
     const handleLoginButton = () => {
         if (mode !== 'login') {
             setMode('login');
             return;
         }
-        // active 상태면 폼 제출 (requestSubmit 지원 브라우저 대상)
-        formRef.current?.requestSubmit?.() ??
-            formRef.current?.dispatchEvent(new Event('submit', { cancelable: true }));
+        const formEl = formRef.current;
+        if (!formEl) return;
+        if (typeof formEl.requestSubmit === 'function') formEl.requestSubmit();
+        else formEl.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
     };
+
+    // ✅ URL 쿼리 / state 변경 시 모드 동기화
+    useEffect(() => {
+        const next = pickMode();
+        if (next !== mode) setMode(next);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [location.search, location.state, initialMode]);
+
+    // ✅ 헤더에서 보낸 intent를 "내부 버튼과 동일한 효과"로 실행
+    useEffect(() => {
+        const intent = location.state?.intent;
+        if (!intent) return;
+
+        if (intent === 'register') {
+            if (mode !== 'register') {
+                setMode('register');
+            } else {
+                navigate('/join');
+            }
+        } else if (intent === 'login') {
+            if (mode !== 'login') {
+                setMode('login');
+            } else {
+                const formEl = formRef.current;
+                if (formEl) {
+                    if (typeof formEl.requestSubmit === 'function') formEl.requestSubmit();
+                    else
+                        formEl.dispatchEvent(
+                            new Event('submit', { cancelable: true, bubbles: true })
+                        );
+                }
+            }
+        }
+
+        // 실행 후 state 제거(재실행 방지)
+        navigate(
+            { pathname: location.pathname, search: location.search },
+            { replace: true, state: {} }
+        );
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [location.state, mode]);
+
     const bgVars = {
         '--bg-left': `url('/images/login/bg-left.png')`,
         '--bg-right': `url('/images/login/bg-right.png')`,

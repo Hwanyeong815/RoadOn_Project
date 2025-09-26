@@ -8,18 +8,9 @@ const NavBar = () => {
     const setToken = useAuthStore((s) => s.setToken); // 토큰 제거용
     const navigate = useNavigate();
 
-    // arrow function 스타일로 핸들러
     const handleLogout = () => {
-        // store에서 현재 사용자 제거 -> isLoggedIn도 false로 바뀜
         setCurrent(null);
-
-        // 토큰도 제거 (있다면)
         setToken && setToken(null);
-
-        // 필요하면 로컬스토리지 등 추가 정리: (store에 clearAll이 있으면 사용 가능)
-        // useAuthStore.getState().clearAll();
-
-        // 로그아웃 후 홈으로 이동
         navigate('/');
     };
 
@@ -57,6 +48,8 @@ const NavBar = () => {
                                 <Link to="/myPage" className="profile-link">
                                     <span>{displayName}</span>님 환영합니다
                                 </Link>
+                            </li>
+                            <li>
                                 <Link
                                     to="/logout"
                                     type="button"
@@ -69,10 +62,21 @@ const NavBar = () => {
                         </>
                     ) : (
                         <>
-                            <li className="none-line">
-                                <Link to="/login">
+                            <li>
+                                <Link
+                                    to="/login?mode=login"
+                                    state={{ mode: 'login', intent: 'login', ts: Date.now() }} // ts로 state 변화 보장
+                                >
                                     <img src="/images/icon/human.png" alt="human" />
-                                    로그인 ｜ 회원가입
+                                    로그인
+                                </Link>
+                            </li>
+                            <li className="line">
+                                <Link
+                                    to="/login?mode=register"
+                                    state={{ mode: 'register', intent: 'register', ts: Date.now() }}
+                                >
+                                    회원가입
                                 </Link>
                             </li>
                         </>
