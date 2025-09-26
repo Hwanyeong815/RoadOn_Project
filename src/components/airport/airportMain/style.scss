@@ -63,12 +63,11 @@
     .visual-bg {
         background-image: url('/images/airport/visual_bg.png');
         background-size: cover;
-        background-position: center;
+        background-position: 0 80%;
         background-repeat: no-repeat;
         width: 100%;
-        height: vw(550px);
+        height: vw(450px);
         position: relative;
-        top: vw(-600px);
         z-index: -1;
         display: flex;
         justify-content: center;
@@ -392,6 +391,70 @@
                 @include font-20px-M;
                 margin-right: vw(40px);
             }
+        }
+    }
+}
+
+@media (min-width: 780px) and (max-width: 1024px) {
+    .airport-main-con1 {
+        .visual-bg {
+            height: 450px;
+            top: 0;
+        }
+
+        .inner {
+            top: 250px;
+            padding: 0 24px;
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    .airport-main-con1 {
+        .visual-bg {
+            height: 550px !important;
+            top: 0;
+        }
+        .inner {
+            top: 80px;
+            padding: 0 16px;
+            .search-title {
+                @include font-20px-M;
+                margin: 16px 0;
+            }
+        }
+    }
+
+    .airport-main-con2 .promo-list,
+    .airport-main-con3 .promo-list,
+    .airport-main-con4 .promo-list,
+    .airport-main-con5 .promo-list {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .airport-main-con2 .promo-card-con,
+    .airport-main-con3 .promo-card-con,
+    .airport-main-con4 .promo-card-con4,
+    .airport-main-con5 .event {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .airport-main-con2 img,
+    .airport-main-con3 img {
+        height: 180px;
+    }
+
+    .airport-main-con4 .promo-card-con4 img {
+        height: 240px;
+    }
+
+    .airport-main-con5 .event {
+        height: 120px;
+        p {
+            @include font-16px-M;
+            margin: 0;
         }
     }
 }
