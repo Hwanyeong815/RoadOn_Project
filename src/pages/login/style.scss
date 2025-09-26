@@ -406,41 +406,28 @@
                     gap: vw(20px);
                     width: 80%;
                 }
-                &-item {
-                    width: vw(50px);
-                    height: vw(50px);
-                    position: relative;
-                    background-color: $greyscale-200;
-                    @include circle;
-                    img {
-                        position: absolute;
-                        left: 50%;
-                        top: 50%;
+                // &-item {
+                //     width: vw(50px);
+                //     height: vw(50px);
+                //     position: relative;
+                //     background-color: $greyscale-200;
+                //     @include circle;
+                //     img {
+                //         position: absolute;
+                //         left: 50%;
+                //         top: 50%;
 
-                        transform: translate(-50%, -50%);
-                    }
-                    // 카카오 로그인 css
-                    &.kakao {
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        width: 100%;
-                        margin: 0 vw(50px);
-
-                        p {
-                            height: 50%;
-                        }
-                        img {
-                            height: 50%;
-                            position: relative;
-                            top: 25%;
-                            left: 0;
-                        }
-                    }
-                }
+                //         transform: translate(-50%, -50%);
+                //     }
+                // }
             }
 
             &.left {
+                &:not(.on) {
+                    .help-text {
+                        display: none;
+                    }
+                }
                 padding: vw(90px) vw(80px);
                 border-radius: vw(20px) 0 0 vw(20px);
 
@@ -455,6 +442,9 @@
                 }
                 .login-group-find {
                     display: none;
+                }
+                .help-text {
+                    color: $red;
                 }
             }
 
@@ -476,6 +466,30 @@
 
                 .login-sns-icons-wrap {
                     display: flex;
+                    justify-content: center;
+                    align-items: center;
+
+                    #kakaoBtn {
+                        display: flex;
+                        justify-content: center;
+                        gap: vw(10px);
+                        width: vw(500px);
+                        padding: vw(12px) vw(20px);
+
+                        background: #fff;
+                        border: 1px solid #f7e600;
+
+                        cursor: pointer;
+                        border-radius: vw(50px);
+                        transition: 0.5s;
+                        &:hover {
+                            box-shadow: 0 0 4px rgba(0, 0, 5, 0.2);
+                            background: #f7e600;
+                            img {
+                                filter: saturate(0) brightness(50);
+                            }
+                        }
+                    }
                 }
                 .login-group-subtitle {
                     display: none;
@@ -498,7 +512,7 @@
                 }
 
                 &.right {
-                    justify-content: start;
+                    // justify-content: start;
                     gap: vw(30px);
                     .login-group-title {
                         display: block;

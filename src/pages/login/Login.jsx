@@ -5,23 +5,22 @@ import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import useAuthStore from '../../store/authStore';
 import KakaoLoginButton from '../../components/ui/kakaoLogin/KakaoLoginButton';
 
-const KAKAO_CLIENT_ID = import.meta.env.VITE_KAKAO_REST_API_KEY; // REST API 키
-const KAKAO_REDIRECT_URI = import.meta.env.VITE_KAKAO_REDIRECT_URI; // 로컬/배포 각각 .env.local / .env
+const KAKAO_CLIENT_ID = import.meta.env.VITE_KAKAO_REST_API_KEY;
+const KAKAO_REDIRECT_URI = import.meta.env.VITE_KAKAO_REDIRECT_URI;
 
 const Login = ({ initialMode = '' }) => {
     const navigate = useNavigate();
     const location = useLocation();
     const [searchParams] = useSearchParams();
 
-    const pickMode = () => {
+    const [mode, setMode] = useState(() => {
         const p = (initialMode || '').toLowerCase();
         const s = (location.state?.mode || '').toLowerCase();
         const q = (searchParams.get('mode') || '').toLowerCase();
         const m = p || s || q || 'login';
         return m === 'register' ? 'register' : 'login';
-    };
+    });
 
-    const [mode, setMode] = useState(pickMode);
     const [identifier, setIdentifier] = useState('');
     const [password, setPassword] = useState('');
     const [err, setErr] = useState('');
@@ -29,13 +28,16 @@ const Login = ({ initialMode = '' }) => {
 
     const validate = useAuthStore((s) => s.validateCredentials);
     const setCurrent = useAuthStore((s) => s.setCurrent);
+    const setToken = useAuthStore((s) => s.setToken);
     const formRef = useRef(null);
 
+    // ✅ 일반 로그인 처리
     const handleSubmit = async (e) => {
         if (e && e.preventDefault) e.preventDefault();
         setErr('');
         if (!identifier.trim()) return setErr('아이디(또는 이메일)를 입력하세요.');
         if (!password) return setErr('비밀번호를 입력하세요.');
+
         setLoading(true);
         try {
             const user = validate(identifier, password);
@@ -68,56 +70,82 @@ const Login = ({ initialMode = '' }) => {
         else formEl.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
     };
 
-    // ✅ URL 쿼리 / state 변경 시 모드 동기화
+    // ✅ 카카오 OAuth 콜백 처리
     useEffect(() => {
-        const next = pickMode();
-        if (next !== mode) setMode(next);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [location.search, location.state, initialMode]);
+        const code = searchParams.get('code');
+        if (!code) return;
 
-    // ✅ 헤더에서 보낸 intent를 "내부 버튼과 동일한 효과"로 실행
-    useEffect(() => {
-        const intent = location.state?.intent;
-        if (!intent) return;
+        (async () => {
+            try {
+                const body = new URLSearchParams({
+                    grant_type: 'authorization_code',
+                    client_id: KAKAO_CLIENT_ID,
+                    redirect_uri: KAKAO_REDIRECT_URI,
+                    code,
+                });
 
-        if (intent === 'register') {
-            if (mode !== 'register') {
-                setMode('register');
-            } else {
-                navigate('/join');
+                const tokenRes = await fetch('https://kauth.kakao.com/oauth/token', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8' },
+                    body: body.toString(),
+                });
+
+                const token = await tokenRes.json();
+                if (!token.access_token) throw new Error('토큰 발급 실패');
+
+                const meRes = await fetch('https://kapi.kakao.com/v2/user/me', {
+                    headers: { Authorization: `Bearer ${token.access_token}` },
+                });
+
+                const me = await meRes.json();
+                if (!me?.id) throw new Error('사용자 정보 조회 실패');
+
+                const nickname =
+                    me?.kakao_account?.profile?.nickname ||
+                    me?.properties?.nickname ||
+                    `kakao_${me.id}`;
+                const avatar =
+                    me?.kakao_account?.profile?.profile_image_url ||
+                    me?.properties?.profile_image ||
+                    '/images/icon/human.png';
+
+                const user = {
+                    id: `kakao_${me.id}`,
+                    provider: 'kakao',
+                    username: nickname,
+                    nameKo: nickname,
+                    avatar,
+                    email: me?.kakao_account?.email || '',
+                };
+
+                // zustand 저장
+                setCurrent(user);
+                setToken?.(token.access_token);
+
+                // URL 정리
+                const cleanUrl = window.location.origin + window.location.pathname;
+                window.history.replaceState({}, '', cleanUrl);
+
+                navigate('/mypage', { replace: true });
+            } catch (e) {
+                console.error(e);
+                setErr('카카오 로그인 처리 중 오류가 발생했습니다.');
+                // URL 정리
+                const cleanUrl = window.location.origin + window.location.pathname;
+                window.history.replaceState({}, '', cleanUrl);
             }
-        } else if (intent === 'login') {
-            if (mode !== 'login') {
-                setMode('login');
-            } else {
-                const formEl = formRef.current;
-                if (formEl) {
-                    if (typeof formEl.requestSubmit === 'function') formEl.requestSubmit();
-                    else
-                        formEl.dispatchEvent(
-                            new Event('submit', { cancelable: true, bubbles: true })
-                        );
-                }
-            }
-        }
-
-        // 실행 후 state 제거(재실행 방지)
-        navigate(
-            { pathname: location.pathname, search: location.search },
-            { replace: true, state: {} }
-        );
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [location.state, mode]);
+        })();
+    }, [searchParams, navigate, setCurrent, setToken]);
 
     const bgVars = {
         '--bg-left': `url('/images/login/bg-left.png')`,
         '--bg-right': `url('/images/login/bg-right.png')`,
     };
+
     return (
         <div id="login" className={mode === 'register' ? 'is-register' : 'is-login'} style={bgVars}>
             <div className="inner">
                 <div className={`login-wrap ${mode === 'register' ? 'is-register' : 'is-login'}`}>
-                    {/* 슬라이더(흰 카드) */}
                     <div className="slider" aria-hidden="true" />
 
                     {/* 왼쪽: 로그인 */}
@@ -128,12 +156,8 @@ const Login = ({ initialMode = '' }) => {
                         <h2 className="login-group-title">회원 로그인</h2>
                         <h2 className="login-group-subtitle">계정이 있으신가요?</h2>
 
-                        <form
-                            className="login-group-form"
-                            onSubmit={handleSubmit}
-                            ref={formRef}
-                            aria-disabled={mode !== 'login'}
-                        >
+                        {/* ⬇️ 조건부 렌더링 ❌ 제거 → 항상 보여줌 */}
+                        <form className="login-group-form" onSubmit={handleSubmit} ref={formRef}>
                             <input
                                 type="text"
                                 className="id"
@@ -141,8 +165,6 @@ const Login = ({ initialMode = '' }) => {
                                 value={identifier}
                                 onChange={(e) => setIdentifier(e.target.value)}
                                 autoComplete="username"
-                                disabled={mode !== 'login'}
-                                aria-disabled={mode !== 'login'}
                             />
                             <input
                                 type="password"
@@ -151,10 +173,7 @@ const Login = ({ initialMode = '' }) => {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 autoComplete="current-password"
-                                disabled={mode !== 'login'}
-                                aria-disabled={mode !== 'login'}
                             />
-                            {/* 버튼은 항상 클릭 가능하지만 내부 로직이 처리함 */}
                             <button
                                 className="button g middle button-login"
                                 type="button"
@@ -162,7 +181,7 @@ const Login = ({ initialMode = '' }) => {
                                 aria-pressed={mode === 'login'}
                             >
                                 {loading ? '로그인 중…' : '로그인'}
-                            </button>{' '}
+                            </button>
                         </form>
 
                         {err && <p className="help-text error">{err}</p>}
@@ -170,17 +189,7 @@ const Login = ({ initialMode = '' }) => {
                         <div className="login-group-find">아이디 찾기 ｜ 비밀번호 찾기</div>
 
                         <div className="login-sns-icons-wrap" aria-hidden={mode !== 'login'}>
-                            {/* <div className="login-sns-icons-item">
-                                <img src="/images/icon/google.svg" alt="google" />
-                            </div> */}
                             <KakaoLoginButton />
-                            {/* <div className="login-sns-icons-item kakao">
-                                <img src="/images/icon/kakao.svg" alt="kakao" />
-                                <p>카카오톡으로 로그인</p>
-                            </div> */}
-                            {/* <div className="login-sns-icons-item">
-                                <img src="/images/icon/apple.svg" alt="apple" />
-                            </div> */}
                         </div>
                     </div>
 
@@ -196,19 +205,6 @@ const Login = ({ initialMode = '' }) => {
                         >
                             통합회원가입 하기
                         </button>
-
-                        <div className="login-sns-icons-wrap" aria-hidden={mode !== 'register'}>
-                            {/* <div className="login-sns-icons-item">
-                                <img src="/images/icon/google.svg" alt="google" />
-                            </div> */}
-                            {/* <div className="login-sns-icons-item kakao">
-                                <img src="/images/icon/kakao.svg" alt="kakao" />
-                                <p>카카오톡으로 로그인</p>
-                            </div> */}
-                            {/* <div className="login-sns-icons-item">
-                                <img src="/images/icon/apple.svg" alt="apple" />
-                            </div> */}
-                        </div>
                     </div>
                 </div>
             </div>

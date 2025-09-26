@@ -1,33 +1,26 @@
-import React, { useEffect } from 'react';
-import './style.scss';
-const KakaoLoginButton = () => {
-    useEffect(() => {
-        if (window.Kakao && !window.Kakao.isInitialized()) {
-            window.Kakao.init(import.meta.env.VITE_KAKAO_JAVASCRIPT_KEY);
-            console.log('Kakao initialized:', window.Kakao.isInitialized());
-        }
-    }, []);
+// src/components/ui/kakaoLogin/KakaoLoginButton.jsx
+import React from 'react';
 
-    const handleKakaoLogin = () => {
-        if (!window.Kakao) {
-            alert('카카오 SDK가 로드되지 않았습니다.');
-            return;
-        }
+const KAKAO_CLIENT_ID = import.meta.env.VITE_KAKAO_REST_API_KEY;
+const KAKAO_REDIRECT_URI = import.meta.env.VITE_KAKAO_REDIRECT_URI;
 
-        window.Kakao.Auth.login({
-            success: function (authObj) {
-                console.log('로그인 성공', authObj);
-                // 예: authObj.access_token 서버로 보내서 사용자 정보 요청 등 처리
-            },
-            fail: function (err) {
-                console.error('로그인 실패', err);
-            },
-        });
+const KakaoLoginButton = ({ className = 'login-sns-icons-item kakao', children }) => {
+    const handleClick = () => {
+        const url =
+            `https://kauth.kakao.com/oauth/authorize?response_type=code` +
+            `&client_id=${encodeURIComponent(KAKAO_CLIENT_ID)}` +
+            `&redirect_uri=${encodeURIComponent(KAKAO_REDIRECT_URI)}`;
+        window.location.href = url;
     };
 
     return (
-        <button id="kakaoBtn" onClick={handleKakaoLogin}>
-            카카오 로그인
+        <button type="button" id="kakaoBtn" className={className} onClick={handleClick}>
+            {children ?? (
+                <>
+                    <img src="/images/icon/kakao.svg" alt="kakao" />
+                    <p>카카오톡으로 로그인</p>
+                </>
+            )}
         </button>
     );
 };

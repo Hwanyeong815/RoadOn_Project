@@ -514,10 +514,4 @@ const useRewardStore = create(
     )
 );
 
-// ✅ 디버그 전역 노출 (어느 페이지든 콘솔에서 접근 가능)
-if (typeof window !== 'undefined') {
-    window.__USE_REWARD_STORE = useRewardStore;
-    console.log('[rewardStore] exposed at window.__USE_REWARD_STORE');
-}
-
 export default useRewardStore;
