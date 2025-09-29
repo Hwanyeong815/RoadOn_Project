@@ -1,83 +1,25 @@
 @use '../../../styles/utils/' as *;
 
 .search-bar {
-    width: 72.5rem;
-    height: 5.625rem;
-    z-index: 10;
+    &-wrap {
+        z-index: 1000;
+        padding-top: 0;
+        padding-bottom: vw(100px);
+    }
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: rgba(217, 217, 217, 0.1);
-    border-radius: 8.75rem;
-    padding: 1.5rem;
-    width: fit-content;
-    backdrop-filter: blur(6px);
-
-    .search-item {
-        display: flex;
-        align-items: center;
-        gap: vw(6px);
-        height: vw(45px);
-        padding: vw(12px) vw(20px);
-        border-radius: vw(45px);
-        background: rgba(255, 255, 255, 0.15);
-
-        border-radius: 30px;
-        padding: 10px 16px;
-        margin-right: 8px;
-        color: #fff;
-        color: var(--0, #fff3ee);
-        text-align: center;
-        font-family: SUIT;
-        font-size: 1rem;
-        font-style: normal;
-        font-weight: 700;
-        line-height: normal;
-
-        .icon {
-            margin-right: 0.94rem;
-            font-size: 14px;
-            opacity: 0.9;
-        }
-
-        input {
-            border: none;
-            outline: none;
-            background: transparent;
-            color: #fff;
-            font-size: 14px;
-            width: 200px;
-
-            &::placeholder {
-                color: var(--0, #fff3ee);
-
-                font-family: SUIT;
-                font-size: 1rem;
-                font-style: normal;
-                font-weight: 400;
-                line-height: normal;
-            }
-        }
-        &.search-location {
-            width: 21.25rem;
-            height: 2.8125rem;
-        }
-    }
-}
-
-.search-bar {
-    display: flex;
-    align-items: center;
-    // gap: vw(12px);
+    width: vw(1160px);
+    gap: vw(12px);
     flex-wrap: wrap;
-    width: vw(1092px);
     margin: auto;
     background: rgba(255, 255, 255, 0.1);
     border-radius: vw(40px);
-    padding: vw(10px) vw(20px);
+    // padding: vw(10px) vw(20px);
     box-sizing: border-box;
 
     .search-item {
+        flex: 1 1 0;
         display: flex;
         align-items: center;
         gap: vw(6px);
@@ -117,6 +59,7 @@
             }
 
             .placeholder {
+                @include font-16px;
                 color: $white; // placeholder 색상
             }
             .placeholder-w {
@@ -195,12 +138,14 @@
             background: transparent;
             border: none;
             outline: none;
+            // color: $default;
             color: $white;
             @include font-16px;
             cursor: pointer;
             text-align: left;
+            .date-picker,
             &::placeholder {
-                color: rgba(255, 255, 255, 0.8);
+                color: $white;
             }
         }
     }
@@ -217,7 +162,7 @@
             border-radius: vw(10px);
             padding: vw(14px);
             box-shadow: 0 vw(6px) vw(18px) rgba(0, 0, 0, 0.25);
-            z-index: 10;
+            z-index: 1001;
             color: $default;
             animation: dp-fade-slide 0.2s ease-out;
         }
@@ -227,11 +172,14 @@
             justify-content: space-between;
             span {
                 @include font-16px;
-                font-weight: bold;
             }
+        }
+        span {
+            @include font-16px;
         }
         .people-btn {
             border: none;
+
             width: vw(30px);
             height: vw(30px);
             border-radius: 50%;
@@ -272,7 +220,76 @@
             background: $foundation-mint-normalhover;
         }
     }
+    &.white {
+        background-color: $white;
+
+        border: $greyscale-300;
+        box-shadow: 0 vw(4px) vw(8px) 0 rgba(0, 0, 0, 0.06);
+        box-sizing: border-box;
+        padding: vw(22.5px) vw(25px);
+
+        .search {
+            &-item {
+                color: $greyscale-1100;
+                background-color: $greyscale-200;
+
+                .icon {
+                    color: $mint;
+                }
+                span {
+                    color: $greyscale-1100;
+                }
+            }
+            &-location {
+                .location-display {
+                    .selected-location {
+                        color: $greyscale-1100; // 선택된 위치 색상
+                        &-o {
+                            color: $greyscale-1100;
+                        }
+                    }
+
+                    .placeholder {
+                        color: $greyscale-1100;
+                    }
+                    .placeholder-w {
+                        color: $greyscale-1100;
+                    }
+                }
+
+                input {
+                    &::placeholder {
+                        color: $greyscale-1100;
+                    }
+                }
+                .dropdown {
+                    .search-input {
+                    }
+                    .location-list {
+                        li {
+                            &:hover {
+                            }
+                        }
+                    }
+                }
+            }
+            &-date {
+                .react-datepicker-wrapper,
+                .react-datepicker__input-container input {
+                    .date-picker,
+                    &::placeholder {
+                        color: $default;
+                    }
+                }
+            }
+            &-party {
+            }
+            &-btn {
+            }
+        }
+    }
 }
+
 /* 모바일 프리셋 */
 // .searchbar--mobile {
 //     // gap: 8px;
