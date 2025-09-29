@@ -13,6 +13,7 @@ const Login = ({ initialMode = '' }) => {
     const location = useLocation();
     const [searchParams] = useSearchParams();
 
+    // 모드: 기본 login, 필요 시 register
     const [mode, setMode] = useState(() => {
         const p = (initialMode || '').toLowerCase();
         const s = (location.state?.mode || '').toLowerCase();
@@ -51,6 +52,7 @@ const Login = ({ initialMode = '' }) => {
         }
     };
 
+    // 회원가입 이동
     const handleGoRegister = () => {
         if (mode !== 'register') {
             setMode('register');
@@ -59,6 +61,7 @@ const Login = ({ initialMode = '' }) => {
         navigate('/join');
     };
 
+    // 로그인 버튼 클릭 → submit 트리거
     const handleLoginButton = () => {
         if (mode !== 'login') {
             setMode('login');
@@ -110,7 +113,7 @@ const Login = ({ initialMode = '' }) => {
                     '/images/icon/human.png';
 
                 const user = {
-                    id: `kakao_${me.id}`,
+                    id: `kakao_${me.id}`, // ✅ id 보장
                     provider: 'kakao',
                     username: nickname,
                     nameKo: nickname,
@@ -122,7 +125,7 @@ const Login = ({ initialMode = '' }) => {
                 setCurrent(user);
                 setToken?.(token.access_token);
 
-                // URL 정리
+                // URL 정리 (code 파라미터 제거)
                 const cleanUrl = window.location.origin + window.location.pathname;
                 window.history.replaceState({}, '', cleanUrl);
 
@@ -148,7 +151,7 @@ const Login = ({ initialMode = '' }) => {
                 <div className={`login-wrap ${mode === 'register' ? 'is-register' : 'is-login'}`}>
                     <div className="slider" aria-hidden="true" />
 
-                    {/* 왼쪽: 로그인 */}
+                    {/* 로그인 */}
                     <div
                         className={`login-group left ${mode === 'login' ? 'on' : ''}`}
                         aria-live="polite"
@@ -156,7 +159,6 @@ const Login = ({ initialMode = '' }) => {
                         <h2 className="login-group-title">회원 로그인</h2>
                         <h2 className="login-group-subtitle">계정이 있으신가요?</h2>
 
-                        {/* ⬇️ 조건부 렌더링 ❌ 제거 → 항상 보여줌 */}
                         <form className="login-group-form" onSubmit={handleSubmit} ref={formRef}>
                             <input
                                 type="text"
@@ -193,7 +195,7 @@ const Login = ({ initialMode = '' }) => {
                         </div>
                     </div>
 
-                    {/* 오른쪽: 회원가입 */}
+                    {/* 회원가입 */}
                     <div className={`login-group right ${mode === 'register' ? 'on' : ''}`}>
                         <h2 className="login-group-title">회원 가입</h2>
                         <h2 className="login-group-subtitle">계정이 없으신가요?</h2>

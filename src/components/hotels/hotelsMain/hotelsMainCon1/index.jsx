@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { FiCalendar } from 'react-icons/fi';
 import DatePicker from 'react-datepicker';
 import AirportSearchBar from '../../../ui/AirportSearchBar/AirportSearchBar';
-// import SearchBar from '../../../ui/SearchBar/SearchBar';
-import SearchBari from '../../../home/visual/search/SearchBar';
+import SearchBar from '../../../ui/SearchBar/SearchBar';
+// import SearchBar from '../../../home/visual/search/SearchBar';
 
 const HotelsMainCon1 = () => {
     return (
@@ -13,7 +13,9 @@ const HotelsMainCon1 = () => {
             <div className="inner">
                 <h2 className="search-title">날짜를 선택해 예약하세요</h2>
                 {/* <SearchBar/> */}
-                <SearchBari className="hotels-search" />
+                <div className="search-bar-wrap">
+                    <SearchBar className="hotels-search" />
+                </div>
             </div>
         </section>
     );

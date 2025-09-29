@@ -3,7 +3,8 @@
 import Filter from '../../../components/hotels/hotelsSearch/Filter';
 import useHotelStore from '../../../store/hotelStore';
 import HotelBox from '../../../components/hotels/hotelsSearch/HotelBox';
-import SearchBarWhite from '../../../components/home/visual/search/SearchBarWhite';
+// import SearchBarWhite from '../../../components/home/visual/search/SearchBarWhite';
+import SearchBar from '../../../components/ui/SearchBar/SearchBar';
 
 function hotelsSearch() {
     // `useHotelStore`를 사용하여 필터 상태와 getFilteredHotels 함수를 모두 가져옵니다.
@@ -15,10 +16,13 @@ function hotelsSearch() {
     const hotels = getFilteredHotels();
 
     return (
-        <main className="hotel">
-            <SearchBarWhite />
+        <main className="hotel hotel-search">
+            {/* <SearchBarWhite /> */}
+            <div className="search-bar-wrap">
+                <SearchBar className="white" />
+            </div>
             <div className="inner">
-                <div className='hotel-filter'>
+                <div className="hotel-filter">
                     <Filter />
                 </div>
                 <div className="list-wrap">

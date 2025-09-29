@@ -9,7 +9,7 @@ import DetailRight from '../../../components/hotels/hotelsDetail/DetailRight';
 import DetailBottom from '../../../components/hotels/hotelsDetail/DetailBottom';
 import GalleryModal from '../../../components/hotels/hotelsDetail/GalleryModal';
 import SearchBar from '../../../components/ui/SearchBar/SearchBar';
-import SearchBarWhite from '../../../components/home/visual/search/SearchBarWhite';
+// import SearchBarWhite from '../../../components/home/visual/search/SearchBarWhite';
 
 const HotelsDetail = () => {
     const { slug } = useParams();
@@ -41,7 +41,7 @@ const HotelsDetail = () => {
     const dynamicOptions = options.map((room, index) => {
         const basePrice = hotel.price; // HotelBox에서 받아온 hotel의 가격
         const priceIncrement = 36850;
-        const newPrice = basePrice + (index * priceIncrement);
+        const newPrice = basePrice + index * priceIncrement;
 
         return {
             ...room,
@@ -114,21 +114,30 @@ const HotelsDetail = () => {
     return (
         <main className="hotel-detail">
             <div className="inner">
-                <SearchBarWhite />
+                {/* <SearchBarWhite /> */}
+                <div className="search-bar-wrap">
+                    <SearchBar className="white" />
+                </div>
                 <section className="hotel-thum">
                     <div
                         className="img-box big-img-1"
                         onClick={handleImageClick}
                         style={{ cursor: 'pointer' }}
                     >
-                        <img src={`/images/hotels/detail/hotelsList/${hotel.image[0]}`} alt="숙소이미지1" />
+                        <img
+                            src={`/images/hotels/detail/hotelsList/${hotel.image[0]}`}
+                            alt="숙소이미지1"
+                        />
                     </div>
                     <div
                         className="img-box big-img-2"
                         onClick={handleImageClick}
                         style={{ cursor: 'pointer' }}
                     >
-                        <img src={`/images/hotels/detail/hotelsList/${hotel.image[1]}`} alt="숙소이미지2" />
+                        <img
+                            src={`/images/hotels/detail/hotelsList/${hotel.image[1]}`}
+                            alt="숙소이미지2"
+                        />
                         <img src="/images/icon/gallery.svg" alt="갤러리" />
                     </div>
                 </section>
@@ -142,7 +151,7 @@ const HotelsDetail = () => {
                 <section className="detail-body-info">
                     <DetailLeft
                         hotel={hotel}
-                        options={dynamicOptions} 
+                        options={dynamicOptions}
                         displayedRooms={getFilteredRooms()}
                         selectedFilter={selectedFilter}
                         selectedRoom={selectedRoom}
@@ -162,10 +171,14 @@ const HotelsDetail = () => {
                     />
                     <DetailRight hotel={hotel} selectedRoom={selectedRoom} />
                 </section>
-                <DetailBottom hotel={hotel} reviews={hotelReviews} activeTab={activeTab}
+                <DetailBottom
+                    hotel={hotel}
+                    reviews={hotelReviews}
+                    activeTab={activeTab}
                     handleScrollTo={handleScrollTo}
                     locationRef={locationRef}
-                    reviewsRef={reviewsRef} />
+                    reviewsRef={reviewsRef}
+                />
             </div>
         </main>
     );
