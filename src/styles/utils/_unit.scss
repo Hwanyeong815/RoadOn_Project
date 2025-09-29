@@ -24,21 +24,12 @@ $rootUnit: 16px !default;
 
 // px을 vw 단위로 변경하는 함수 ------------------------------------------------------- /
 
-// 디자인 기준 뷰포트 (ex: 1920px, 필요시 with 로 오버라이드)
-$vw-base: 1920px !default;
+// 딱 두 개만 설정
+$vw-base: 1920px !default; // 디자인 기준폭
+$vw-min: 360px !default; // 최소 보장 뷰포트
 
-// 최소 보장할 뷰포트 폭 (모바일 최솟값, ex: 360px)
-$vw-min-viewport: 360px !default;
-
-// 입력 px 값으로 최소 px 산출
-@function vw-minpx($px, $min_vp: $vw-min-viewport, $base: $vw-base) {
-    @return math.div($px, $base) * $min_vp;
-}
-
-// 최종 vw() = clamp(min, vw, max)
-@function vw($px, $base: $vw-base, $min_vp: $vw-min-viewport) {
-    $min: vw-minpx($px, $min_vp, $base);
-    $fluid: math.div($px, $base) * 100vw;
-    $max: $px;
-    @return clamp($min, $fluid, $max);
+// px -> 화면기준(svw) 유동값 + 안전한 clamp
+@function vw($px) {
+    $r: math.div($px, $vw-base); // 비율
+    @return clamp($r * $vw-min, $r * 100svw, $px);
 }

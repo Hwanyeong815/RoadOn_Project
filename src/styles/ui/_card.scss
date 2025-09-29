@@ -5,137 +5,137 @@
 @use './../utils/flexbox' as *;
 @use './../utils/media' as *;
 
-.card {
-    transition: transform 1s;
+// .card {
+//     transition: transform 1s;
 
-    // 일반 선언 먼저
-    border-radius: rem(10px);
-    margin-bottom: 12px;
+//     // 일반 선언 먼저
+//     border-radius: rem(10px);
+//     margin-bottom: 12px;
 
-    @include tablet {
-        background-color: $white;
-    }
-    @include desktop {
-        background-color: $white;
-    }
+//     @include tablet {
+//         background-color: $white;
+//     }
+//     @include desktop {
+//         background-color: $white;
+//     }
 
-    a {
-        text-decoration: none;
-        color: inherit;
-    }
+//     a {
+//         text-decoration: none;
+//         color: inherit;
+//     }
 
-    &__title {
-        @include font-24px-B;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
+//     &__title {
+//         @include font-24px-B;
+//         overflow: hidden;
+//         text-overflow: ellipsis;
+//         white-space: nowrap;
+//     }
 
-    &__thumb {
-        border-top-left-radius: rem(10px);
-        border-top-right-radius: rem(10px);
+//     &__thumb {
+//         border-top-left-radius: rem(10px);
+//         border-top-right-radius: rem(10px);
 
-        // 일반 선언 먼저
-        width: 100%;
+//         // 일반 선언 먼저
+//         width: 100%;
 
-        @include mobile {
-            border-bottom-left-radius: rem(10px);
-            border-bottom-right-radius: rem(10px);
-        }
-    }
+//         @include mobile {
+//             border-bottom-left-radius: rem(10px);
+//             border-bottom-right-radius: rem(10px);
+//         }
+//     }
 
-    &-info {
-        padding: rem(16px);
-    }
+//     &-info {
+//         padding: rem(16px);
+//     }
 
-    &__subtitle {
-        @include font-18px-B;
-        @include marginY(16px);
-        display: block;
-        max-height: rem(54px);
-        order: -1;
+//     &__subtitle {
+//         @include font-18px-B;
+//         // @include marginY(16px);
+//         display: block;
+//         max-height: rem(54px);
+//         order: -1;
 
-        @include mobile {
-            margin-top: rem(4px);
-        }
-    }
+//         @include mobile {
+//             margin-top: rem(4px);
+//         }
+//     }
 
-    &__desc {
-        @include font-14px;
-        // color: $desc-font;
-    }
-}
+//     &__desc {
+//         @include font-14px;
+//         // color: $desc-font;
+//     }
+// }
 
-.card-practice {
-    background-color: $white;
+// .card-practice {
+//     background-color: $white;
 
-    .card__title {
-        margin-top: rem(8px);
-    }
+//     .card__title {
+//         margin-top: rem(8px);
+//     }
 
-    .card__subtitle {
-        height: rem(54px);
-    }
+//     .card__subtitle {
+//         height: rem(54px);
+//     }
 
-    &-info {
-        padding: rem(16px);
+//     &-info {
+//         padding: rem(16px);
 
-        @include mobile {
-            padding: rem(32px);
-        }
-    }
-}
+//         @include mobile {
+//             padding: rem(32px);
+//         }
+//     }
+// }
 
-.card-lecturer:hover {
-    transform: translateY(-10px);
-}
+// .card-lecturer:hover {
+//     transform: translateY(-10px);
+// }
 
-.card-lecturer {
-    a {
-        @include flexbox($direction: column);
+// .card-lecturer {
+//     a {
+//         @include flexbox($direction: column);
 
-        @include mobile {
-            flex-direction: row;
-            flex-grow: 1;
-            max-height: rem(150px);
-        }
-    }
+//         @include mobile {
+//             flex-direction: row;
+//             flex-grow: 1;
+//             max-height: rem(150px);
+//         }
+//     }
 
-    .card__subtitle,
-    .card__desc,
-    .tag-wrapper {
-        @include mobile {
-            width: 100%;
-            margin-top: 0;
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-        }
-    }
+//     .card__subtitle,
+//     .card__desc,
+//     .tag-wrapper {
+//         @include mobile {
+//             width: 100%;
+//             margin-top: 0;
+//             overflow: hidden;
+//             white-space: nowrap;
+//             text-overflow: ellipsis;
+//         }
+//     }
 
-    .card__thumb {
-        @include mobile {
-            width: rem(140px);
-        }
-        @include tablet {
-            height: 50%;
-        }
-        @include desktop {
-            height: 50%;
-        }
-    }
+//     .card__thumb {
+//         @include mobile {
+//             width: rem(140px);
+//         }
+//         @include tablet {
+//             height: 50%;
+//         }
+//         @include desktop {
+//             height: 50%;
+//         }
+//     }
 
-    &-info {
-        @include flexbox($direction: column);
-        padding: rem(16px);
+//     &-info {
+//         @include flexbox($direction: column);
+//         padding: rem(16px);
 
-        @include mobile {
-            @include paddingX(10px);
-            width: calc(100vw - 160px);
-        }
-    }
-}
+//         @include mobile {
+//             // @include paddingX(10px);
+//             width: calc(100vw - 160px);
+//         }
+//     }
+// }
 
-.tag-wrapper {
-    order: -2;
-}
+// .tag-wrapper {
+//     order: -2;
+// }
