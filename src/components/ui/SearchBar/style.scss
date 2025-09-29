@@ -147,6 +147,20 @@
             &::placeholder {
                 color: $white;
             }
+            .date-picker {
+                caret-color: transparent;
+                pointer-events: auto;
+                cursor: pointer;
+                user-select: none;
+            }
+
+            .date-picker:focus {
+                outline: none;
+            }
+        }
+        .react-datepicker__day--disabled {
+            color: #cccccc !important;
+            cursor: not-allowed !important;
         }
     }
 

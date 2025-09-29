@@ -1,17 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React</title>
-    <script
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Vite + React</title>
+        <!-- <script
       type="text/javascript"
-      src="//dapi.kakao.com/v2/maps/sdk.js?appkey=eeeaa5a76ddc41c1b38bf05e42fa8d5b&libraries=services"
-    ></script>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+      src="//dapi.kakao.com/v2/maps/sdk.js?appkey=eeeaa5a76ddc41c1b38bf05e42fa8d5b&libraries=services,clusterer"
+    ></script> -->
+        <script
+            charset="UTF-8"
+            class="daum_roughmap_loader_script"
+            src="https://ssl.daumcdn.net/dmaps/map_js_init/roughmapLoader.js"
+        ></script>
+        <script charset="UTF-8">
+            new daum.roughmap.Lander({
+                timestamp: '1759049304544',
+                key: '9vuvnykzriz',
+                mapWidth: '640',
+                mapHeight: '360',
+            }).render();
+        </script>
+    </head>
+    <body>
+        <div id="root"></div>
+        <script type="module" src="/src/main.jsx"></script>
+    </body>
 </html>
