@@ -2,32 +2,8 @@
 @use './unit' as *;
 @use 'sass:math';
 
-// 박스 가운데 정렬
-@mixin autoMargin($marginX: auto) {
-    margin-left: $marginX;
-    margin-right: $marginX;
-}
-
-// 패딩 관련 mixin
-@mixin paddingY($paddingY: 0) {
-    padding-top: rem($paddingY);
-    padding-bottom: rem($paddingY);
-}
-
-@mixin paddingX($paddingX: 0) {
-    padding-left: rem($paddingX);
-    padding-right: rem($paddingX);
-}
-
-// 마진 관련 mixin
-@mixin marginY($marginY: 0) {
-    margin-top: rem($marginY);
-    margin-bottom: rem($marginY);
-}
-
-@mixin marginX($marginX: 0) {
-    margin-left: rem($marginX);
-    margin-right: rem($marginX);
+@mixin circle {
+    border-radius: vw(999px);
 }
 
 // modal
@@ -36,31 +12,4 @@
     top: $top;
     left: $left;
     transform: translate(-50%, -50%);
-    
-}
-
-// 말줄임표
-@mixin textEllipsis() {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-// box size
-@mixin boxSizeMinMax($min: 768px, $max: 1200px) {
-    min-width: rem($min);
-    max-width: rem($max);
-    @include autoMargin;
-}
-
-@mixin boxSizeFull {
-    position: relative;
-    left: 50%;
-    margin-left: -50vw;
-    margin-right: initial;
-    width: 100vw;
-}
-
-@mixin circle {
-    border-radius: vw(999px);
 }

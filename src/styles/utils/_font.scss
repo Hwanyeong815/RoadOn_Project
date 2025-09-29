@@ -1,6 +1,8 @@
 @use './unit' as *;
+@use 'sass:math';
 
 // px을 clamp(rem) 단위로 변환하는 믹스인 -------------------------------
+/*
 @mixin font-size-clamp($value, $base: $rootUnit) {
     $range: 2px; // 기본값
 
@@ -11,6 +13,27 @@
     }
 
     font-size: clamp(rem($value - $range, $base), rem($value, $base), rem($value + $range, $base));
+}
+    */
+@mixin font-size-clamp($value, $base: $rootUnit) {
+    // 가변 범위(기존 로직 유지)
+    $range: 2px;
+    @if $value <= 18px {
+        $range: 1px;
+    } @else if $value >= 30px {
+        $range: 4px;
+    }
+
+    // 비율 및 값 계산
+    $ratio: math.div($value, $vw-base); // 무단위 비율
+    $min: rem($value - $range, $base); // px 하한을 rem으로
+    $max: rem($value + $range, $base); // px 상한을 rem으로
+
+    // 레거시/안전용 고정 폰트 먼저 한 줄 (브라우저 미지원 대비)
+    font-size: rem($value, $base);
+
+    // 진짜 유동 폰트: 가운데에 뷰포트 단위 사용
+    font-size: clamp($min, #{$ratio * 100}svw, $max);
 }
 
 // --------------------
@@ -98,7 +121,7 @@
     @include font-size-clamp(28px);
     font-weight: 800;
     letter-spacing: 0;
-    line-height: rem(21px);
+    line-height: rem(42px);
 }
 @mixin font-28px-M {
     @include font-size-clamp(28px);
@@ -132,12 +155,7 @@
     letter-spacing: 0;
     line-height: rem(36px);
 }
-@mixin font-24px {
-    @include font-size-clamp(24px);
-    font-weight: 400;
-    letter-spacing: 0;
-    line-height: rem(36px);
-}
+
 @mixin font-24px {
     @include font-size-clamp(24px);
     font-weight: 400;

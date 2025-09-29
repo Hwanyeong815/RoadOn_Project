@@ -56,64 +56,6 @@
             }
         }
     }
-
-    // &None {
-    //     appearance: none;
-    //     border: 0;
-    //     padding: 0;
-    //     background: none;
-    // }
-    // 햄버거 버튼
-    // &--burger {
-    //     @include desktop {
-    //         display: none;
-    //     }
-
-    //     width: rem(25px);
-    //     height: rem(25px);
-    //     overflow: hidden;
-    //     transform: translate(0, 0);
-    //     margin-right: 10px;
-    //     position: absolute;
-    //     right: 0px;
-
-    //     &__top,
-    //     &__middle,
-    //     &__bottom {
-    //         background: $dark-gray;
-    //         position: absolute;
-    //         left: 0;
-    //         width: 100%;
-    //     }
-
-    //     &__top {
-    //         height: 12%;
-    //         top: 10%;
-    //     }
-
-    //     &__middle {
-    //         height: 12%;
-    //         top: 45%;
-    //         transform: translateY(5%);
-    //     }
-
-    //     &__bottom {
-    //         height: 12%;
-    //         top: 80%;
-    //     }
-    // }
-
-    // &-group {
-    //     padding: rem(2px);
-    // }
-
-    // &-practice-prev,
-    // &-practice-next {
-    //     border: none;
-    //     background-color: transparent;
-    //     @include font-24px-B;
-    //     color: $black;
-    // }
 }
 
 button {

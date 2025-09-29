@@ -3,15 +3,6 @@
 @use './../utils/color' as *;
 @use './../utils/mixin' as *;
 
-.tag {
-    @include paddingX(8px);
-    @include paddingY(2px);
-    @include font-12px-B;
-    display: inline-block;
-    border-radius: rem(4px);
-    word-break: keep-all;
-}
-
 .circle {
     @include circle;
 }

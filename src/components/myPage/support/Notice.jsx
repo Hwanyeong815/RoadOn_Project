@@ -12,7 +12,10 @@ const Notice = () => {
     const { page, pageSize, setPage } = usePagination('notice', 3);
 
     const total = notices.length;
-
+    const totalPages = Math.max(1, Math.ceil(total / pageSize));
+    if (page > totalPages) {
+        setPage(totalPages);
+    }
     // 현재 페이지 아이템
     const pageItems = useMemo(() => {
         const start = (page - 1) * pageSize;
