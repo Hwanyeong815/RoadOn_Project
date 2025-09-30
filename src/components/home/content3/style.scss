@@ -2,6 +2,8 @@
 
 .content3 {
     position: relative;
+    overflow-x: hidden;
+    overflow: hidden;
 
     .hot_hotels {
         color: var(--greyscale-1200, #444);

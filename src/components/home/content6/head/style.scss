@@ -1,14 +1,14 @@
 @use '../../../../styles/utils' as *;
 
-body {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    overflow-x: hidden;
-}
+// body {
+//     position: relative;
+//     width: 100%;
+//     height: 100%;
+//     overflow-x: hidden;
+// }
 
 .inner {
-    margin-top: 12.5rem;
+    // margin-top: 12.5rem;
 
     .con-header {
         display: flex;
@@ -17,9 +17,9 @@ body {
             margin-top: 2rem;
             margin-left: 1rem;
         }
-        h1 {
+        h3 {
             display: inline-block;
-            color: var(--ORANGE, #ff7f50);
+            color: $orange;
             font-family: Pretendard;
             font-size: 8.75rem;
             font-weight: 600;

@@ -1,10 +1,14 @@
 @use '../../../styles/utils' as *;
 
 .coupon-event-container {
-    padding: vw(60) vw(20);
     margin: 0 auto;
     position: relative;
-    width: 100vw;
+    // width: 100vw;
+    width: min-content;
+    width: 99vw;
+
+    overflow-y: hidden;
+    overflow: hidden;
 
     .coupon-header {
         margin-bottom: vw(50);
@@ -54,6 +58,7 @@
 
     .couponbg {
         position: absolute;
+
         top: vw(290);
         right: vw(-320); // -20rem = -320px
     }
