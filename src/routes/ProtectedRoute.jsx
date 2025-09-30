@@ -14,7 +14,7 @@ const ProtectedRoute = ({ children }) => {
         if (!currentUser) {
             openSwal('loginRequired2').then((res) => {
                 if (res.isConfirmed) {
-                    navigate('/login', { state: { from: location }, replace: true });
+                    navigate('/login', { state: { from: location }, replace: false });
                 } else {
                     navigate('/', { replace: true }); // 로그인 거부 시 홈으로 돌려보내기
                 }

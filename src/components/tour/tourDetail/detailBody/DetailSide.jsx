@@ -2,6 +2,7 @@ import './style.scss';
 import { FiMinus, FiPlus } from 'react-icons/fi';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import ReserveBtn from '../../../ui/reserveBtn';
 
 const DetailSide = ({ tourData }) => {
     const [childCount, setChildCount] = useState(0);
@@ -103,13 +104,14 @@ const DetailSide = ({ tourData }) => {
             </div>
             <div className="btn-wrap">
                 {/* adultCount와 childCount가 모두 0일 때 버튼 비활성 */}
-                <button
+                {/* <button
                     className="button large o reserve"
                     disabled={adultCount === 0 && childCount === 0}
                     onClick={handleReservation}
                 >
                     예약하기
-                </button>
+                </button> */}
+                <ReserveBtn className="o" />
             </div>
         </section>
     );

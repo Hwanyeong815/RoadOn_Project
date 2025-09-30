@@ -45,9 +45,9 @@ const Login = ({ initialMode = '' }) => {
             if (!user) return setErr('계정이 없거나 비밀번호가 일치하지 않습니다.');
             setCurrent(user);
 
-            // ✅ 이전 경로 기억 (ProtectedRoute에서 state.from 전달됨)
-            const redirectTo = location.state?.from?.pathname || '/mypage';
-            navigate(redirectTo, { replace: true });
+            // ✅ 로그인 성공 후 이전 페이지로 이동 (없으면 기본 /mypage)
+            const from = location.state?.from?.pathname || '/mypage';
+            navigate(from, { replace: true });
         } catch {
             setErr('로그인 중 오류가 발생했습니다.');
         } finally {
@@ -83,8 +83,48 @@ const Login = ({ initialMode = '' }) => {
 
         (async () => {
             try {
-                // ... (토큰 발급 / 유저정보 로직 동일)
+                const body = new URLSearchParams({
+                    grant_type: 'authorization_code',
+                    client_id: KAKAO_CLIENT_ID,
+                    redirect_uri: KAKAO_REDIRECT_URI,
+                    code,
+                });
 
+                const tokenRes = await fetch('https://kauth.kakao.com/oauth/token', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8' },
+                    body: body.toString(),
+                });
+
+                const token = await tokenRes.json();
+                if (!token.access_token) throw new Error('토큰 발급 실패');
+
+                const meRes = await fetch('https://kapi.kakao.com/v2/user/me', {
+                    headers: { Authorization: `Bearer ${token.access_token}` },
+                });
+
+                const me = await meRes.json();
+                if (!me?.id) throw new Error('사용자 정보 조회 실패');
+
+                const nickname =
+                    me?.kakao_account?.profile?.nickname ||
+                    me?.properties?.nickname ||
+                    `kakao_${me.id}`;
+                const avatar =
+                    me?.kakao_account?.profile?.profile_image_url ||
+                    me?.properties?.profile_image ||
+                    '/images/icon/human.png';
+
+                const user = {
+                    id: `kakao_${me.id}`, // ✅ id 보장
+                    provider: 'kakao',
+                    username: nickname,
+                    nameKo: nickname,
+                    avatar,
+                    email: me?.kakao_account?.email || '',
+                };
+
+                // zustand 저장
                 setCurrent(user);
                 setToken?.(token.access_token);
 
@@ -92,12 +132,13 @@ const Login = ({ initialMode = '' }) => {
                 const cleanUrl = window.location.origin + window.location.pathname;
                 window.history.replaceState({}, '', cleanUrl);
 
-                // ✅ 이전 경로 있으면 이동
-                const redirectTo = location.state?.from?.pathname || '/mypage';
-                navigate(redirectTo, { replace: true });
+                // ✅ 로그인 성공 후 이전 페이지로 이동 (없으면 기본 /mypage)
+                const from = location.state?.from?.pathname || '/mypage';
+                navigate(from, { replace: true });
             } catch (e) {
                 console.error(e);
                 setErr('카카오 로그인 처리 중 오류가 발생했습니다.');
+                // URL 정리
                 const cleanUrl = window.location.origin + window.location.pathname;
                 window.history.replaceState({}, '', cleanUrl);
             }

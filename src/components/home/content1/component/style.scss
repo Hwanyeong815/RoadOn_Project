@@ -48,7 +48,14 @@
             border: none;
             pointer-events: auto;
 
-            transform: translateX(-50%);
+            background-color: $mint;
+        }
+        .btn-wrap {
+            position: relative;
+
+            button {
+                margin-left: 200px;
+            }
         }
     }
 
