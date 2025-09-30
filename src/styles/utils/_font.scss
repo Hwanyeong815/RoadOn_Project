@@ -47,6 +47,13 @@
     letter-spacing: 0;
     line-height: rem(60px);
 }
+// 60px
+@mixin font-55px-B {
+    @include font-size-clamp(55px);
+    font-weight: 700;
+    letter-spacing: 0;
+    line-height: rem(60px);
+}
 
 // 36px
 @mixin font-36px-B {

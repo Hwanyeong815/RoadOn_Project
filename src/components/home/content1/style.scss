@@ -1,49 +1,69 @@
-@use "../../../styles/utils" as *;
+@use '../../../styles/utils' as *;
 
 .themeSection {
-  width: 100%;
+    width: 100%;
 
-  .inner {
-    padding-bottom: 20px !important;
-    .title-wrap {
-      position: relative;
-      display: inline-block;
+    .inner {
+        // padding-bottom: 20px !important;
+        padding-bottom: vw(20) !important;
 
-      .title-img {
-        width: 90%;
-        position: relative;
-        z-index: 2;
-        margin-bottom: 2.94rem;
-      }
+        .title-wrap {
+            position: relative;
+            display: inline-block;
 
-      .highlight {
-        position: absolute;
-        bottom: 50px; // 글씨 높이에 맞춰 조정
-        right: 58px;
-        width: 33%;
-        height: 20%; // 박스 높이
-        background: #ffd6cc;
-        z-index: 1; // 이미지 아래
-      }
-    }
+            .title-img {
+                width: 90%;
+                position: relative;
+                z-index: 2;
 
-    .tags {
-      display: flex;
-      gap: 5rem;
-      list-style: none;
-      padding: 0;
+                // margin-bottom: 2.94rem; // ≈ 47.04px
+                margin-bottom: vw(47.04);
+            }
 
-      li {
-        position: relative; // ::after 위치 기준
-        font-size: 30px;
-        font-weight: 700;
-        color: #a7a7a7;
-        cursor: pointer;
+            .highlight {
+                position: absolute;
 
-        &.active {
-          color: $mint;
+                // bottom: 50px; // 글씨 높이에 맞춰 조정
+                bottom: vw(50);
+
+                // right: 58px;
+                right: vw(58);
+
+                width: 33%;
+
+                // height: 20%; // 박스 높이 (퍼센트라 그대로 둠)
+                height: 20%;
+
+                background: #ffd6cc;
+
+                // z-index: 1; // 이미지 아래
+                z-index: 1;
+            }
         }
-      }
+
+        .tags {
+            display: flex;
+
+            // gap: 5rem; // ≈ 80px
+            gap: vw(80);
+
+            list-style: none;
+            padding: 0;
+
+            li {
+                position: relative; // ::after 위치 기준
+
+                // font-size: 30px;
+                font-size: vw(30);
+
+                font-weight: 700;
+                color: #a7a7a7;
+                cursor: pointer;
+
+                &.active {
+                    color: $mint;
+                }
+            }
+        }
     }
-  }
 }

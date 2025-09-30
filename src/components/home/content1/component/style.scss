@@ -1,54 +1,71 @@
-@use "../../../../styles/utils" as *;
+@use '../../../../styles/utils' as *;
 
 .circle-component {
-  display: flex;
-  position: relative;
-  width: 100%;
-  align-items: center;
-
-  .left {
-    flex: 1;
-    align-items: center;
-    justify-content: center;
+    display: flex;
     position: relative;
+    width: 100%;
+    align-items: center;
 
-    .background {
-      width: 100%;
-      height: auto;
-      object-fit: cover;
-      position: relative;
+    .left {
+        flex: 1;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+
+        .background {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            position: relative;
+        }
+
+        .re-button {
+            position: absolute;
+
+            // top: 730px;
+            top: vw(730);
+
+            left: 25%;
+            background: $mint;
+            color: $white;
+
+            // width: 180px;
+            width: vw(180);
+
+            // height: 45px;
+            height: vw(45);
+
+            // border-radius: 30px;
+            border-radius: vw(30);
+
+            @include font-18px;
+            text-align: center;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: none;
+            pointer-events: auto;
+
+            transform: translateX(-50%);
+        }
     }
-    .re-button {
-      position: absolute;
-      top: vw(730px);
-      left: 25%;
-      background: $mint;
-      color: $white;
-      width: vw(180px);
-      height: vw(45px);
-      border-radius: vw(30px);
-      font-size: vw(18px);
-      font-weight: 400;
-      text-align: center;
 
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      border: none;
-      pointer-events: auto;
+    .right {
+        position: absolute;
 
-      transform: translateX(-50%);
+        // right: 280px;
+        right: vw(280);
+
+        // top: 70px;
+        top: vw(70);
+
+        .display-img {
+            // width: 700px;
+            width: vw(700);
+
+            height: auto;
+        }
     }
-  }
-
-  .right {
-    position: absolute;
-    right: 280px;
-    top: 70px;
-    .display-img {
-      width: 700px;
-      height: auto;
-    }
-  }
 }

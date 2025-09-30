@@ -1,73 +1,85 @@
-@use "../../../styles/utils" as *;
+@use '../../../styles/utils' as *;
 
 .bottom-text-container {
-  margin-top: 120px;
-  width: 100%;
-  background-color: #ffffff;
-  padding: 60px 0;
-  overflow: hidden;
+    // margin-top: 120px;
+    margin-top: vw(120);
+
+    width: 100%;
+    background-color: #ffffff;
+
+    // padding: 60px 0;
+    padding: vw(60) 0;
+
+    overflow: hidden;
 }
 
 .text-row {
-  width: 100%;
-  overflow: hidden;
-  margin-bottom: 30px;
+    width: 100%;
+    overflow: hidden;
 
-  &:last-child {
-    margin-bottom: 0;
-  }
+    // margin-bottom: 30px;
+    margin-bottom: vw(30);
+
+    &:last-child {
+        margin-bottom: 0;
+    }
 }
 
 .text-content {
-  display: flex;
-  width: max-content;
-  animation: scroll 40s linear infinite;
+    display: flex;
+    width: max-content;
+    animation: scroll 40s linear infinite;
 
-  img {
-    height: 100px;
-    width: auto;
-    margin-right: 0;
-    flex-shrink: 0;
-  }
+    img {
+        // height: 100px;
+        height: vw(100);
+
+        width: auto;
+        margin-right: 0;
+        flex-shrink: 0;
+    }
 }
 
 .text-row-1 .text-content {
-  animation: scroll-right 120s linear infinite;
+    animation: scroll-right 120s linear infinite;
 }
 
 .text-row-2 .text-content {
-  animation: scroll-left 120s linear infinite;
+    animation: scroll-left 120s linear infinite;
 }
 
 @keyframes scroll-right {
-  0% {
-    transform: translateX(-50%);
-  }
-  100% {
-    transform: translateX(0%);
-  }
+    0% {
+        transform: translateX(-50%);
+    }
+    100% {
+        transform: translateX(0%);
+    }
 }
 
 @keyframes scroll-left {
-  0% {
-    transform: translateX(0%);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
+    0% {
+        transform: translateX(0%);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
 }
 
 // 반응형 디자인
 @media screen and (max-width: 768px) {
-  .bottom-text-container {
-    padding: 40px 0;
-  }
+    .bottom-text-container {
+        // padding: 40px 0;
+        padding: vw(40) 0;
+    }
 
-  .text-content img {
-    height: 70px;
-  }
+    .text-content img {
+        // height: 70px;
+        height: vw(70);
+    }
 
-  .text-row {
-    margin-bottom: 20px;
-  }
+    .text-row {
+        // margin-bottom: 20px;
+        margin-bottom: vw(20);
+    }
 }
