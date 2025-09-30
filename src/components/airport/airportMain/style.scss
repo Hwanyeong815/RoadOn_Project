@@ -63,12 +63,11 @@
     .visual-bg {
         background-image: url('/images/airport/visual_bg.png');
         background-size: cover;
-        background-position: center;
+        background-position: 0 80%;
         background-repeat: no-repeat;
         width: 100%;
-        height: vw(550px);
+        height: vw(450px);
         position: relative;
-        top: vw(-600px);
         z-index: -1;
         display: flex;
         justify-content: center;
@@ -93,6 +92,7 @@
 
 //Con2
 .airport-main-con2 {
+    margin-top: vw(100px);
     .inner {
         h3 {
             span {
@@ -393,5 +393,155 @@
                 margin-right: vw(40px);
             }
         }
+    }
+}
+/* 모바일 */
+@media (max-width: 480px) {
+    .airport-main-con1 {
+        .visual-bg {
+            height: 550px !important;
+            top: 0;
+        }
+        .inner {
+            top: 80px;
+            padding: 0 16px;
+            .search-title {
+                @include font-20px-M;
+                margin: 16px 0;
+            }
+        }
+    }
+    .airport-main-con2 h3,
+    .airport-main-con2 h4,
+    .airport-main-con3 h3,
+    .airport-main-con3 h4,
+    .airport-main-con4 h3,
+    .airport-main-con4 h4,
+    .airport-main-con5 h3,
+    .airport-main-con5 h4 {
+        white-space: normal;
+        word-break: keep-all;
+        line-height: 1.4;
+        text-align: left;
+    }
+
+    /* Con2, Con3 */
+    .airport-main-con2 .inner .promo-list,
+    .airport-main-con3 .promo-list {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        overflow-x: auto;
+        gap: 12px;
+        scroll-snap-type: x mandatory;
+        padding-bottom: 12px;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+
+        .promo-card-con {
+            flex: 0 0 100% !important;
+            max-width: 100% !important;
+            scroll-snap-align: center;
+            border-radius: 12px;
+            overflow: hidden;
+
+            height: 360px;
+
+            img {
+                width: 100%;
+                height: 200px;
+                object-fit: cover;
+                display: block;
+            }
+
+            .info {
+                padding: 16px;
+                height: calc(100% - 200px);
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+            }
+        }
+    }
+
+    /* Con4 */
+    .airport-main-con4 .promo-list {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        overflow-x: auto;
+        gap: 12px;
+        scroll-snap-type: x mandatory;
+        padding-bottom: 12px;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+
+        .promo-card-con4 {
+            flex: 0 0 48% !important;
+            max-width: 48% !important;
+            scroll-snap-align: center;
+            border-radius: 12px;
+            overflow: hidden;
+            background: $white;
+
+            height: 320px;
+
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                display: block;
+            }
+
+            .info {
+                padding: 14px;
+                height: calc(100% - 180px);
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+
+                .type {
+                    @include font-14px;
+                    color: $greyscale-700;
+                    margin-bottom: 6px;
+                }
+                .title {
+                    @include font-16px-SB;
+                    color: $default;
+                    line-height: 1.4;
+                }
+                .desc {
+                    @include font-14px;
+                    color: $greyscale-900;
+                    margin-top: auto;
+                }
+            }
+        }
+    }
+
+    /* Con5 */
+    .airport-main-con5 .promo-list {
+        flex-direction: column !important;
+        gap: 16px;
+
+        .event {
+            width: 100% !important;
+            max-width: 100% !important;
+            height: 120px;
+            border-radius: 12px;
+            padding: 16px;
+        }
+    }
+
+    /* 공통 이미지 */
+    .airport-main-con2 img,
+    .airport-main-con3 img,
+    .airport-main-con4 img,
+    .airport-main-con5 img {
+        width: 100% !important;
+        object-fit: cover;
+        display: block;
     }
 }

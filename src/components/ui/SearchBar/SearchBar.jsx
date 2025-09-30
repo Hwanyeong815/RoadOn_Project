@@ -1,6 +1,6 @@
 // src/components/ui/searchBar/index.jsx
 import { useState, useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import { ko } from 'date-fns/locale';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -30,16 +30,41 @@ const locations = [
 
 const SearchBar = ({ className = '' }) => {
     const navigate = useNavigate();
+    const location = useLocation();
     const setSearchParams = useHotelStore((state) => state.setSearchParams);
+    const searchParams = useHotelStore((state) => state.searchParams);
+    const triggerUpdate = useHotelStore((state) => state.triggerUpdate);
 
     const [openDropdown, setOpenDropdown] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
-    const [selectedLocation, setSelectedLocation] = useState('');
-    const [dates, setDates] = useState([null, null]);
-    const [people, setPeople] = useState(1);
+
+    // zustand의 searchParams에서 초기값 가져오기
+    const [selectedLocation, setSelectedLocation] = useState(searchParams.location || '');
+    const [dates, setDates] = useState(() => {
+        // zustand에 저장된 날짜가 있으면 사용, 없으면 오늘/내일
+        if (searchParams.startDate && searchParams.endDate) {
+            return [new Date(searchParams.startDate), new Date(searchParams.endDate)];
+        }
+        const today = new Date();
+        const tomorrow = new Date(today);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        return [today, tomorrow];
+    });
+    const [people, setPeople] = useState(searchParams.people || 1);
+
+    const today = new Date();
 
     const peopleDropdownRef = useRef(null);
     const locationDropdownRef = useRef(null);
+
+    // searchParams가 변경되면 로컬 state 업데이트
+    useEffect(() => {
+        setSelectedLocation(searchParams.location || '');
+        if (searchParams.startDate && searchParams.endDate) {
+            setDates([new Date(searchParams.startDate), new Date(searchParams.endDate)]);
+        }
+        setPeople(searchParams.people || 1);
+    }, [searchParams]);
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -81,7 +106,15 @@ const SearchBar = ({ className = '' }) => {
             people,
         };
         setSearchParams(searchData);
-        navigate('/hotels/search');
+
+        // 현재 페이지가 /hotels/search인 경우
+        if (location.pathname === '/hotels/search') {
+            // 강제 업데이트 트리거
+            triggerUpdate();
+        } else {
+            // 다른 페이지에서는 /hotels/search로 이동
+            navigate('/hotels/search');
+        }
     };
 
     return (
@@ -153,6 +186,7 @@ const SearchBar = ({ className = '' }) => {
                     dateFormat="MM.dd (eee)"
                     placeholderText="가는날 - 오는날"
                     shouldCloseOnSelect
+                    minDate={today}
                 />
             </div>
 
