@@ -58,10 +58,23 @@ export const MyRoutes = () => {
                         <Route index element={<Home />} />
 
                         {/* 결제 관련 */}
-                        <Route path="payment">
+                        {/* <Route path="payment">
                             <Route index element={<Payment />} />
-                            {/* ✅ 성공 경로: completed (HotelPaymentRight.successUrl과 일치시켜야 함) */}
-                            {/* <Route path="completed" element={<PaymentCompleted />} /> */}
+
+                            <Route path="success" element={<PaymentSuccess />} />
+                            <Route path="fail" element={<PaymentFail />} />
+                        </Route> */}
+
+                        {/* 결제 관련 */}
+                        <Route
+                            path="payment"
+                            element={
+                                <ProtectedRoute>
+                                    <Outlet />
+                                </ProtectedRoute>
+                            }
+                        >
+                            <Route index element={<Payment />} />
                             <Route path="success" element={<PaymentSuccess />} />
                             <Route path="fail" element={<PaymentFail />} />
                         </Route>
