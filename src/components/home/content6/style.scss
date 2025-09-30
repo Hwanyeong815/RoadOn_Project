@@ -1,72 +1,82 @@
-@use "../../../styles/utils" as *;
+@use '../../../styles/utils' as *;
 
 .bottom-text-container {
-  width: 100%;
-  background-color: #ffffff;
-  padding: 60px 0;
-  overflow: hidden;
+    width: 100%;
+    background-color: #ffffff;
+
+    // padding: 60px 0;
+    padding: vw(60) 0;
+
+    overflow: hidden;
 }
 
 .text-row {
-  width: 100%;
-  overflow: hidden;
-  margin-bottom: 30px;
-  
-  &:last-child {
-    margin-bottom: 0;
-  }
+    width: 100%;
+    overflow: hidden;
+
+    // margin-bottom: 30px;
+    margin-bottom: vw(30);
+
+    &:last-child {
+        margin-bottom: 0;
+    }
 }
 
 .text-content {
-  display: flex;
-  width: max-content;
-  animation: scroll 40s linear infinite;
-  
-  img {
-    height: 100px;
-    width: auto;
-    margin-right: 0;
-    flex-shrink: 0;
-  }
+    display: flex;
+    width: max-content;
+    animation: scroll 40s linear infinite;
+
+    img {
+        // height: 100px;
+        height: vw(100);
+
+        width: auto;
+        margin-right: 0;
+        flex-shrink: 0;
+    }
 }
 
 .text-row-1 .text-content {
-  animation: scroll-right 40s linear infinite;
+    animation: scroll-right 40s linear infinite;
 }
 
 .text-row-2 .text-content {
-  animation: scroll-left 40s linear infinite;
+    animation: scroll-left 40s linear infinite;
 }
 
 @keyframes scroll-right {
-  0% {
-    transform: translateX(-50%);
-  }
-  100% {
-    transform: translateX(0%);
-  }
+    0% {
+        transform: translateX(-50%);
+    }
+    100% {
+        transform: translateX(0%);
+    }
 }
 
 @keyframes scroll-left {
-  0% {
-    transform: translateX(0%);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
+    0% {
+        transform: translateX(0%);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
 }
 
 // 반응형 디자인
 @media screen and (max-width: 768px) {
-  .bottom-text-container {
-    padding: 40px 0;
-  }
-  
-  .text-content img {
-    height: 70px;
-  }
-  
-  .text-row {
-    margin-bottom: 20px;
-  }
+    .bottom-text-container {
+        // padding: 40px 0;
+        padding: vw(40) 0;
+    }
+
+    .text-content img {
+        // height: 70px;
+        height: vw(70);
+    }
+
+    .text-row {
+        // margin-bottom: 20px;
+        margin-bottom: vw(20);
+    }
 }

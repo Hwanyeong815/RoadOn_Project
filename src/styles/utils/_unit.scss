@@ -28,8 +28,16 @@ $rootUnit: 16px !default;
 $vw-base: 1920px !default; // 디자인 기준폭
 $vw-min: 360px !default; // 최소 보장 뷰포트
 
-// px -> 화면기준(svw) 유동값 + 안전한 clamp
-@function vw($px) {
+// 숫자 → px 변환 보조 함수
+@function ensure-px($value) {
+    @if unit($value) == '' {
+        @return $value * 1px; // 단위 없으면 px로 붙임
+    }
+    @return $value; // 이미 px이면 그대로 반환
+}
+// px or 숫자 -> 화면기준(svw) 유동값 + 안전한 clamp
+@function vw($value) {
+    $px: ensure-px($value);
     $r: math.div($px, $vw-base); // 비율
     @return clamp($r * $vw-min, $r * 100svw, $px);
 }

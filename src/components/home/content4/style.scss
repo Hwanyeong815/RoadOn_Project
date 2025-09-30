@@ -1,58 +1,80 @@
-@use "../../../styles/utils" as *;
+@use '../../../styles/utils' as *;
+
 .content4 {
-  margin-top: 15rem;
-  width: 100%;
-  height: 86.75rem;
+    // margin-top: 15rem; // ≈ 240px
+    margin-top: vw(240);
 
-  position: relative;
-  .content4_top {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 8.62rem;
-    z-index: 1;
-    p {
-      font-size: 1.2rem;
-      font-weight: bold;
-      font-size: 2.8125rem;
-    }
-    .text1 {
-      color: #828282;
-    }
-    .text2 {
-      color: $orange;
-    }
-    .imgwrap {
-      position: relative;
-      width: 25.5625rem;
-      height: 32.6875rem;
+    width: 100%;
 
-      .airplane {
-        position: relative;
-        width: 100%;
-        height: 100%;
-        z-index: 2; // 프레임이 위로
-        pointer-events: none;
-      }
+    // height: 86.75rem; // ≈ 1388px
+    height: vw(1388);
 
-      video {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        z-index: 1; // 비디오는 뒤에
-        clip-path: ellipse(38% 48% at 50% 50%);
-      }
+    position: relative;
+
+    .content4_top {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        // gap: 8.62rem; // ≈ 137.92px
+        gap: vw(137.92);
+
+        z-index: 1;
+
+        p {
+            // font-size: 1.2rem; // ≈ 19.2px
+            font-size: vw(19.2);
+
+            font-weight: bold;
+
+            // font-size: 2.8125rem; // ≈ 45px
+            font-size: vw(45);
+        }
+
+        .text1 {
+            color: #828282;
+        }
+
+        .text2 {
+            color: $orange;
+        }
+
+        .imgwrap {
+            position: relative;
+
+            // width: 25.5625rem; // ≈ 409px
+            width: vw(409);
+
+            // height: 32.6875rem; // ≈ 523px
+            height: vw(523);
+
+            .airplane {
+                position: relative;
+                width: 100%;
+                height: 100%;
+                z-index: 2; // 프레임이 위로
+                pointer-events: none;
+            }
+
+            video {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                z-index: 1; // 비디오는 뒤에
+                clip-path: ellipse(38% 48% at 50% 50%);
+            }
+        }
     }
-  }
-  .content4_bg {
-    img {
-      position: absolute;
-      left: 0;
-      bottom: 0;
-      z-index: 1;
+
+    .content4_bg {
+        img {
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            z-index: 1;
+        }
     }
-  }
 }

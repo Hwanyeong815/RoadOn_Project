@@ -23,8 +23,8 @@ const Header = () => {
         const img = header.querySelector('h1 img');
         if (!img) return;
 
-        const defaultSrc = img.dataset.srcDefault || '/images/CI.png';
-        const greySrc = img.dataset.srcGrey || '/images/CI-grey.png';
+        const defaultSrc = img.dataset.srcDefault || '/images/ci.png';
+        const greySrc = img.dataset.srcGrey || '/images/ci-grey.png';
 
         const preload = (src) => {
             const p = new Image();
@@ -79,11 +79,11 @@ const Header = () => {
                 <h1>
                     <Link to="/">
                         <img
-                            src="/images/CI.png"
+                            src="/images/ci.png"
                             alt="Brand"
-                            data-src-default="/images/CI.png"
-                            data-src-grey="/images/CI-grey.png"
-                            data-current-src="/images/CI.png"
+                            data-src-default="/images/ci.png"
+                            data-src-grey="/images/ci-grey.png"
+                            data-current-src="/images/ci.png"
                             width="140"
                             height="auto"
                         />

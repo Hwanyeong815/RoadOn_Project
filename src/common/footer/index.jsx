@@ -7,7 +7,7 @@ const Footer = () => {
                 <div className="footer-group">
                     <h2>
                         <Link to="/">
-                            <img src="/images/CI-grey.png" alt="" />
+                            <img src="/images/ci-grey.png" alt="" />
                         </Link>
                     </h2>
                     <section className="footer-info-wrap">
