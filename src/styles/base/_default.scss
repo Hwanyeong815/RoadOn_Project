@@ -21,4 +21,9 @@ body {
         // padding-left: 5%;
         // padding-right: 5%;
     }
+    @include mobile {
+        .inner {
+            width: 350px;
+        }
+    }
 }

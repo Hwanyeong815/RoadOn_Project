@@ -89,6 +89,9 @@ const Header = () => {
                         />
                     </Link>
                 </h1>
+                <div className="mobile-menu-wrap">
+                    <img src="/images/ham.png" alt="" className="mobile-menu" />
+                </div>
                 <NavBar />
             </div>
             {/* <FloatingBtn /> */}
