@@ -58,14 +58,6 @@ export const MyRoutes = () => {
                         <Route index element={<Home />} />
 
                         {/* 결제 관련 */}
-                        {/* <Route path="payment">
-                            <Route index element={<Payment />} />
-
-                            <Route path="success" element={<PaymentSuccess />} />
-                            <Route path="fail" element={<PaymentFail />} />
-                        </Route> */}
-
-                        {/* 결제 관련 */}
                         <Route
                             path="payment"
                             element={
@@ -100,18 +92,14 @@ export const MyRoutes = () => {
                         </Route>
 
                         {/* ✅ 로그인 필요 */}
-                        <Route path="payment">
-                            <Route
-                                index
-                                element={
-                                    <ProtectedRoute>
-                                        <Payment />
-                                    </ProtectedRoute>
-                                }
-                            />
-                            <Route path="success" element={<PaymentSuccess />} />
-                            <Route path="fail" element={<PaymentFail />} />
-                        </Route>
+                        <Route
+                            path="mypage"
+                            element={
+                                <ProtectedRoute>
+                                    <MyPage />
+                                </ProtectedRoute>
+                            }
+                        />
                         {/* 기타 */}
                         <Route path="login" element={<Login />} />
                         <Route path="join" element={<Join />} />

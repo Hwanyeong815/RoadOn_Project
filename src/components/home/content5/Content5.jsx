@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './style.scss';
+import { MdArrowForwardIos, MdArrowBackIos } from 'react-icons/md';
 
 const slides = [
     { id: 0, image: './images/main/road1.png', alt: '리조트' },
@@ -9,7 +10,11 @@ const slides = [
 
 const Content5 = () => {
     const [currentSlide, setCurrentSlide] = useState(1);
+    const intervalRef = useRef(null);
+    const startX = useRef(0);
+    const isDragging = useRef(false);
 
+    // 위치 클래스 계산
     const getPositionClass = (index) => {
         const pos = (index - currentSlide + slides.length) % slides.length;
         if (pos === 1) return 'position-4'; // 오른쪽
@@ -17,8 +22,34 @@ const Content5 = () => {
         return pos === 0 ? 'position-3' : 'position-none'; // 중앙 or 숨김
     };
 
+    // 슬라이드 이동
     const moveSlide = (dir) =>
         setCurrentSlide((prev) => (prev + dir + slides.length) % slides.length);
+
+    // 자동 재생
+    useEffect(() => {
+        intervalRef.current = setInterval(() => {
+            moveSlide(1);
+        }, 3000);
+        return () => clearInterval(intervalRef.current);
+    }, []);
+
+    // 드래그 이벤트
+    const handleDragStart = (e) => {
+        isDragging.current = true;
+        startX.current = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+    };
+
+    const handleDragEnd = (e) => {
+        if (!isDragging.current) return;
+        const endX = e.type.includes('mouse') ? e.clientX : e.changedTouches[0].clientX;
+        const diff = endX - startX.current;
+
+        if (diff > 50) moveSlide(-1); // 오른쪽으로 드래그 → 이전
+        else if (diff < -50) moveSlide(1); // 왼쪽으로 드래그 → 다음
+
+        isDragging.current = false;
+    };
 
     return (
         <div className="content5-container">
@@ -38,10 +69,16 @@ const Content5 = () => {
                 </div>
 
                 {/* 슬라이더 */}
-                <div className="slider-container">
-                    {/* 좌우 화살표 */}
+                <div
+                    className="slider-container"
+                    onMouseDown={handleDragStart}
+                    onMouseUp={handleDragEnd}
+                    onTouchStart={handleDragStart}
+                    onTouchEnd={handleDragEnd}
+                >
                     <button className="left-arrow" onClick={() => moveSlide(-1)}>
                         <ArrowIcon dir="left" />
+                        <MdArrowBackIos />
                     </button>
 
                     <div className="slider-content">
@@ -57,17 +94,6 @@ const Content5 = () => {
                                             <p className="location">강릉시 · 강릉 강문해변 앞</p>
                                             <h3 className="hotel-name">세인트존스 호텔</h3>
                                         </div>
-                                        <div className="category-tags">
-                                            <svg viewBox="0 0 100 100" className="category-svg">
-                                                <defs>
-                                                    <path
-                                                        id="circle"
-                                                        d="M50,50 m-37,0 a37,37 0 1,1 74,0 a37,37 0 1,1 -74,0"
-                                                    />
-                                                </defs>
-                                                {/* 필요 시 textPath 추가 */}
-                                            </svg>
-                                        </div>
                                     </div>
                                 )}
                             </div>
@@ -76,6 +102,7 @@ const Content5 = () => {
 
                     <button className="right-arrow" onClick={() => moveSlide(1)}>
                         <ArrowIcon dir="right" />
+                        <MdArrowForwardIos />
                     </button>
                 </div>
             </div>
@@ -84,7 +111,7 @@ const Content5 = () => {
 };
 
 const ArrowIcon = ({ dir }) => (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+    <svg width="30" height="24" viewBox="0 0 24 24" fill="none">
         <path
             d={dir === 'left' ? 'M15 18L9 12L15 6' : 'M9 18L15 12L9 6'}
             stroke="white"

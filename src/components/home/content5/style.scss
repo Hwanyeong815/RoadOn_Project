@@ -62,8 +62,6 @@
             // 화살표
             .left-arrow,
             .right-arrow {
-                height: 100%;
-                width: 5%;
                 display: flex;
                 justify-content: center;
                 align-items: center;
@@ -163,13 +161,13 @@
                     box-shadow: 0 vw(3) vw(13) rgba($black, 0.2);
                 }
 
-                &.position-none {
-                    left: 50%;
-                    z-index: 0;
-                    transform: translate(-50%, 0) rotateY(0deg) scale(0.7, 0.7);
-                    opacity: 0;
-                    box-shadow: none;
-                }
+                // &.position-none {
+                //     left: 50%;
+                //     z-index: 0;
+                //     transform: translate(-50%, 0) rotateY(0deg) scale(0.7, 0.7);
+                //     opacity: 0;
+                //     box-shadow: none;
+                // }
 
                 // 미디어와 카드
                 .media,
