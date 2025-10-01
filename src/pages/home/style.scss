@@ -8,26 +8,4 @@
     h2 {
         @include font-32px-B;
     }
-    @include tablet {
-        .inner {
-            padding: vw(48) 0; // 48px → vw(48)
-            background-color: skyblue;
-        }
-        h2 {
-            font-size: 3rem;
-        }
-    }
 }
-/*
-@include tablet {
-    .home {
-        .inner {
-            padding: 50px 0;
-            background-color: pink;
-        }
-        h2 {
-            @include font-18px-B;
-        }
-    }
-}
-    */

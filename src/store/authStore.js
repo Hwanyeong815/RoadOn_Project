@@ -37,7 +37,7 @@ const loadFromStorage = () => {
 };
 
 const initial = (() => {
-    const base = { users: [defaultTestUser], currentUser: null };
+    const base = { users: [defaultTestUser], currentUser: undefined }; // 🚨 null → undefined
     if (typeof window === 'undefined') return base;
 
     const stored = loadFromStorage();

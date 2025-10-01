@@ -98,6 +98,7 @@ const AirportBox = ({ airportId, inWishList = false }) => {
     }
 
     const handleClick = () => {
+        // ✅ 로그인 확인 제거 → 그냥 결제 페이지로 바로 이동
         navigate(`/payment`, { state: { productType: 'flight', airport, segments } });
     };
 

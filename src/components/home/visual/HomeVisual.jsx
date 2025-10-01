@@ -29,8 +29,8 @@ const HomeVisual = () => {
             {/* 오버레이 */}
             <div className="overlay"></div>
             <div className="text" ref={textRef}>
-                <h1>
-                    Cinematic Scene{' '}
+                <h2>
+                    Cinematic Scene
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="59"
@@ -97,11 +97,13 @@ const HomeVisual = () => {
                             stroke-width="1.5"
                         />{' '}
                     </svg>
-                </h1>
+                </h2>
                 <p>
                     클릭 한 번으로 즐기는 <span>영화 같은 여행</span>
                 </p>
-                <SearchBar />
+                <div className="search-bar-wrap">
+                    <SearchBar />
+                </div>
             </div>
         </div>
     );

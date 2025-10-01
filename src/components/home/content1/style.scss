@@ -4,7 +4,6 @@
     width: 100%;
 
     .inner {
-        // padding-bottom: 20px !important;
         padding-bottom: vw(20) !important;
 
         .title-wrap {
@@ -64,6 +63,12 @@
                     color: $mint;
                 }
             }
+        }
+    }
+    @include tablet {
+        @include mobile {
+            height: 590px;
+            background-color: pink;
         }
     }
 }

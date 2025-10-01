@@ -22,12 +22,10 @@
         flex: 1 1 0;
         display: flex;
         align-items: center;
-        gap: vw(6px);
-        height: vw(45px);
-        padding: vw(12px) vw(20px);
-        border-radius: vw(45px);
+        // height: vw(45px);
+        // padding: vw(12px) vw(20px);
+        // border-radius: vw(45px);
         background: rgba(255, 255, 255, 0.15);
-        color: $white;
         @include font-16px;
         position: relative;
         cursor: pointer;
@@ -75,6 +73,7 @@
             text-align: left;
             @include font-16px;
             flex-grow: 1;
+
             &::placeholder {
                 color: rgba(255, 255, 255, 0.8);
                 text-align: left;
@@ -298,6 +297,94 @@
             &-party {
             }
             &-btn {
+            }
+        }
+    }
+    @include tablet {
+        @include mobile {
+            &-wrap {
+                width: 100%;
+                margin: 0;
+                padding: 0;
+            }
+
+            border: 1px solid $white !important;
+            min-width: 350px;
+            height: 235px;
+            flex-direction: column;
+            justify-content: center;
+            gap: 15px;
+
+            padding: 0;
+            .search-item {
+                min-width: 300px;
+                max-height: 35px;
+                font-size: 12px;
+                border-radius: 500px !important;
+                padding: 0 20px;
+
+                .icon {
+                    font-size: 12px;
+                    margin-left: 20px;
+                    margin-right: 10px;
+                }
+                span {
+                    font-size: 12px;
+                }
+            }
+            .search-location {
+                .location-display {
+                    .selected-location {
+                        &-o {
+                        }
+                    }
+
+                    .placeholder {
+                        font-size: 12px;
+                    }
+                    .placeholder-w {
+                    }
+                }
+
+                input {
+                    &::placeholder {
+                    }
+                }
+                .dropdown {
+                    .search-input {
+                    }
+                    .location-list {
+                        li {
+                            &:hover {
+                            }
+                        }
+                    }
+                }
+            }
+            .search-date {
+                .react-datepicker-wrapper,
+                .react-datepicker__input-container input {
+                    font-size: 12px;
+
+                    .date-picker,
+                    &::placeholder {
+                    }
+                    .date-picker {
+                    }
+
+                    .date-picker:focus {
+                    }
+                }
+                .react-datepicker__day--disabled {
+                }
+            }
+            .search-btn {
+                min-width: 300px;
+                min-height: 35px;
+                border-radius: 500px !important;
+                background-color: rgba($mint, 0.15) !important;
+                border: 1px solid $mint !important;
+                color: $mint !important;
             }
         }
     }

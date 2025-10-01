@@ -12,18 +12,17 @@ body {
     color: $default;
     @include font-16px;
     word-break: keep-all;
-    // @include paddingX(16px);
+
     @include desktop {
-        // padding-left: 5%;
-        // padding-right: 5%;
     }
     @include tablet {
-        // padding-left: 5%;
-        // padding-right: 5%;
+        .inner {
+            width: min(89.74vw, 350px);
+        }
     }
     @include mobile {
         .inner {
-            width: 350px;
+            width: min(89.74vw, 350px);
         }
     }
 }

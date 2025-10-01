@@ -100,14 +100,18 @@ export const MyRoutes = () => {
                         </Route>
 
                         {/* ✅ 로그인 필요 */}
-                        <Route
-                            path="mypage"
-                            element={
-                                <ProtectedRoute>
-                                    <MyPage />
-                                </ProtectedRoute>
-                            }
-                        />
+                        <Route path="payment">
+                            <Route
+                                index
+                                element={
+                                    <ProtectedRoute>
+                                        <Payment />
+                                    </ProtectedRoute>
+                                }
+                            />
+                            <Route path="success" element={<PaymentSuccess />} />
+                            <Route path="fail" element={<PaymentFail />} />
+                        </Route>
                         {/* 기타 */}
                         <Route path="login" element={<Login />} />
                         <Route path="join" element={<Join />} />

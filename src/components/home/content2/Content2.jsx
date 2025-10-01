@@ -55,8 +55,10 @@ const CouponEvent = () => {
         const couponTweens = [];
 
         gsap.utils.toArray('.coupon-item').forEach((item, i) => {
+            const isMobile = window.innerWidth < 768;
+
             const tween = gsap.to(item, {
-                y: 200, // 더 크게 출렁
+                y: isMobile ? 20 : 120, // ✅ 모바일은 살짝만, 데스크탑은 크게
                 duration: 1.2,
                 repeat: -1,
                 yoyo: true,

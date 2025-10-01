@@ -1,30 +1,34 @@
-// src/routes/protectedRoute.jsx
+// src/routes/ProtectedRoute.jsx
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import useAuthStore from '../store/authStore';
 import { openSwal } from '../components/ui/swal/presets';
 
 const ProtectedRoute = ({ children }) => {
-    const currentUser = useAuthStore((s) => s.currentUser ?? s.current ?? s.user ?? null);
+    const currentUser = useAuthStore((s) => s.currentUser);
+    const isLoggedIn = useAuthStore((s) => s.isLoggedIn);
     const location = useLocation();
     const navigate = useNavigate();
-    const [checking, setChecking] = useState(true); // ✅ 초기 로딩 상태 추가
+    const [checking, setChecking] = useState(true);
 
     useEffect(() => {
-        if (!currentUser) {
+        // store 복원 전이면 대기
+        if (currentUser === undefined) return;
+
+        if (!isLoggedIn || !currentUser) {
             openSwal('loginRequired2').then((res) => {
                 if (res.isConfirmed) {
-                    navigate('/login', { state: { from: location }, replace: false });
+                    navigate('/login', { state: { from: location }, replace: true });
                 } else {
-                    navigate('/', { replace: true }); // 로그인 거부 시 홈으로 돌려보내기
+                    navigate('/', { replace: true });
                 }
             });
         }
         setChecking(false);
-    }, [currentUser, navigate, location]);
+    }, [currentUser, isLoggedIn, navigate, location]);
 
-    // ✅ 체크 중이거나 로그인 안 된 상태면 children을 렌더링하지 않음
-    if (checking || !currentUser) return null;
+    // 로그인 체크 중이거나 로그인 실패 시 → 아무것도 안 그림
+    if (checking || !isLoggedIn || !currentUser) return null;
 
     return children;
 };

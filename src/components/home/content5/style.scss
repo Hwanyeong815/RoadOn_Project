@@ -3,372 +3,288 @@
 .content5-container {
     width: 100%;
     min-height: 100vh;
-    background-color: #ffffff;
-    padding: 100px 0;
-    overflow: visible;
-}
+    background-color: $white;
+    padding: vw(100) 0;
+    border: 1px solid $black;
 
-.roadon-pick-section {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-    overflow: visible;
-}
+    .roadon-pick-section {
+        max-width: vw(1200);
+        margin: 0 auto;
+        padding: 0 vw(20);
+        overflow: visible;
 
-// 헤더 영역
-.roadon-pick-header {
-    text-align: center;
-    margin-bottom: 80px;
-    margin-top: 60px;
-}
+        // 헤더 영역
+        .roadon-pick-header {
+            text-align: center;
+            margin-bottom: vw(80);
+            margin-top: vw(60);
 
-.roadon-pick-title {
-    font-size: 3rem !important;
-    font-weight: 300 !important;
-    margin-bottom: 10px !important;
-    line-height: 1.1 !important;
-    letter-spacing: -1px !important;
+            .roadon-pick-title {
+                margin-bottom: vw(10);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 90px;
 
-    .road-text {
-        color: var(--MINT, #42bdcc);
-        text-align: center;
-        font-family: Pretendard;
-        font-size: 60px;
-        font-style: normal;
-        font-weight: 600;
-        line-height: 150%; /* 90px */
+                p {
+                    font-size: rem(60);
+                    margin-right: 10px;
+                    color: $greyscale-1100;
+                    .R {
+                        color: $mint;
+                    }
+                    .O {
+                        color: $orange;
+                    }
+                }
+            }
+
+            .roadon-pick-description {
+                @include font-24px;
+                color: $greyscale-1000;
+                line-height: 1.5;
+            }
+        }
+
+        // 슬라이더 컨테이너
+        .slider-container {
+            height: vw(576); // 36rem 기준
+            width: 100%;
+            max-width: vw(1200);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            user-select: none;
+            position: relative;
+            margin-top: vw(32); // 2rem
+            overflow: visible;
+
+            // 화살표
+            .left-arrow,
+            .right-arrow {
+                height: 100%;
+                width: 5%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                cursor: pointer;
+                transition: all 0.5s ease-in-out;
+                position: absolute;
+                z-index: 10;
+                border: none;
+                background: none;
+
+                svg {
+                    width: vw(96); // 6rem
+                    height: vw(96);
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    cursor: pointer;
+                    border-radius: 50%;
+                    padding: vw(8);
+                    background: transparent;
+                    color: $white;
+                    opacity: 1;
+                }
+            }
+
+            .left-arrow {
+                left: -10%;
+            }
+            .right-arrow {
+                right: -10%;
+            }
+
+            // 슬라이더 콘텐츠
+            .slider-content {
+                height: 100%;
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: row;
+                overflow: visible;
+                position: relative;
+                perspective: vw(100);
+
+                &-background {
+                    display: none;
+                }
+            }
+
+            // 슬라이드 카드
+            .slide {
+                position: absolute;
+                left: 50%;
+                background: $greyscale-800;
+                border-radius: vw(25);
+                z-index: 0;
+                transform: translate(-50%, 0) rotateY(0deg) scale(1, 1);
+                transform-style: preserve-3d;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                transition: all 0.5s ease-in-out;
+
+                &.position-2 {
+                    width: vw(400);
+                    height: vw(400);
+                    border-radius: vw(60) 0;
+                    left: 5%;
+                    z-index: 2;
+                    opacity: 1;
+                    box-shadow: 0 vw(3) vw(13) rgba($black, 0.2);
+                }
+
+                &.position-3 {
+                    width: vw(610);
+                    height: vw(550);
+                    border-radius: vw(60) 0;
+                    left: 50%;
+                    z-index: 4;
+                    opacity: 1;
+                    box-shadow: 0 vw(3) vw(16) rgba($black, 0.3);
+                    cursor: pointer;
+
+                    &:hover {
+                        box-shadow: 0 0 vw(19) rgba($black, 0.4);
+                        transform: translate(-50%, 0) rotateY(0deg) scale(1.02, 1.02);
+                    }
+                }
+
+                &.position-4 {
+                    width: vw(400);
+                    height: vw(400);
+                    border-radius: vw(60) 0;
+                    left: 95%;
+                    z-index: 2;
+                    opacity: 1;
+                    box-shadow: 0 vw(3) vw(13) rgba($black, 0.2);
+                }
+
+                &.position-none {
+                    left: 50%;
+                    z-index: 0;
+                    transform: translate(-50%, 0) rotateY(0deg) scale(0.7, 0.7);
+                    opacity: 0;
+                    box-shadow: none;
+                }
+
+                // 미디어와 카드
+                .media,
+                .card-sections {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    border-radius: vw(60) 0;
+                }
+
+                .media {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+
+                    img {
+                        position: absolute;
+                        height: 100%;
+                        width: 100%;
+                        object-fit: cover;
+                        border-radius: vw(60) 0;
+                    }
+                }
+
+                .card-sections {
+                    padding: vw(16);
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-between;
+                    box-sizing: border-box;
+                }
+
+                // 카드 오버레이
+                .card-overlay {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-between;
+                    padding: vw(55);
+                    color: $white;
+                    text-shadow: 0 vw(2) vw(10) rgba($black, 0.7);
+                    background: linear-gradient(
+                        180deg,
+                        rgba(0, 0, 0, 0.2) 0%,
+                        rgba(0, 0, 0, 0.05) 30%,
+                        rgba(0, 0, 0, 0.05) 70%,
+                        rgba(0, 0, 0, 0.3) 100%
+                    );
+                    border-radius: vw(60) 0;
+
+                    .top-info {
+                        text-align: left;
+
+                        .location {
+                            @include font-16px;
+                            opacity: 0.95;
+                            margin-bottom: vw(5);
+                            margin-left: vw(3);
+                            letter-spacing: 0.5px;
+                        }
+
+                        .hotel-name {
+                            @include font-32px-B;
+                            line-height: 1;
+                            margin: 0;
+                            letter-spacing: -1px;
+                            text-shadow: none;
+                        }
+                    }
+
+                    .hilton-logo {
+                        position: absolute;
+                        top: vw(30);
+                        right: vw(30);
+                        font-size: rem(20);
+                        font-weight: 900;
+                        background: rgba($white, 0.95);
+                        color: $black;
+                        padding: vw(8) vw(16);
+                        border-radius: vw(8);
+                        box-shadow: 0 vw(4) vw(10) rgba($black, 0.2);
+                    }
+
+                    .category-tags {
+                        position: absolute;
+                        bottom: vw(-30);
+                        left: 50%;
+                        transform: translateX(-50%);
+                        width: 100%;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        overflow: visible;
+
+                        .category-svg {
+                            fill: currentColor;
+                            max-width: vw(150);
+                            width: vw(150);
+                            height: auto;
+                            filter: drop-shadow(0 vw(2) vw(10) rgba($black, 0.7));
+                            transform: rotate(-14deg);
+                        }
+                    }
+                }
+            }
+        }
     }
 
-    .oad-text {
-        color: var(--greyscale-1100, #646464);
-        font-family: Pretendard;
-        font-size: 60px;
-        font-style: normal;
-        font-weight: 600;
-        line-height: 150%;
-    }
-
-    .o-text {
-        color: var(--ORANGE, #ff7f50);
-        font-family: Pretendard;
-        font-size: 60px;
-        font-style: normal;
-        font-weight: 600;
-        line-height: 150%;
-    }
-
-    .n-text {
-        color: var(--greyscale-1100, #646464);
-        font-family: Pretendard;
-        font-size: 60px;
-        font-style: normal;
-        font-weight: 600;
-        line-height: 150%;
-    }
-
-    .pick-text {
-        color: var(--greyscale-1100, #646464);
-        font-family: Pretendard;
-        font-size: 60px;
-        font-style: normal;
-        font-weight: 500;
-        line-height: 150%;
-    }
-}
-
-.roadon-pick-description {
-    font-size: 20px;
-    color: #666;
-    font-weight: 500;
-    line-height: 1.5;
-}
-
-// 슬라이더 컨테이너
-.slider-container {
-    height: 36rem;
-    width: 100%;
-    max-width: 1200px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    user-select: none;
-    position: relative;
-    margin-top: 2rem;
-    overflow: visible;
-}
-
-// 화살표
-.left-arrow,
-.right-arrow {
-    height: 100%;
-    width: 5%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    position: absolute;
-    z-index: 10;
-}
-
-.left-arrow {
-    left: -10%;
-}
-
-.right-arrow {
-    right: -10%;
-}
-
-.left-arrow svg,
-.right-arrow svg {
-    width: 6rem;
-    height: 6rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    border-radius: 50%;
-    padding: 8px;
-    background: transparent;
-    color: white;
-    opacity: 1;
-}
-
-// 슬라이더 콘텐츠
-.slider-content {
-    height: 100%;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: row;
-    overflow: visible;
-    position: relative;
-    perspective: 100px;
-}
-
-// 그라데이션 배경 제거
-.slider-content-background {
-    display: none;
-}
-
-// 슬라이드 카드
-.slide {
-    position: absolute;
-    left: 50%;
-    background: #999;
-    border-radius: 25px;
-    z-index: 0;
-    transform: translate(-50%, 0) rotateY(0deg) scale(1, 1);
-    transform-style: preserve-3d;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out, left 0.5s ease-in-out,
-        z-index 0s 0.25s ease-in-out, box-shadow 0.5s ease-in-out, filter 0.5s ease-in-out;
-}
-
-// 위치별 크기 조정
-.slide.position-2 {
-    width: 400px !important;
-    height: 400px !important;
-    border-radius: 60px 0px;
-}
-
-.slide.position-3 {
-    width: 610px !important;
-    height: 550px !important;
-    border-radius: 60px 0px;
-}
-
-.slide.position-4 {
-    width: 400px !important;
-    height: 400px !important;
-    border-radius: 60px 0px;
-}
-
-// 위치별 스타일
-.slide.position-2 {
-    left: 5% !important;
-    z-index: 2 !important;
-    transform: translate(-50%, 0) rotateY(0deg) !important;
-    opacity: 1 !important;
-    box-shadow: 0px 0.2rem 0.8rem rgba(0, 0, 0, 0.2) !important;
-    filter: none;
-}
-
-.slide.position-3 {
-    left: 50% !important;
-    z-index: 4 !important;
-    transform: translate(-50%, 0) rotateY(0deg) !important;
-    opacity: 1 !important;
-    box-shadow: 0px 0.2rem 1rem rgba(0, 0, 0, 0.3) !important;
-    cursor: pointer;
-    filter: none;
-
-    &:hover {
-        box-shadow: 0px 0rem 1.2rem rgba(0, 0, 0, 0.4) !important;
-        transform: translate(-50%, 0) rotateY(0deg) scale(1.02, 1.02) !important;
-    }
-}
-
-.slide.position-4 {
-    left: 95% !important;
-    z-index: 2 !important;
-    transform: translate(-50%, 0) rotateY(0deg) !important;
-    opacity: 1 !important;
-    box-shadow: 0px 0.2rem 0.8rem rgba(0, 0, 0, 0.2) !important;
-    filter: none;
-}
-
-.slide.position-none {
-    left: 50%;
-    z-index: 0;
-    transform: translate(-50%, 0) rotateY(0deg) scale(0.7, 0.7);
-    opacity: 0;
-    box-shadow: 0px 0.4rem 1.6rem rgba(0, 0, 0, 0);
-}
-
-// 미디어와 카드 섹션
-.media,
-.card-sections {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border-radius: 60px 0px;
-}
-
-.media {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    img {
-        position: absolute;
-        height: 100%;
-        width: 100%;
-        object-fit: cover;
-        border-radius: 60px 0px;
-    }
-}
-
-.card-sections {
-    padding: 1rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    box-sizing: border-box;
-}
-
-// 카드 오버레이
-.card-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 55px;
-    color: white;
-    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
-    background: linear-gradient(
-        180deg,
-        rgba(0, 0, 0, 0.2) 0%,
-        rgba(0, 0, 0, 0.05) 30%,
-        rgba(0, 0, 0, 0.05) 70%,
-        rgba(0, 0, 0, 0.3) 100%
-    );
-    border-radius: 60px 0px;
-}
-
-// 상단 정보
-.top-info {
-    text-align: left;
-}
-
-.location {
-    font-size: 16px;
-    // margin-bottom: 8px;
-    opacity: 0.95;
-    font-weight: 400;
-    margin-bottom: 5px;
-    margin-left: 3px;
-    letter-spacing: 0.5px;
-}
-
-.hotel-name {
-    font-size: 32px;
-    font-weight: 700;
-    line-height: 1;
-    margin: 0;
-    letter-spacing: -1px;
-    text-shadow: none;
-}
-
-// Hilton 로고
-.hilton-logo {
-    position: absolute;
-    top: 30px;
-    right: 30px;
-    font-size: 20px;
-    font-weight: 900;
-    background: rgba(255, 255, 255, 0.95);
-    color: #000;
-    padding: 8px 16px;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-
-// 카테고리 태그
-.category-tags {
-    position: absolute;
-    bottom: -30px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: visible;
-}
-
-.category-svg {
-    fill: currentColor;
-    height: auto;
-    max-width: 150px;
-    transform-origin: center;
-    width: 150px;
-    filter: drop-shadow(0 2px 10px rgba(0, 0, 0, 0.7));
-    overflow: visible;
-    transform: rotate(-14deg);
-}
-
-// 반응형 디자인
-@media screen and (max-width: 620px) {
-    .slide.position-2,
-    .slide.position-4 {
-        opacity: 0.95 !important;
-    }
-}
-
-@media screen and (max-width: 445px) {
-    .slide.position-2,
-    .slide.position-4 {
-        opacity: 0.5 !important;
-    }
-}
-
-@media screen and (max-width: 415px) {
-    .slide {
-        opacity: 0 !important;
-        box-shadow: none !important;
-    }
-    .slide.position-3 {
-        box-shadow: none !important;
-        opacity: 1 !important;
+    @include tablet {
+        @include mobile;
     }
 }

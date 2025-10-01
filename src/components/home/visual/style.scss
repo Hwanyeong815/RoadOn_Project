@@ -34,7 +34,7 @@
         left: 50%;
         transform: translate(-50%, -45%);
 
-        h1 {
+        h2 {
             font-size: rem(96);
             letter-spacing: vw(-1.92);
             color: $white;
@@ -59,6 +59,56 @@
 
             span {
                 @include font-24px-B;
+            }
+        }
+    }
+    @include tablet {
+        @include mobile {
+            height: 440px;
+            .overlay {
+            }
+            .video {
+            }
+            .text {
+                justify-content: space-between;
+                padding: 20px 0;
+                width: 100%;
+                height: max-content;
+                gap: 10px;
+                padding: 0;
+                margin: 0;
+
+                h2 {
+                    line-height: 1;
+                    margin: 0;
+                    padding: 0;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    width: 100%;
+                    font-size: 20px;
+
+                    svg {
+                        height: 20px;
+                        width: 20px;
+                        &.tour-o,
+                        .tour-u {
+                            margin-right: 0;
+                        }
+                    }
+                }
+                p {
+                    margin: 0;
+                    margin-top: -50px;
+                    margin-bottom: 60px;
+                    padding: 0;
+                    font-size: 12px;
+                    span {
+                        font-size: 12px;
+                    }
+                }
+                .search-bar-wrap {
+                }
             }
         }
     }

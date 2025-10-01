@@ -156,3 +156,10 @@
         }
     }
 }
+@include tablet {
+    @include mobile {
+        .content3 {
+            display: none;
+        }
+    }
+}
