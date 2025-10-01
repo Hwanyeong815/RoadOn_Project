@@ -286,4 +286,9 @@ html.is-active {
         transform: translateY(0);
         pointer-events: auto;
     }
+    @include tablet {
+        @include mobile {
+            display: none;
+        }
+    }
 }

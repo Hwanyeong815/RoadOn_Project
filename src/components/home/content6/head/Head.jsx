@@ -82,10 +82,8 @@ const Head = () => {
         <section className="inner" ref={headerRef}>
             <div className="con-header">
                 <h3 ref={titleRef}>
-                    <span className="lead">BEST&nbsp;</span>
-                    <span className="grayhead">
-                        TRAVEL <br />
-                    </span>
+                    BEST
+                    <span className="grayhead">TRAVEL</span>
                 </h3>
                 <span className="grayhead" ref={subheadRef}>
                     DESTINATIONS

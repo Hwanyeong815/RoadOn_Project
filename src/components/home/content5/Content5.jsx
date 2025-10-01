@@ -77,7 +77,6 @@ const Content5 = () => {
                     onTouchEnd={handleDragEnd}
                 >
                     <button className="left-arrow" onClick={() => moveSlide(-1)}>
-                        <ArrowIcon dir="left" />
                         <MdArrowBackIos />
                     </button>
 
@@ -101,7 +100,6 @@ const Content5 = () => {
                     </div>
 
                     <button className="right-arrow" onClick={() => moveSlide(1)}>
-                        <ArrowIcon dir="right" />
                         <MdArrowForwardIos />
                     </button>
                 </div>
@@ -109,17 +107,5 @@ const Content5 = () => {
         </div>
     );
 };
-
-const ArrowIcon = ({ dir }) => (
-    <svg width="30" height="24" viewBox="0 0 24 24" fill="none">
-        <path
-            d={dir === 'left' ? 'M15 18L9 12L15 6' : 'M9 18L15 12L9 6'}
-            stroke="white"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-        />
-    </svg>
-);
 
 export default Content5;
