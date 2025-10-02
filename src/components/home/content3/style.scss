@@ -2,24 +2,20 @@
 
 .content3 {
     position: relative;
-    overflow-x: hidden;
-    overflow: hidden;
+    // overflow: hidden;
+    // padding-bottom: 550px;
+    // padding-top: 100px;
+    // padding: 100px 0;
+    padding: vw(100) 0 vw(500);
 
     .hot_hotels {
-        color: var(--greyscale-1200, #444);
-
-        // font-size: 3.125rem; // ≈ 50px
-        font-size: vw(50);
-
+        color: $greyscale-1200;
+        font-size: rem(60);
         font-weight: 700;
         line-height: 150%;
-        position: absolute;
-
-        // right: 18.83rem; // ≈ 301.28px
-        right: vw(301.28);
-
-        // top: 18.69rem; // ≈ 299.04px
-        top: vw(299.04);
+        text-align: right;
+        padding-right: vw(300);
+        z-index: 3;
     }
 
     .contet3bg {
@@ -29,21 +25,14 @@
             width: 100vw;
             position: absolute;
             bottom: 0;
-            overflow: hidden;
         }
 
         video {
-            overflow: hidden;
             position: absolute;
             bottom: 0;
             left: 0;
-
-            // width: 143.5rem; // ≈ 2296px
             width: vw(2296);
-
-            // height: 30.625rem; // ≈ 490px
             height: vw(490);
-
             object-fit: cover;
             z-index: -1;
         }
@@ -51,111 +40,85 @@
 
     .carousel {
         position: relative;
-        z-index: 1;
-
-        // height: 94.3125rem; // ≈ 1509px
-        height: vw(1509);
-
+        z-index: 0;
+        height: vw(800);
         pointer-events: none;
-    }
-
-    .carousel-item {
-        --width: clamp(150px, 30vw, 300px);
-        --height: clamp(200px, 40vw, 400px);
-        --x: calc(var(--active) * 800%);
-        --y: calc(var(--active) * 200%);
-        --rot: calc(var(--active) * 120deg);
-        --opacity: calc(var(--zIndex) / var(--items) * 3 - 2);
-
-        overflow: hidden;
-        position: absolute;
-        z-index: var(--zIndex);
-        width: var(--width);
-        height: var(--height);
-        margin: calc(var(--height) * -0.5) 0 0 calc(var(--width) * -0.5);
-        border-radius: vw(10);
-        user-select: none;
-        transform-origin: 0% 100%;
-        pointer-events: all;
-
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(var(--x), var(--y)) rotate(var(--rot));
-
-        z-index: var(--zIndex);
-        transition: transform 0.8s cubic-bezier(0, 0.02, 0, 1);
-
-        .carousel-box {
+        .carousel-item {
+            --x: calc(var(--active) * 400%);
+            --y: calc(var(--active) * 100%);
+            --rot: calc(var(--active) * 60deg);
+            --opacity: calc(var(--zIndex) / var(--items) * 3 - 2);
             position: absolute;
-            z-index: 1;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            transition: opacity 0.8s cubic-bezier(0, 0.02, 0, 1);
-            opacity: var(--opacity);
-            font-family: 'Orelo-sw-db', serif;
+            z-index: var(--zIndex);
+            width: vw(420);
+            height: vw(560);
+            margin: calc(var(--height) * -0.5) 0 0 calc(var(--width) * -0.5);
+            user-select: none;
+            transform-origin: 0% 100%;
+            pointer-events: all;
+            top: 40%;
+            left: 50%;
+            transform: translate(var(--x), var(--y)) rotate(var(--rot));
+            transition: transform 0.8s cubic-bezier(0, 0.02, 0, 1);
 
-            &:before {
-                content: '';
+            .carousel-box {
                 position: absolute;
-                z-index: 1;
                 top: 0;
                 left: 0;
                 width: 100%;
                 height: 100%;
-                background: linear-gradient(
-                    to bottom,
-                    rgba(0, 0, 0, 0.3),
-                    rgba(0, 0, 0, 0) 30%,
-                    rgba(0, 0, 0, 0) 50%,
-                    rgba(0, 0, 0, 0.5)
-                );
+                transition: opacity 0.8s cubic-bezier(0, 0.02, 0, 1);
+                opacity: var(--opacity);
+                border-radius: vw(18);
+                overflow: hidden;
+
+                &:before {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: linear-gradient(
+                        to bottom,
+                        rgba(0, 0, 0, 0.3),
+                        rgba(0, 0, 0, 0) 30%,
+                        rgba(0, 0, 0, 0) 50%,
+                        rgba(0, 0, 0, 0.5)
+                    );
+                }
             }
-        }
 
-        .title {
-            position: absolute;
-            z-index: 1;
-            color: #fff;
+            .title {
+                position: absolute;
+                color: $white;
+                bottom: vw(20);
+                left: vw(20);
+                text-shadow: 0 vw(4) vw(4) rgba(0, 0, 0, 0.1);
 
-            // bottom: 20px;
-            bottom: vw(20);
+                strong {
+                    @include font-14px;
+                }
+                h3 {
+                    @include font-30px-B;
+                    font-family: 'Pretendard';
+                    line-height: 1.1;
+                }
+                p {
+                    @include font-18px;
+                }
+            }
 
-            // left: 20px;
-            left: vw(20);
-
-            transition: opacity 0.8s cubic-bezier(0, 0.02, 0, 1);
-            font-size: clamp(20px, 3vw, 30px);
-
-            // text-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
-            text-shadow: 0 vw(4) vw(4) rgba(0, 0, 0, 0.1);
-        }
-
-        .num {
-            position: absolute;
-            z-index: 1;
-            color: #fff;
-
-            // top: 10px;
-            top: vw(10);
-
-            // left: 20px;
-            left: vw(20);
-
-            transition: opacity 0.8s cubic-bezier(0, 0.02, 0, 1);
-            font-size: clamp(20px, 10vw, 80px);
-        }
-
-        img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            pointer-events: none;
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                pointer-events: none;
+            }
         }
     }
 }
+
 @include tablet {
     @include mobile {
         .content3 {

@@ -1,16 +1,16 @@
 @use '../../../styles/utils' as *;
 
 .bottom-text-container {
-    // margin-top: 120px;
     margin-top: vw(120);
-
     width: 100%;
     background-color: #ffffff;
-
-    // padding: 60px 0;
     padding: vw(60) 0;
-
     overflow: hidden;
+    @include tablet {
+        @include mobile {
+            display: none;
+        }
+    }
 }
 
 .text-row {
@@ -31,7 +31,6 @@
     animation: scroll 40s linear infinite;
 
     img {
-        // height: 100px;
         height: vw(100);
 
         width: auto;

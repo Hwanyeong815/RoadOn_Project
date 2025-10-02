@@ -80,14 +80,19 @@ const Head = () => {
 
     return (
         <section className="inner" ref={headerRef}>
-            <div className="con-header">
-                <h3 ref={titleRef}>
-                    BEST
-                    <span className="grayhead">TRAVEL</span>
+            <div className="con-header-wrap">
+                <h3 className="con-header-title" ref={titleRef}>
+                    <strong className="con-header-row">
+                        <span className="head-txt orange">BEST</span>
+                        <span className="head-txt">TRAVEL</span>
+                    </strong>
+                    <strong className="con-header-row">
+                        <span className="head-txt" ref={subheadRef}>
+                            DESTINATIONS
+                        </span>
+                    </strong>
                 </h3>
-                <span className="grayhead" ref={subheadRef}>
-                    DESTINATIONS
-                </span>
+
                 <p>스크롤을 내려 다음 여행을 찾아보세요.</p>
             </div>
         </section>

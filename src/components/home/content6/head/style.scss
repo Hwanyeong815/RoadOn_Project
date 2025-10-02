@@ -2,65 +2,62 @@
 
 .inner {
     .con-header {
-        display: flex;
-        flex-direction: column;
+        &-wrap {
+            display: flex;
+            flex-direction: column;
 
-        p {
-            margin-top: vw(62); // 2rem = 32px → vw 단위 변환
-            margin-left: vw(16); // 1rem = 16px → vw 단위 변환
-        }
+            p {
+                margin-top: vw(50);
 
-        h3 {
-            font-size: rem(140);
-            color: $orange;
-            line-height: 1;
-            &:not(span) {
-                font-weight: 800;
-            }
-            span {
-                font-weight: 400;
-                margin-left: 30px;
-                min-height: max-content;
+                width: 100%;
+                font-size: rem(25);
+                font-weight: 300;
             }
         }
-
-        .grayhead {
-            color: var(--greyscale-1200, #444);
-            line-height: 1;
-            font-size: rem(140);
-            // vertical-align: top;
+        &-title {
+            display: flex;
+            flex-direction: column;
         }
-    }
-
-    .heading-line-wrapper {
-        overflow: hidden; // 줄 단위 마스크
-    }
-
-    .heading-line-wrapper div {
-        display: block; // SplitText가 만든 라인 span 감싸는 요소
+        &-row {
+            display: flex !important;
+            // justify-content: center;
+            width: 100%;
+            gap: vw(10);
+            .head {
+                &-txt {
+                    color: $greyscale-1200;
+                    font-size: rem(140);
+                    line-height: 1;
+                }
+            }
+            .orange {
+                color: $orange;
+                font-weight: bold;
+            }
+        }
     }
 }
 
 @include tablet {
     @include mobile {
         .con-header {
-            p {
-            }
+            &-wrap {
+                align-items: center;
 
-            h3 {
-                font-size: rem(35);
-                span {
+                p {
+                    display: none;
                 }
             }
 
-            .grayhead {
+            &-row {
+                justify-content: center;
+                .head {
+                    &-txt {
+                        font-size: rem(35) !important;
+                    }
+                }
             }
-        }
-
-        .heading-line-wrapper {
-        }
-
-        .heading-line-wrapper div {
         }
     }
 }
+// 모바일일때 35px
