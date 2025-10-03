@@ -1,6 +1,7 @@
 import Content1 from '../../components/home/content1/Content1';
 import Content2 from '../../components/home/content2/Content2';
 import Content3 from '../../components/home/content3/Content3';
+import Content3Mobile from '../../components/home/content3/Content3Mobile';
 import Content4 from '../../components/home/content4/Content4';
 import Content5 from '../../components/home/content5/Content5';
 import Content6 from '../../components/home/content6/Content6';
@@ -18,6 +19,7 @@ function Home() {
             <Content3 />
             <Content4 />
             <Content5 />
+            <Content3Mobile />
             <Content6 />
             <Content7 />
         </main>
