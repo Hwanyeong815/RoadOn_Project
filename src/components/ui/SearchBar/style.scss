@@ -1,123 +1,391 @@
 @use '../../../styles/utils/' as *;
 
-.searchbar {
-    width: vw(1160px);
-    height: vw(90px);
-    margin: auto;
-    padding: vw(25px);
-    display: grid;
-    grid-auto-flow: column;
-    grid-template-columns: 1fr repeat(2, vw(280px)) vw(120px);
-    grid-template-rows: vw(45px);
+.search-bar {
+    &-wrap {
+        z-index: 1000;
+        padding-top: 0;
+        padding-bottom: vw(100px);
+    }
+    display: flex;
+    justify-content: space-between;
     align-items: center;
-    gap: vw(30px);
+    width: vw(1160px);
+    gap: vw(12px);
+    flex-wrap: wrap;
+    margin: auto;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: vw(40px);
+    // padding: vw(10px) vw(20px);
+    box-sizing: border-box;
 
-    border-radius: vw(140px);
-    background: $white;
+    .search-item {
+        flex: 1 1 0;
+        display: flex;
+        align-items: center;
+        // height: vw(45px);
+        // padding: vw(12px) vw(20px);
+        // border-radius: vw(45px);
+        background: rgba(255, 255, 255, 0.15);
+        @include font-16px;
+        position: relative;
+        cursor: pointer;
 
-    &.transparent {
-        border: vw(1px) solid #d9d9d9;
-        background: rgba(217, 217, 217, 0.1);
-        backdrop-filter: blur(5px);
-        .searchbar {
-            &__field,
-            &__input,
-            &__chip {
-                color: $white;
-                background: rgba(255, 255, 255, 0.15);
-                span {
-                    color: #fff3ee;
-                }
-            }
-            &__input {
-                background-color: transparent;
-                &::placeholder {
+        .icon {
+            color: $white;
+            @include font-18px;
+        }
+
+        &:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+    }
+
+    // 여행지 검색 부분 스타일
+    .search-location {
+        width: vw(260px);
+        .location-display {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            color: $white;
+
+            .selected-location {
+                color: $greyscale-1100; // 선택된 위치 색상
+                &-o {
                     color: $white;
                 }
             }
+
+            .placeholder {
+                @include font-16px;
+                color: $white; // placeholder 색상
+            }
+            .placeholder-w {
+                color: $greyscale-1100;
+            }
+        }
+
+        input {
+            background: transparent;
+            border: none;
+            outline: none;
+            color: $white;
+            text-align: left;
+            @include font-16px;
+            flex-grow: 1;
+
+            &::placeholder {
+                color: rgba(255, 255, 255, 0.8);
+                text-align: left;
+            }
+        }
+        .dropdown {
+            position: absolute;
+            top: calc(100% + vw(6px));
+            left: 0;
+            width: vw(300px); // 드롭다운 너비
+            background: $white;
+            border-radius: vw(10px);
+            padding: vw(14px);
+            box-shadow: 0 vw(6px) vw(18px) rgba(0, 0, 0, 0.25);
+            z-index: 10;
+            color: $default;
+            animation: dp-fade-slide 0.2s ease-out;
+
+            z-index: 1000; // 충분히 높은 값
+            pointer-events: auto; // 클릭 이벤트 허용
+
+            .search-input {
+                width: 100%;
+                padding: vw(8px);
+                margin-bottom: vw(10px);
+                border: 1px solid $greyscale-300;
+                border-radius: vw(6px);
+                @include font-16px;
+                color: $default;
+            }
+            .location-list {
+                list-style: none;
+                margin: 0;
+                padding: 0;
+                max-height: vw(180px);
+                overflow-y: auto;
+
+                li {
+                    padding: vw(8px);
+                    border-radius: vw(6px);
+                    cursor: pointer;
+                    @include font-16px;
+                    color: $default;
+                    &:hover {
+                        background: $greyscale-100;
+                    }
+
+                    cursor: pointer;
+                    pointer-events: auto;
+                }
+            }
         }
     }
 
-    /* 필드 (검색어) */
-    &__field {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        height: vw(45px);
-        padding: 0 vw(25px);
-        border-radius: 999px;
-        background: #f4f4f4;
-        color: $greyscale-1100;
-    }
+    // 날짜 선택 부분 스타일
+    .search-date {
+        width: vw(280px);
+        .react-datepicker-wrapper,
+        .react-datepicker__input-container input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            outline: none;
+            // color: $default;
+            color: $white;
+            @include font-16px;
+            cursor: pointer;
+            text-align: left;
+            .date-picker,
+            &::placeholder {
+                color: $white;
+            }
+            .date-picker {
+                caret-color: transparent;
+                pointer-events: auto;
+                cursor: pointer;
+                user-select: none;
+            }
 
-    &__icon {
-        width: vw(20px);
-        color: $mint;
-    }
-
-    &__input {
-        border: none;
-        outline: none;
-        background: transparent;
-        color: #333;
-
-        @include font-16px-M;
-
-        &::placeholder {
-            color: $greyscale-1100;
+            .date-picker:focus {
+                outline: none;
+            }
+        }
+        .react-datepicker__day--disabled {
+            color: #cccccc !important;
+            cursor: not-allowed !important;
         }
     }
 
-    /* 칩 공통 */
-    &__chip {
-        display: inline-flex;
-        align-items: center;
-        gap: vw(14px);
-        height: vw(45px);
-        padding: 0 vw(27px);
-        border: 0;
-        border-radius: vw(140px);
-        background: #f4f4f4;
-
+    // 인원 선택 부분 스타일
+    .search-party {
+        width: vw(260px);
+        .dropdown {
+            position: absolute;
+            top: calc(100% + vw(6px));
+            left: 0;
+            width: vw(220px); // 인원 드롭다운 너비
+            background: $white;
+            border-radius: vw(10px);
+            padding: vw(14px);
+            box-shadow: 0 vw(6px) vw(18px) rgba(0, 0, 0, 0.25);
+            z-index: 1001;
+            color: $default;
+            animation: dp-fade-slide 0.2s ease-out;
+        }
+        .people-control {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            span {
+                @include font-16px;
+            }
+        }
         span {
-            color: $greyscale-1100;
-            @include font-16px-B;
+            @include font-16px;
         }
-        font: inherit;
-        white-space: nowrap;
-        cursor: pointer;
+        .people-btn {
+            border: none;
 
-        .searchbar__icon {
-            width: 18px;
-            height: 18px;
+            width: vw(30px);
+            height: vw(30px);
+            border-radius: 50%;
+            background: $mint;
+            color: $white;
+            @include font-16px;
+            cursor: pointer;
+            &:hover {
+                background: $foundation-mint-normalhover;
+            }
         }
-
-        &:hover {
-            filter: brightness(0.98);
-        }
-        &:active {
-            transform: translateY(1px);
+        .confirm-btn {
+            margin-top: vw(10px);
+            width: 100%;
+            padding: vw(10px);
+            border-radius: vw(40px);
+            border: none;
+            background: $mint;
+            color: $white;
+            cursor: pointer;
+            &:hover {
+                background: $foundation-mint-normalhover;
+            }
         }
     }
 
-    /* 검색 버튼 */
-    &__submit {
+    .search-btn {
+        width: vw(120px);
         height: vw(45px);
-        align-self: center;
-        border: 0;
-        border-radius: vw(140px);
+        padding: vw(10px);
+        border-radius: vw(30px);
+        border: none;
         background: $mint;
         color: $white;
-        @include font-16px-SB;
-
+        @include font-16px;
         cursor: pointer;
-        transition: transform 0.05s ease, filter 0.15s ease;
-
         &:hover {
-            filter: brightness(1.03);
+            background: $foundation-mint-normalhover;
         }
-        &:active {
-            transform: translateY(1px);
+    }
+    &.white {
+        background-color: $white;
+        border: $greyscale-300;
+        box-shadow: 0 vw(4px) vw(8px) 0 rgba(0, 0, 0, 0.06);
+        box-sizing: border-box;
+        padding: vw(22.5px) vw(25px);
+
+        .search {
+            &-item {
+                color: $greyscale-1100;
+                background-color: $greyscale-200;
+
+                .icon {
+                    color: $mint;
+                }
+                span {
+                    color: $greyscale-1100;
+                }
+            }
+            &-location {
+                .location-display {
+                    .selected-location {
+                        color: $greyscale-1100; // 선택된 위치 색상
+                        &-o {
+                            color: $greyscale-1100;
+                        }
+                    }
+
+                    .placeholder {
+                        color: $greyscale-1100;
+                    }
+                    .placeholder-w {
+                        color: $greyscale-1100;
+                    }
+                }
+
+                input {
+                    &::placeholder {
+                        color: $greyscale-1100;
+                    }
+                }
+                .dropdown {
+                    .search-input {
+                    }
+                    .location-list {
+                        li {
+                            &:hover {
+                            }
+                        }
+                    }
+                }
+            }
+            &-date {
+                .react-datepicker-wrapper,
+                .react-datepicker__input-container input {
+                    .date-picker,
+                    &::placeholder {
+                        color: $default;
+                    }
+                }
+            }
+            &-party {
+            }
+            &-btn {
+            }
+        }
+    }
+    @include tablet {
+        @include mobile {
+            &-wrap {
+                width: 100%;
+                margin: 0;
+                padding: 0;
+            }
+
+            border: 1px solid $white !important;
+            min-width: 350px;
+            height: 235px;
+            flex-direction: column;
+            justify-content: center;
+            gap: 15px;
+
+            padding: 0;
+            .search-item {
+                min-width: 300px;
+                max-height: 35px;
+                font-size: 12px;
+                border-radius: 500px !important;
+                padding: 0 20px;
+
+                .icon {
+                    font-size: 12px;
+                    margin-left: 20px;
+                    margin-right: 10px;
+                }
+                span {
+                    font-size: 12px;
+                }
+            }
+            .search-location {
+                .location-display {
+                    .selected-location {
+                        &-o {
+                        }
+                    }
+
+                    .placeholder {
+                        font-size: 12px;
+                    }
+                    .placeholder-w {
+                    }
+                }
+
+                input {
+                    &::placeholder {
+                    }
+                }
+                .dropdown {
+                    .search-input {
+                    }
+                    .location-list {
+                        li {
+                            &:hover {
+                            }
+                        }
+                    }
+                }
+            }
+            .search-date {
+                .react-datepicker-wrapper,
+                .react-datepicker__input-container input {
+                    font-size: 12px;
+
+                    .date-picker,
+                    &::placeholder {
+                    }
+                    .date-picker {
+                    }
+
+                    .date-picker:focus {
+                    }
+                }
+                .react-datepicker__day--disabled {
+                }
+            }
+            .search-btn {
+                min-width: 300px;
+                min-height: 35px;
+                border-radius: 500px !important;
+                background-color: rgba($mint, 0.15) !important;
+                border: 1px solid $mint !important;
+                color: $mint !important;
+            }
         }
     }
 }

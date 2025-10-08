@@ -6,7 +6,7 @@ const useHotelStore = create((set, get) => ({
     hotels: hotelListData,
     selectedHotel: null,
     reviews: hotelsReviewData,
-    
+
     // 검색 상태 추가
     searchParams: {
         location: '',
@@ -23,9 +23,9 @@ const useHotelStore = create((set, get) => ({
         discount: false,
         priceRange: [0, 1000000],
     },
-
+    // ✅ 부분 업데이트가 기존 값을 날리지 않도록 "병합"으로 변경
     setSearchParams: (params) => {
-        set({ searchParams: params });
+        set((state) => ({ searchParams: { ...state.searchParams, ...params } }));
     },
 
     // 필터 상태 업데이트 함수
@@ -38,13 +38,12 @@ const useHotelStore = create((set, get) => ({
     // 필터링된 호텔을 반환하는 함수 (검색 조건 추가)
     getFilteredHotels: () => {
         const { hotels, filters, searchParams } = get();
-
+        const norm = (s) => (s ?? '').toString().trim().toLowerCase();
         let filtered = hotels.filter((hotel) => {
-            // 1. 검색 조건 (여행지) 체크
-            let matchLocation = true;
-            if (searchParams.location) {
-                matchLocation = hotel.location.includes(searchParams.location);
-            }
+            //  1) 위치(여행지) — 부분일치 & 대소문자 무시 & null 안전
+            const matchLocation =
+                !searchParams.location ||
+                norm(hotel.location).includes(norm(searchParams.location));
 
             // 2. 기존 필터 로직
             let matchType = false;
@@ -59,7 +58,7 @@ const useHotelStore = create((set, get) => ({
                 // 그 외의 경우, 선택된 유형과 정확히 일치하는지 확인
                 matchType = filters.type.includes(hotel.type);
             }
-
+            // 3) 성급
             let matchStar = false;
             if (filters.star.length === 0 || filters.star.includes('전체')) {
                 // 필터가 아예 없거나 '전체'가 선택된 경우 모든 성급을 포함
@@ -68,15 +67,23 @@ const useHotelStore = create((set, get) => ({
                 // 그 외의 경우, 선택된 성급과 정확히 일치하는지 확인
                 matchStar = filters.star.includes(hotel.star);
             }
-            
+
+            // 4) 서비스 — hotel.service가 없을 수도 있으니 안전하게
+            const services = Array.isArray(hotel.service) ? hotel.service : [];
             const matchService =
-                filters.service.length === 0 ||
-                filters.service.every((s) => hotel.service.includes(s));
+                filters.service.length === 0 || filters.service.every((s) => services.includes(s));
             const matchDiscount = !filters.discount || hotel.discount === true; // 할인 여부
             const matchPrice =
                 hotel.price >= filters.priceRange[0] && hotel.price <= filters.priceRange[1];
 
-            return matchLocation && matchType && matchStar && matchService && matchDiscount && matchPrice;
+            return (
+                matchLocation &&
+                matchType &&
+                matchStar &&
+                matchService &&
+                matchDiscount &&
+                matchPrice
+            );
         });
         return filtered;
     },
@@ -95,45 +102,45 @@ const useHotelStore = create((set, get) => ({
 
     getHotelReviews: (hotelId, reviewCount) => {
         const { reviews } = get();
-        
+
         const seededRandom = (seed) => {
             let x = Math.sin(seed) * 10000;
             return x - Math.floor(x);
         };
-        
+
         const shuffledReviews = [...reviews].sort((a, b) => {
             const seedA = seededRandom(hotelId * 100 + a.id);
             const seedB = seededRandom(hotelId * 100 + b.id);
             return seedA - seedB;
         });
-        
+
         return shuffledReviews.slice(0, reviewCount).map((review, index) => ({
             ...review,
             hotelId: hotelId,
-            uniqueId: `${hotelId}-${review.id}-${index}`
+            uniqueId: `${hotelId}-${review.id}-${index}`,
         }));
     },
 
     getHighRatedReviews: (hotelId, count = 3) => {
         const { reviews } = get();
-        
-        const highRatedReviews = reviews.filter(review => review.rate >= 3);
-        
+
+        const highRatedReviews = reviews.filter((review) => review.rate >= 3);
+
         const seededRandom = (seed) => {
             let x = Math.sin(seed) * 10000;
             return x - Math.floor(x);
         };
-        
+
         const shuffledReviews = [...highRatedReviews].sort((a, b) => {
             const seedA = seededRandom(hotelId * 200 + a.id);
             const seedB = seededRandom(hotelId * 200 + b.id);
             return seedA - seedB;
         });
-        
+
         return shuffledReviews.slice(0, count).map((review, index) => ({
             ...review,
             hotelId: hotelId,
-            uniqueId: `mini-${hotelId}-${review.id}-${index}`
+            uniqueId: `mini-${hotelId}-${review.id}-${index}`,
         }));
     },
 }));

@@ -6,46 +6,6 @@ import packagesData from '../api/packagesData';
 import useAuthStore from './authStore'; // ✅ 계정 연동
 
 const STORAGE_KEY = 'app:wishlist_v1';
-/*
-// --- 개발용 샘플 데이터 ---
-const SAMPLE_ITEMS = [
-    {
-        uid: 'hotel-2',
-        type: 'hotel',
-        id: 2,
-        data: {
-            name: '세인트존스 호텔',
-            location: '서울 중구',
-            price: 310000,
-            slug: 'saint-johns-hotel',
-        },
-    },
-    {
-        uid: 'hotel-16',
-        type: 'hotel',
-        id: 16,
-        data: {
-            name: '만다린 오리엔탈 방콕',
-            location: '태국 방콕',
-            price: 480000,
-            slug: 'mandarin-oriental-bangkok',
-        },
-    },
-    {
-        uid: 'tour-younskitchen2-tenerife',
-        type: 'tour',
-        id: 'younskitchen2-tenerife',
-        data: {
-            title: '윤식당 스페인 투어',
-            subtitle: '스페인 가라치코 3박 4일',
-            duration: '3박 4일',
-            adult_fee: 490000,
-            desc: "tvN 예능 '윤식당' 촬영지 투어 - 맛과 풍경을 함께 즐기는 여행",
-            slug: 'younskitchen2-tenerife',
-        },
-    },
-];
-*/
 
 // === 🧠 유저별 키 네임스페이스 ===
 const getCurrentUID = () => useAuthStore.getState().currentUser?.id || 'guest';

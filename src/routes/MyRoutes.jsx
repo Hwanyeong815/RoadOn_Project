@@ -24,6 +24,7 @@ import EditProfile from '../components/login/editProfile';
 import Logout from '../components/logout';
 import Test from '../components/ui/swal/Test';
 import { useLayoutEffect } from 'react';
+import ProtectedRoute from './ProtectedRoute';
 
 // ✅ 최초 1회만 Landing으로 보내는 가드
 const FirstVisitGate = () => {
@@ -57,10 +58,15 @@ export const MyRoutes = () => {
                         <Route index element={<Home />} />
 
                         {/* 결제 관련 */}
-                        <Route path="payment">
+                        <Route
+                            path="payment"
+                            element={
+                                <ProtectedRoute>
+                                    <Outlet />
+                                </ProtectedRoute>
+                            }
+                        >
                             <Route index element={<Payment />} />
-                            {/* ✅ 성공 경로: completed (HotelPaymentRight.successUrl과 일치시켜야 함) */}
-                            {/* <Route path="completed" element={<PaymentCompleted />} /> */}
                             <Route path="success" element={<PaymentSuccess />} />
                             <Route path="fail" element={<PaymentFail />} />
                         </Route>
@@ -85,8 +91,16 @@ export const MyRoutes = () => {
                             <Route path=":slug" element={<TourDetail />} />
                         </Route>
 
+                        {/* ✅ 로그인 필요 */}
+                        <Route
+                            path="mypage"
+                            element={
+                                <ProtectedRoute>
+                                    <MyPage />
+                                </ProtectedRoute>
+                            }
+                        />
                         {/* 기타 */}
-                        <Route path="myPage" element={<MyPage />} />
                         <Route path="login" element={<Login />} />
                         <Route path="join" element={<Join />} />
                         <Route path="logout" element={<Logout />} />

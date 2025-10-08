@@ -2,16 +2,17 @@ import { useNavigate } from 'react-router-dom';
 import useHotelStore from '../../../store/hotelStore'; // ✅ useHotelStore import
 import { differenceInDays, format } from 'date-fns';
 import { ko } from 'date-fns/locale';
+import ReserveBtn from '../../ui/reserveBtn';
 
 const DetailRight = ({ hotel, selectedRoom }) => {
     const navigate = useNavigate();
-    
+
     // ✅ useHotelStore에서 searchParams 가져오기
     const searchParams = useHotelStore((state) => state.searchParams);
 
     // ✅ 날짜와 인원 데이터 추출
     const { startDate, endDate, people } = searchParams;
-    
+
     let nights = 0;
     let formattedDates = '날짜를 선택하세요';
     let totalPrice = selectedRoom.price;
@@ -21,7 +22,7 @@ const DetailRight = ({ hotel, selectedRoom }) => {
         // 숙박 기간 계산 (차이 + 1 대신 차이만 계산하여 박 수를 구함)
         nights = differenceInDays(endDate, startDate);
         if (nights < 0) nights = 0; // 유효하지 않은 날짜 선택 시 0박 처리
-        
+
         // 날짜 형식 지정
         const formattedStart = format(new Date(startDate), 'M월 d일 (E)', { locale: ko });
         const formattedEnd = format(new Date(endDate), 'M월 d일 (E)', { locale: ko });
@@ -35,11 +36,11 @@ const DetailRight = ({ hotel, selectedRoom }) => {
         const reservationData = {
             hotel: hotel,
             selectedRoom: selectedRoom,
-            nights: nights, 
-            startDate: startDate, 
+            nights: nights,
+            startDate: startDate,
             endDate: endDate,
-            people: people, 
-            totalPrice: totalPrice, 
+            people: people,
+            totalPrice: totalPrice,
             productType: 'hotel',
         };
 
@@ -72,12 +73,12 @@ const DetailRight = ({ hotel, selectedRoom }) => {
                     <div className="res-prices">
                         <ul className="total">
                             <li>
-                                <span>숙박 기간({nights}박)</span> 
-                                <span>{formattedDates}</span> 
+                                <span>숙박 기간({nights}박)</span>
+                                <span>{formattedDates}</span>
                             </li>
                             <li>
                                 <span>인원</span>
-                                <span>성인 {people}명</span> 
+                                <span>성인 {people}명</span>
                             </li>
                             <li>
                                 <span>객실 요금</span>
@@ -87,14 +88,15 @@ const DetailRight = ({ hotel, selectedRoom }) => {
 
                         <div className="total-wrap">
                             <strong>총액</strong>
-                            <em>{totalPrice.toLocaleString()}원</em> 
+                            <em>{totalPrice.toLocaleString()}원</em>
                         </div>
                     </div>
                 </div>
                 <div className="btn-wrap">
-                    <button className="button large o reserve" onClick={handleReservation}>
+                    {/* <button className="button large o reserve" onClick={handleReservation}>
                         예약하기
-                    </button>
+                    </button> */}
+                    <ReserveBtn className="g" />
                 </div>
             </section>
         </div>

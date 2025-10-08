@@ -37,8 +37,7 @@ const loadFromStorage = () => {
 };
 
 const initial = (() => {
-    // 기본(최초 실행) 로그인 X
-    const base = { users: [defaultTestUser], currentUser: null };
+    const base = { users: [defaultTestUser], currentUser: undefined }; // 🚨 null → undefined
     if (typeof window === 'undefined') return base;
 
     const stored = loadFromStorage();
@@ -71,7 +70,7 @@ const useAuthStore = create((set, get) => ({
     addUser: (user) => {
         const u = {
             ...user,
-            id: user.id || generateId(),
+            id: user.id || generateId(), // ✅ 항상 id 보장
             createdAt: user.createdAt || new Date().toISOString(),
             password: user.password || undefined,
         };
@@ -89,11 +88,25 @@ const useAuthStore = create((set, get) => ({
 
     // 현재 사용자 직접 설정
     setCurrent: (user) => {
-        const u = user || null;
-        if (u && !get().users.some((x) => x.id === u.id)) {
+        if (!user) {
+            set({ currentUser: null, isLoggedIn: false });
+            saveToStorage(get);
+            return;
+        }
+
+        // ✅ 항상 id 보장
+        const u = { ...user, id: user.id || generateId() };
+
+        // 이미 users 배열에 있으면 업데이트, 없으면 추가
+        const exists = get().users.some((x) => x.id === u.id);
+        if (!exists) {
             set((state) => ({ users: [...state.users, u], currentUser: u, isLoggedIn: true }));
         } else {
-            set({ currentUser: u, isLoggedIn: !!u });
+            set((state) => ({
+                users: state.users.map((x) => (x.id === u.id ? u : x)),
+                currentUser: u,
+                isLoggedIn: true,
+            }));
         }
         saveToStorage(get);
     },

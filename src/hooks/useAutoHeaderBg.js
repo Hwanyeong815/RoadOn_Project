@@ -24,8 +24,11 @@ const parseRgb = (s = '') => {
     }
     return null;
 };
+
 const luminance = ({ r, g, b }) => 0.2126 * r + 0.7152 * g + 0.0722 * b;
+
 const isTransparent = (s = '') => !s || s === 'transparent' || /rgba\(.+, ?0\)/.test(s);
+
 const getEffectiveBg = (el) => {
     let cur = el;
     while (cur && cur !== document.documentElement) {
@@ -42,20 +45,14 @@ const getEffectiveBg = (el) => {
     };
 };
 
-/**
- * useAutoHeaderBg(headerRef, opts)
- * - 히스테리시스 + 다중 샘플 + 안정화
- * - 초기 페인트 전에 useLayoutEffect로 즉시 판정
- * - minScrollForOn: 이 픽셀보다 스크롤 전에는 .bg-on을 절대 켜지 않음(투명 유지)
- */
 const useAutoHeaderBg = (headerRef, opts = {}) => {
     const {
         offsetY = 2,
-        stabilizeMs = 150,
+        stabilizeMs = 250, // ⬅️ 150 → 250으로 변경 (깜빡임 완화)
         L_ON = 250,
         L_OFF = 235,
-        minScrollForOn = 0, // <--- 추가
-        deps = [], // 라우트 변경 등 외부 신호
+        minScrollForOn = 0,
+        deps = [],
     } = opts;
 
     const rafRef = useRef(null);
@@ -98,9 +95,10 @@ const useAutoHeaderBg = (headerRef, opts = {}) => {
     const manualCheck = (header, isCurrentlyOn) => {
         if (!header) return false;
 
-        // 스크롤이 충분히 내려가기 전에는 항상 OFF (투명 유지)
+        // 스크롤이 충분히 내려가기 전에는 항상 OFF
         const y = window.scrollY || document.documentElement.scrollTop || 0;
         if (!isCurrentlyOn && y < minScrollForOn) return false;
+        if (isCurrentlyOn && y < minScrollForOn) return false;
 
         const rect = header.getBoundingClientRect();
         const xs = [
@@ -119,7 +117,7 @@ const useAutoHeaderBg = (headerRef, opts = {}) => {
             })
         );
 
-        return isCurrentlyOn ? cnt >= 3 : cnt >= 4;
+        return isCurrentlyOn ? cnt >= 2 : cnt >= 2;
     };
 
     const scheduleCheck = (header) => {
@@ -142,11 +140,10 @@ const useAutoHeaderBg = (headerRef, opts = {}) => {
         });
     };
 
-    // 초기: 페인트 전에 즉시 판단
     useLayoutEffect(() => {
         const header = headerRef?.current;
         if (!header) return;
-        const first = manualCheck(header, false);
+        const first = manualCheck(header, !!lastAppliedRef.current);
         applyState(header, first);
         scheduleCheck(header);
         const t1 = setTimeout(() => scheduleCheck(header), 60);
@@ -159,7 +156,6 @@ const useAutoHeaderBg = (headerRef, opts = {}) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [headerRef]);
 
-    // 이벤트 기반 재판정
     useEffect(() => {
         const header = headerRef?.current;
         if (!header) return;
@@ -172,7 +168,6 @@ const useAutoHeaderBg = (headerRef, opts = {}) => {
         if (document.fonts && document.fonts.ready)
             document.fonts.ready.then(() => scheduleCheck(header));
 
-        // 외부 deps(예: 라우트 변경)에도 반응
         scheduleCheck(header);
 
         return () => {

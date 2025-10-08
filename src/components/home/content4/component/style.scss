@@ -1,45 +1,242 @@
-@use "../../../../styles/utils" as *;
-/* 섹션 전체가 이상해 보이면 이 정도만 초기화 */
-.content4,
-.flow-svg {
-  position: relative;
-  display: block;
-  width: 100%;
-}
-.flow-svg {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: auto;
-  z-index: 999 !important;
-  pointer-events: none;
+@use '../../../../styles/utils' as *;
+
+.flow-container {
+    position: relative;
+    margin-top: vw(100);
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    gap: vw(50);
+    width: 100%;
+
+    .flow-svg {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 100%;
+        height: auto;
+
+        .band {
+            stroke: $orange;
+            stroke-width: vw(80);
+        }
+
+        .band-text {
+            @include font-28px-B;
+            fill: $white;
+            letter-spacing: vw(2);
+        }
+    }
+
+    .product-cards {
+        margin: auto;
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: vw(30);
+
+        .product-card {
+            min-height: vw(286);
+            width: vw(856);
+            display: flex;
+            border-radius: vw(40);
+            position: relative;
+            overflow: hidden;
+
+            // background-size: cover;
+            // background-repeat: no-repeat;
+            // &:first-child {
+            //     background-image: url('/images/main/ticket3.png');
+            // }
+
+            .img-wrap {
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                width: 100%;
+                height: 100%;
+
+                img {
+                    // filter: brightness(0.5);
+                    position: absolute;
+                    left: 50%;
+                    top: 50%;
+                    transform: translate(-50%, -50%);
+
+                    width: 110%;
+                    height: 110%;
+                }
+            }
+
+            &__panel {
+                position: absolute;
+                left: 0;
+                top: 50%;
+                transform: translateY(-50%);
+                z-index: 1;
+                width: vw(630);
+                height: 100%;
+                padding: vw(50);
+                border-radius: vw(40);
+
+                .price-origin {
+                    text-decoration: line-through;
+                    color: #999;
+                    @include font-22px;
+                }
+                .price-sale {
+                    color: #ff6b6b;
+                    @include font-30px-B;
+                    margin-bottom: vw(10);
+                }
+                .title {
+                    @include font-24px-B;
+                    margin-bottom: vw(10);
+                    padding: 0;
+                }
+                .meta {
+                    color: $greyscale-1200;
+                    margin-bottom: vw(10);
+                }
+                .tags {
+                    @include font-14px;
+                    color: $greyscale-900;
+                }
+            }
+        }
+    }
+
+    .more-button {
+        &-wrap {
+        }
+        width: vw(180);
+        height: vw(45);
+        border-radius: vw(30);
+        @include font-18px;
+    }
 }
 
-.flow-svg .band {
-  vector-effect: non-scaling-stroke;
-} /* ✅ 띠 */
-.flow-svg #flowPathMask {
-  vector-effect: non-scaling-stroke;
-} /* ✅ 마스크도 동일 */
+.content4_bg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
 
-.flow-svg .band-text {
-  fill: #000;
-  font-weight: 700;
-  font-size: 22px;
-  letter-spacing: 0.06em;
-  dominant-baseline: middle;
-  pointer-events: none;
+    img {
+        height: vw(180);
+        position: absolute;
+        &:first-child {
+            right: 0;
+            top: 0;
+        }
+        &:last-child {
+            bottom: 0;
+            left: 0;
+        }
+    }
 }
+@include tablet {
+    @include mobile {
+        .flow-container {
+            // display: none;
+            margin-top: 50px;
+            .flow-svg {
+                display: none;
+            }
+            .product-cards {
+                .product-card {
+                    width: 350px;
+                    height: 116px;
+                    .img-wrap {
+                        img {
+                            width: 350px;
+                            height: 116px;
+                        }
+                    }
+                    &__panel {
+                        width: 260px;
+                        height: 90%;
+                        box-sizing: border-box;
+                        padding: 20px;
 
-/* 혹시 전역 스타일이 색을 덮어쓰면 보호 */
-.content4 .flow-svg text,
-.content4 .flow-svg textPath {
-  fill: #000 !important;
+                        .price-origin {
+                            font-size: 10px;
+                            line-height: 1;
+                        }
+                        .price-sale {
+                            font-size: 12px;
+                            line-height: 1;
+                        }
+                        .title {
+                            font-size: 12px;
+                            line-height: 1;
+                        }
+                        .meta {
+                            font-size: 8px;
+                            line-height: 1;
+                        }
+                        .tags {
+                            font-size: 8px;
+                            line-height: 1;
+                        }
+                    }
+                }
+            }
+            .more-button {
+                &-wrap {
+                }
+                width: 140px;
+                height: 35px;
+                border-radius: 500px;
+                line-height: 1;
+            }
+        }
+    }
 }
+// /* 섹션 전체가 이상해 보이면 이 정도만 초기화 */
+// .content4,
+// .flow-svg {
+//     position: relative;
+//     display: block;
+//     width: 100%;
+// }
 
-/* 혹시 전역 스타일이 text 색을 덮어쓰면 보호 */
-.content4 .flow-svg text,
-.content4 .flow-svg textPath {
-  fill: #000 !important;
-}
+// .flow-svg {
+//     position: absolute;
+//     top: 0;
+//     left: 0;
+//     width: 100%;
+//     height: auto;
+//     z-index: 999 !important;
+//     pointer-events: none;
+// }
+
+// .flow-svg .band {
+//     vector-effect: non-scaling-stroke;
+// } /* ✅ 띠 */
+
+// .flow-svg #flowPathMask {
+//     vector-effect: non-scaling-stroke;
+// } /* ✅ 마스크도 동일 */
+
+// .flow-svg .band-text {
+//     fill: #000;
+//     font-weight: 700;
+
+//     // font-size: 22px;
+//     font-size: vw(22);
+
+//     letter-spacing: 0.06em;
+//     dominant-baseline: middle;
+//     pointer-events: none;
+// }
+
+// /* 혹시 전역 스타일이 색을 덮어쓰면 보호 */
+// .content4 .flow-svg text,
+// .content4 .flow-svg textPath {
+//     fill: #000 !important;
+// }

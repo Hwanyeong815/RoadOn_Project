@@ -2,6 +2,7 @@ import './style.scss';
 import { FiMinus, FiPlus } from 'react-icons/fi';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import ReserveBtn from '../../../ui/reserveBtn';
 
 const DetailSide = ({ tourData }) => {
     const [childCount, setChildCount] = useState(0);
@@ -11,29 +12,22 @@ const DetailSide = ({ tourData }) => {
     if (!tourData) return null;
 
     const { subtitle, adult_fee = 0, child_fee = 0, posterImg } = tourData;
-
     const totalPrice = adultCount * adult_fee + childCount * child_fee;
 
     const handleCountChange = (type, operation) => {
         if (type === 'child') {
-            setChildCount((prev) => {
-                const newCount = operation === 'plus' ? prev + 1 : Math.max(0, prev - 1);
-                return newCount;
-            });
+            setChildCount((prev) => (operation === 'plus' ? prev + 1 : Math.max(0, prev - 1)));
         } else {
-            setAdultCount((prev) => {
-                const newCount = operation === 'plus' ? prev + 1 : Math.max(0, prev - 1);
-                return newCount;
-            });
+            setAdultCount((prev) => (operation === 'plus' ? prev + 1 : Math.max(0, prev - 1)));
         }
     };
 
     const handleReservation = () => {
         const reservationData = {
             tour: tourData,
-            adultCount: adultCount,
-            childCount: childCount,
-            totalPrice: totalPrice,
+            adultCount,
+            childCount,
+            totalPrice,
             productType: 'tour',
         };
 
@@ -43,7 +37,6 @@ const DetailSide = ({ tourData }) => {
 
         console.log('전달할 데이터:', reservationData);
     };
-    console.log('DetailSide로 넘어온 데이터:', tourData);
 
     return (
         <section className="detail-side">
@@ -53,6 +46,7 @@ const DetailSide = ({ tourData }) => {
                 </div>
                 <strong>{subtitle}</strong>
             </div>
+
             <div className="box-option">
                 <div className="people people1">
                     <div className="peop-wrap">
@@ -75,6 +69,7 @@ const DetailSide = ({ tourData }) => {
                         </button>
                     </div>
                 </div>
+
                 <div className="people people2">
                     <div className="peop-wrap">
                         <p className="type">성인</p>
@@ -96,20 +91,19 @@ const DetailSide = ({ tourData }) => {
                         </button>
                     </div>
                 </div>
+
                 <div className="total-wrap">
                     <strong>총액</strong>
                     <em>{totalPrice.toLocaleString()}원</em>
                 </div>
             </div>
+
             <div className="btn-wrap">
-                {/* adultCount와 childCount가 모두 0일 때 버튼 비활성 */}
-                <button
-                    className="button large o reserve"
+                <ReserveBtn
+                    className="o"
                     disabled={adultCount === 0 && childCount === 0}
-                    onClick={handleReservation}
-                >
-                    예약하기
-                </button>
+                    onReserve={handleReservation} // ✅ 여기 추가
+                />
             </div>
         </section>
     );

@@ -68,7 +68,11 @@
             align-items: flex-start;
             gap: vw(16px);
             margin-top: vw(20px);
-
+            .form-line {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+            }
             /* 영문 이름(2열) */
             &.en {
                 .fields-2col {
@@ -81,6 +85,7 @@
                 .field {
                     display: flex;
                     flex-direction: column;
+
                     min-width: 0;
 
                     .sublabel {

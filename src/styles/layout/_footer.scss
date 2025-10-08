@@ -1,12 +1,10 @@
 @use './../utils' as *;
 
 #footer {
-    // margin-top: vw(100px);
+    margin-top: vw(100px);
     background-color: $greyscale-200;
     width: 100%;
     height: vw(320px);
-    // position: absolute;
-    // margin: 0;
 
     .inner {
         padding: vw(90px) 0;
@@ -73,6 +71,84 @@
                 img {
                     margin-right: vw(10px);
                     min-width: vw(30px);
+                }
+            }
+        }
+    }
+    @include tablet {
+        @include mobile {
+            height: 41.03vw; // 160px
+
+            .inner {
+                flex-direction: column;
+                justify-content: center;
+                gap: 2.5641vw;
+            }
+
+            h2 {
+                width: 17.95vw; // 70px
+                height: 4.62vw; // 18px
+
+                a {
+                    img {
+                    }
+                }
+            }
+
+            .footer {
+                &-group {
+                    flex-direction: column;
+                    align-items: center;
+                    height: 100%;
+                }
+
+                &-info-wrap {
+                    width: 61.54vw; // 240px
+
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+
+                    div {
+                        font-size: 2.05vw; // 8px
+                        align-items: center;
+
+                        &.links {
+                            p {
+                            }
+                            margin-bottom: 1.54vw; // 6px
+                            line-height: 1;
+                        }
+
+                        &.info {
+                            p {
+                            }
+                            margin-bottom: 0;
+                        }
+
+                        &.copyright {
+                            line-height: 1;
+                        }
+                    }
+                }
+
+                &-award-wrap {
+                    width: 100%;
+                    display: flex;
+                    justify-content: center;
+
+                    p {
+                        flex-direction: column;
+                        align-items: center;
+                        font-size: 1.54vw; // 6px
+                        line-height: 1;
+                        padding: 0 2.56vw; // 10px
+
+                        img {
+                            width: 3.85vw; // 15px
+                            height: 2.56vw; // 10px
+                        }
+                    }
                 }
             }
         }

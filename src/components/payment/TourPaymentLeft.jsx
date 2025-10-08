@@ -1,9 +1,7 @@
 // src/components/tour/TourPaymentLeft.jsx
 import './style.scss';
 import { useState } from 'react';
-import { IoIosCheckmarkCircleOutline } from 'react-icons/io';
 import { IoCardOutline } from 'react-icons/io5';
-import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
 import useAuthStore from '../../store/authStore';
 import PaymentReward from '../ui/coupon/PaymentReward';
 
@@ -11,26 +9,15 @@ const TourPaymentLeft = ({
     segments = [],
     party = { adults: 2, children: 1, infants: 0 },
     reserver = { name: '', email: '', phone: '' },
-    /** 결제 총금액(없으면 0) */
     totalPrice = 0,
+    onRewardChange, // ✅ 부모(PaymentLayout)에서 내려주는 함수
 }) => {
-    // ✅ 로그인 사용자 → 없으면 테스트 계정으로 fallback
     const currentUser = useAuthStore((s) => s.currentUser);
     const userId = currentUser?.id || 'u_test_1';
 
-    const [gender, setGender] = useState('male');
-    const [isOpen, setIsOpen] = useState(false);
-    const [payMethod, setPayMethod] = useState('card'); // 'card' | 'tosspay' | 'naverpay' | 'kakaopay'
+    const [payMethod, setPayMethod] = useState('card');
 
-    // PaymentReward에서 넘어오는 값 (우측 결제 요약에서 활용)
-    const [rewardState, setRewardState] = useState({
-        coupon: null,
-        usedPoints: 0,
-        couponAmount: 0,
-        finalAmount: 0,
-    });
-
-    // 더미 세그먼트 (없을 때만 노출)
+    // 더미 세그먼트 (데이터 없을 때 fallback)
     const fallbackSegments = [
         {
             title: '가는편',
@@ -76,6 +63,7 @@ const TourPaymentLeft = ({
                 </h3>
 
                 <div className="pay-box-wrap">
+                    {/* 항공 스케줄 */}
                     <div className="flight-schedule">
                         <div className="depart-info compact">
                             {/* 왼쪽(가는편) */}
@@ -154,12 +142,11 @@ const TourPaymentLeft = ({
                         </p>
                     </div>
 
-                    {/* ✅ 쿠폰/포인트 (마크업 클래스 유지) */}
+                    {/* ✅ 쿠폰/포인트 */}
                     <PaymentReward
                         userId={userId}
-                        productType="tour" // ✅ hotel -> tour
-                        // productData={productData}       // (있으면 넘겨주세요)
-                        onChange={(next) => onRewardChange?.(next)} // ✅ 부모로 전달
+                        productType="tour"
+                        onChange={(next) => onRewardChange?.(next)} // 부모(PaymentLayout)로 전달
                     />
 
                     {/* 결제 수단 */}
@@ -192,38 +179,6 @@ const TourPaymentLeft = ({
                                 <img src="/images/icon/kakaopay.png" alt="카카오페이" />
                             </li>
                         </ul>
-
-                        {payMethod === 'card' && (
-                            <>
-                                <div className="card-types">
-                                    <h5>카드 종류</h5>
-                                    <select defaultValue="">
-                                        <option value="" disabled>
-                                            카드를 선택해주세요.
-                                        </option>
-                                        <option value="kb">KB국민카드</option>
-                                        <option value="sh">신한카드</option>
-                                        <option value="bc">BC카드</option>
-                                        <option value="hy">현대카드</option>
-                                    </select>
-                                </div>
-
-                                <div className="installment">
-                                    <h5>할부 선택</h5>
-                                    <select defaultValue="0">
-                                        <option value="0">일시불</option>
-                                        <option value="3">3개월</option>
-                                        <option value="6">6개월</option>
-                                        <option value="12">12개월</option>
-                                    </select>
-                                </div>
-
-                                <div className="pay-default">
-                                    <input id="saveMethod" type="checkbox" />
-                                    <label htmlFor="saveMethod">이 결제수단을 다음에도 사용</label>
-                                </div>
-                            </>
-                        )}
                     </div>
                 </div>
             </div>

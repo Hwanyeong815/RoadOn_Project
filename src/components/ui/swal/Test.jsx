@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { openSwal, toast, openAndNavigate } from '../../ui/swal/presets'; // ← openCouponBoxShortcut import 불필요
 import CouponButton from '../../ui/coupon/CouponButton';
+import SearchBar from '../SearchBar/SearchBar';
 
 const Test = () => {
     const navigate = useNavigate();
@@ -35,9 +36,14 @@ const Test = () => {
         });
 
     return (
-        <div style={{ padding: 100 }}>
+        <div style={{ padding: 100, background: 'grey' }}>
+            {/*  */}
+            {/* 화이트 테마 */}
+            <SearchBar className="white" />
+            {/* 투명 테마 */}
+            <SearchBar className="transparent" />
+            {/*  */}
             <h2>SweetAlert2 Presets Demo</h2>
-
             <div style={{ display: 'grid', gap: 12, maxWidth: 420 }}>
                 <button onClick={onLogin}>로그인 필요</button>
                 <button onClick={onWishlist}>찜 추가 완료</button>

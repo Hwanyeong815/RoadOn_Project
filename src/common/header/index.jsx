@@ -3,7 +3,6 @@ import { Link, useLocation } from 'react-router-dom';
 import NavBar from './NavBar';
 import { useRef, useEffect } from 'react';
 import useAutoHeaderBg from '../../hooks/useAutoHeaderBg';
-// import FloatingBtn from './FloatingBtn' // 필요 시 사용
 
 const Header = () => {
     const headerRef = useRef(null);
@@ -20,24 +19,23 @@ const Header = () => {
         const header = headerRef.current;
         if (!header) return;
 
-        const img = header.querySelector('h1 img');
-        if (!img) return;
+        const logoImg = header.querySelector('h1 img');
+        const hamImg = header.querySelector('.mobile-menu');
+        if (!logoImg || !hamImg) return;
 
-        const defaultSrc = img.dataset.srcDefault || '/images/CI.png';
-        const greySrc = img.dataset.srcGrey || '/images/CI-grey.png';
+        const defaultLogoSrc = logoImg.dataset.srcDefault || '/images/ci.png';
+        const greyLogoSrc = logoImg.dataset.srcGrey || '/images/ci-grey.png';
+        const defaultHamSrc = hamImg.dataset.srcDefault || '/images/ham.png';
+        const greyHamSrc = hamImg.dataset.srcGrey || '/images/ham-grey.png';
 
-        const preload = (src) => {
+        // 이미지 미리 로드
+        [defaultLogoSrc, greyLogoSrc, defaultHamSrc, greyHamSrc].forEach((src) => {
             const p = new Image();
             p.src = src;
-        };
-        preload(defaultSrc);
-        preload(greySrc);
+        });
 
-        const apply = () => {
-            const targetSrc = header.classList.contains('bg-on') ? greySrc : defaultSrc;
+        const swap = (img, targetSrc) => {
             if (img.dataset.currentSrc === targetSrc) return;
-
-            // 부드러운 전환: 페이드 아웃 → 소스 교체 → onload에 페이드 인
             img.style.transition = 'opacity 0.14s ease';
             img.style.opacity = '0';
 
@@ -56,10 +54,16 @@ const Header = () => {
             setTimeout(doSwap, 60);
         };
 
+        const apply = () => {
+            const useGrey = header.classList.contains('bg-on');
+            swap(logoImg, useGrey ? greyLogoSrc : defaultLogoSrc);
+            swap(hamImg, useGrey ? greyHamSrc : defaultHamSrc);
+        };
+
         // 초기 적용
         apply();
 
-        // 헤더 클래스 변화 감지 → 로고 스왑
+        // 헤더 클래스 변화 감지 → 로고 + 햄버거 아이콘 스왑
         const mo = new MutationObserver((muts) => {
             for (const m of muts) {
                 if (m.attributeName === 'class') {
@@ -79,19 +83,28 @@ const Header = () => {
                 <h1>
                     <Link to="/">
                         <img
-                            src="/images/CI.png"
+                            src="/images/ci.png"
                             alt="Brand"
-                            data-src-default="/images/CI.png"
-                            data-src-grey="/images/CI-grey.png"
-                            data-current-src="/images/CI.png"
+                            data-src-default="/images/ci.png"
+                            data-src-grey="/images/ci-grey.png"
+                            data-current-src="/images/ci.png"
                             width="140"
                             height="auto"
                         />
                     </Link>
                 </h1>
+                <div className="mobile-menu-wrap">
+                    <img
+                        src="/images/ham.png"
+                        alt=""
+                        className="mobile-menu"
+                        data-src-default="/images/ham.png"
+                        data-src-grey="/images/ham-grey.png"
+                        data-current-src="/images/ham.png"
+                    />
+                </div>
                 <NavBar />
             </div>
-            {/* <FloatingBtn /> */}
         </header>
     );
 };
