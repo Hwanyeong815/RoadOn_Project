@@ -1168,11 +1168,11 @@ strong {
             border-radius: vw(10px);
             padding: vw(14px);
             box-shadow: 0 vw(6px) vw(18px) rgba(0, 0, 0, 0.25);
-            z-index: 10;
+            z-index: 100000;
             color: $default;
             animation: dp-fade-slide 0.2s ease-out;
 
-            z-index: 1000; // 충분히 높은 값
+            z-index: 100000; // 충분히 높은 값
             pointer-events: auto; // 클릭 이벤트 허용
 
             .search-input {
