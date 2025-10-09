@@ -37,7 +37,12 @@ const Content3Mobile = () => {
                     ))}
                 </Swiper>
             </div>
-            f
+            <div className="contet3bg">
+                <img src="/images/main/content3_bg_mobile.png" alt="content3_bg" />
+                <video autoPlay muted loop playsInline>
+                    <source src="/videos/main/hotStay.mp4" type="video/mp4" />
+                </video>
+            </div>
         </div>
     );
 };

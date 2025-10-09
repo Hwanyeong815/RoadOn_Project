@@ -128,37 +128,36 @@
             }
             &-mobile {
                 display: block;
+                min-height: vw(380px);
+                border: 1px solid #000;
+                position: relative;
             }
             .hot_hotels {
                 @include font-20px;
                 text-align: left;
+                margin-left: vw(18px);
                 span {
                     @include font-20px-B;
                 }
             }
             .contet3bg {
+                height: max-content;
+                border: 1px solid #000;
             }
             .inner {
-                margin: 0;
-                padding: 0;
-                background-color: yellow;
             }
             .swiper-slide {
-                width: 168px;
                 height: 57.4359vw;
                 box-sizing: border-box;
 
-                // width: 100%;
                 .carousel-box {
                     position: relative;
                     border-radius: 10px;
-                    width: 100%;
+
+                    width: 168px;
+
                     height: 100%;
                     overflow: hidden;
-                    // &:before {
-                    //     content: '';
-                    //     // position: absolute;
-                    // }
 
                     .title {
                         position: absolute;
