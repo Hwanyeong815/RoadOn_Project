@@ -1,10 +1,9 @@
 @use '../../../styles/utils' as *;
 
 .coupon-event-container {
-    margin: 0 auto;
+    padding: vw(150) 0;
     position: relative;
-    width: 99vw;
-    overflow: hidden;
+    overflow-x: hidden;
 
     .coupon-header {
         .head {
@@ -117,10 +116,10 @@
                         height: 100%;
 
                         button {
-                            width: 140px;
-                            height: 35px;
+                            width: 35.8974vw;
+                            height: 8.9744vw;
                             @include font-16px;
-                            border-radius: 400px;
+                            border-radius: 102.5641vw;
                             line-height: 1;
                         }
                     }

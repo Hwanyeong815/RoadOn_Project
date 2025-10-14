@@ -1,14 +1,15 @@
 @use './../utils' as *;
 
 .inner {
-    width: 1400px;
+    width: vw(1400px);
     margin: auto;
     position: relative;
     box-sizing: border-box;
+    @include desktop {
+    }
     @include tablet {
-        width: 95%;
     }
     @include mobile {
-        width: vw(350px);
+        width: 89.7436vw; //350px
     }
 }

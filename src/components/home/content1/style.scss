@@ -1,74 +1,168 @@
 @use '../../../styles/utils' as *;
 
-.themeSection {
-    width: 100%;
+.content1 {
+    overflow: hidden;
+    position: relative;
+
+    padding-bottom: vw(150);
 
     .inner {
-        padding-bottom: vw(20) !important;
-
-        .title-wrap {
-            position: relative;
-            display: inline-block;
-
-            .title-img {
-                width: 90%;
-                position: relative;
-                z-index: 2;
-
-                // margin-bottom: 2.94rem; // ≈ 47.04px
-                margin-bottom: vw(47.04);
-            }
-
-            .highlight {
-                position: absolute;
-
-                // bottom: 50px; // 글씨 높이에 맞춰 조정
-                bottom: vw(50);
-
-                // right: 58px;
-                right: vw(58);
-
-                width: 33%;
-
-                // height: 20%; // 박스 높이 (퍼센트라 그대로 둠)
-                height: 20%;
-
-                background: #ffd6cc;
-
-                // z-index: 1; // 이미지 아래
-                z-index: 1;
-            }
-        }
-
-        .tags {
-            display: flex;
-
-            // gap: 5rem; // ≈ 80px
-            gap: vw(80);
-
-            list-style: none;
-            padding: 0;
-
-            li {
-                position: relative; // ::after 위치 기준
-
-                // font-size: 30px;
-                font-size: vw(30);
-
-                font-weight: 700;
-                color: #a7a7a7;
-                cursor: pointer;
-
-                &.active {
+    }
+    &-head-txt {
+        z-index: 20;
+        padding-top: vw(160);
+        .title {
+            font-size: rem(50);
+            font-weight: 500;
+            margin-bottom: vw(60px);
+            color: $greyscale-1100;
+            strong {
+                font-weight: 600;
+                .r {
                     color: $mint;
+                }
+                .o {
+                    color: $orange;
+                }
+            }
+            .thic {
+                font-weight: 700;
+                position: relative;
+                margin-left: vw(6);
+                &::after {
+                    content: '';
+                    position: absolute;
+                    z-index: -1;
+                    left: 0;
+                    bottom: vw(10);
+                    width: 100%;
+                    height: vw(20);
+                    background-color: rgba(#ff7f50, 0.2);
                 }
             }
         }
+        &-line {
+            display: flex;
+            gap: vw(60px);
+            li {
+                color: $greyscale-900;
+                font-family: 'suit';
+                transition: 0.3s;
+                &.on,
+                &:hover {
+                    color: $mint;
+                    cursor: pointer;
+                }
+                @include font-35px-B;
+                letter-spacing: rem(-2);
+            }
+        }
     }
-    @include tablet {
-        @include mobile {
-            height: 590px;
-            background-color: pink;
+
+    .left {
+        margin-top: vw(80);
+        position: relative;
+        width: max-content;
+        .img-wrap {
+            img {
+                width: 100%;
+            }
+        }
+        .button-reserve {
+            position: absolute;
+            bottom: 27%;
+            left: 50%;
+            &--drama {
+                // bottom: 0;
+            }
+            &--enter {
+                bottom: 25%;
+            }
+            &--movie {
+                bottom: 25%;
+            }
+            &--kpop {
+                bottom: 25%;
+            }
+        }
+    }
+
+    .right {
+        pointer-events: none;
+        position: absolute;
+        top: 0;
+        right: -5%;
+        background-color: beige;
+        width: vw(1050);
+        aspect-ratio: 1 / 1;
+        z-index: 10;
+        background: transparent;
+
+        --orbit-offset-x: #{vw(120)};
+        --orbit-offset-y: vw(0);
+
+        &-shape-wrap {
+            position: absolute;
+            top: 0;
+            right: 0%;
+
+            width: vw(1379);
+            height: vw(1379);
+        }
+        &-shape {
+            pointer-events: none;
+            position: absolute;
+            offset-path: var(--orbit-path);
+            offset-rotate: 0deg;
+            z-index: 15;
+            overflow: hidden;
+            border: 1px solid #000;
+            background-color: $white;
+            img {
+                &-wrap {
+                    position: relative;
+                }
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+
+                object-fit: contain;
+            }
+            &.top {
+                width: vw(625);
+                height: vw(560);
+                border-radius: 56% 44% 54% 46% / 72% 70% 30% 28%;
+                // background-color: red;
+                offset-distance: 12%;
+            }
+            &.center {
+                width: vw(820);
+                height: vw(820);
+                border-radius: 60% 40% 30% 70% / 55% 67% 33% 45%;
+                // background-color: yellow;
+                offset-distance: 48%;
+            }
+            &.bottom {
+                width: vw(605);
+                height: vw(570);
+                border-radius: 73% 27% 41% 59% / 37% 19% 81% 63%;
+                // background-color: blue;
+
+                offset-distance: 85%;
+            }
+        }
+        .circle-line {
+            top: 0;
+            right: 0;
+            width: vw(1379);
+            height: vw(1379);
+
+            pointer-events: none;
+            stroke: #acacac;
+            stroke-width: 1;
+            fill: #acacac;
+            transform-origin: top right;
         }
     }
 }

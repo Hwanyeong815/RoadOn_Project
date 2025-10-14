@@ -12,17 +12,4 @@ body {
     color: $default;
     @include font-16px;
     word-break: keep-all;
-
-    @include desktop {
-    }
-    @include tablet {
-        .inner {
-            width: min(89.74vw, 350px);
-        }
-    }
-    @include mobile {
-        .inner {
-            width: min(89.74vw, 350px);
-        }
-    }
 }
