@@ -1,4 +1,5 @@
 // src/components/tour/TourMainCon2/index.jsx
+
 import { useEffect, useMemo, useRef } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Autoplay } from 'swiper/modules';
@@ -23,7 +24,7 @@ const CategoryTabs = ({ active, onChange }) => (
     </div>
 );
 
-function useAutoRotateCategories(enabled = true, intervalMs = 10000) {
+const useAutoRotateCategories = (enabled = true, intervalMs = 10000) => {
     const activeCategory = useTourStore((s) => s.activeCategory);
     const setCategory = useTourStore((s) => s.setCategory);
     const timerRef = useRef(null);
@@ -38,16 +39,17 @@ function useAutoRotateCategories(enabled = true, intervalMs = 10000) {
         }, intervalMs);
         return () => clearInterval(timerRef.current);
     }, [enabled, intervalMs, activeCategory, setCategory]);
-}
+};
 
-export default function TourMainCon2({
-    initialCategory = '예능',
+// ✅ 화살표 함수 버전으로 변경된 컴포넌트
+const TourMainCon2 = ({
+    initialCategory = '드라마',
     initialIndex = 0,
     initialTourId,
     autoRotateCategories = true,
     categoryIntervalMs = 8000,
     slideDelayMs = 3500,
-}) {
+}) => {
     const swiperRef = useRef(null);
     const navigate = useNavigate();
 
@@ -60,9 +62,10 @@ export default function TourMainCon2({
 
     useAutoRotateCategories(autoRotateCategories, categoryIntervalMs);
 
-    const slides = useMemo(() => {
-        return tours.filter((t) => !excludedIds.has(t.id) && t.category === activeCategory);
-    }, [tours, excludedIds, activeCategory]);
+    const slides = useMemo(
+        () => tours.filter((t) => !excludedIds.has(t.id) && t.category === activeCategory),
+        [tours, excludedIds, activeCategory]
+    );
 
     useEffect(() => {
         if (!slides.length) {
@@ -103,7 +106,6 @@ export default function TourMainCon2({
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     const handleSlideChange = (sw) => setIndex(sw.activeIndex);
-
     const handleCategoryChange = (cat) => {
         setCategory(cat);
         requestAnimationFrame(() => {
@@ -112,7 +114,6 @@ export default function TourMainCon2({
         });
     };
 
-    // ====== 상세로 이동 helpers ======
     const goDetailByItem = (item) => {
         if (!item) return;
         navigate(`/tour/${item.slug ?? item.id}`);
@@ -124,12 +125,10 @@ export default function TourMainCon2({
     };
 
     const handleSlideClick = (item) => {
-        // 드래그 중에는 클릭 네비게이션 방지
         const sw = swiperRef.current?.swiper;
         if (sw && sw.allowClick === false) return;
         goDetailByItem(item);
     };
-    // ================================
 
     const current = slides[activeIndex];
     const bgUrl = current?.backgroundImg || '';
@@ -137,6 +136,7 @@ export default function TourMainCon2({
 
     return (
         <section
+            id="tour-con2"
             className="tour-main-con tour-main-con2"
             style={{
                 backgroundImage: bgUrl ? `url(${bgUrl})` : undefined,
@@ -191,7 +191,6 @@ export default function TourMainCon2({
                                         <p>“{item.description}”</p>
                                     </div>
 
-                                    {/* ✅ 아이콘 5개 고정 */}
                                     <div className="icons-wrap">
                                         {item.duration && (
                                             <div className="icon-box">
@@ -263,4 +262,7 @@ export default function TourMainCon2({
             </div>
         </section>
     );
-}
+};
+
+// ✅ export 그대로 유지
+export default TourMainCon2;
