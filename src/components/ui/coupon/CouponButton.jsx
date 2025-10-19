@@ -110,7 +110,7 @@ const CouponButton = ({
         }
     };
     // after successful claim (inside handleClaim)
-    console.log('DEBUG rewardByUser AFTER claim:', useRewardStore.getState().rewardByUser);
+    // console.log('DEBUG rewardByUser AFTER claim:', useRewardStore.getState().rewardByUser);
 
     return (
         <div className="coupon-button-wrap">
