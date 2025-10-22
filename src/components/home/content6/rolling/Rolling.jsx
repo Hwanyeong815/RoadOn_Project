@@ -1,7 +1,31 @@
 import './style.scss';
-import { images } from './rollingImg.js';
 
 const Rolling = () => {
+    // ✅ 절대 경로로 변경 (public/images/main/)
+    const images = [
+        { id: 1, src: '/images/main/city1.png' },
+        { id: 2, src: '/images/main/city2.png' },
+        { id: 3, src: '/images/main/city3.png' },
+        { id: 4, src: '/images/main/city4.png' },
+        { id: 5, src: '/images/main/city5.png' },
+        { id: 6, src: '/images/main/city6.png' },
+        { id: 7, src: '/images/main/city7.png' },
+        { id: 8, src: '/images/main/city8.png' },
+        { id: 9, src: '/images/main/city9.png' },
+        { id: 10, src: '/images/main/city10.png' },
+        { id: 11, src: '/images/main/city11.png' },
+        { id: 12, src: '/images/main/city12.png' },
+        { id: 13, src: '/images/main/city13.png' },
+        { id: 14, src: '/images/main/city14.png' },
+        { id: 15, src: '/images/main/city15.png' },
+        { id: 16, src: '/images/main/city16.png' },
+        { id: 17, src: '/images/main/city17.png' },
+        { id: 18, src: '/images/main/city18.png' },
+        { id: 19, src: '/images/main/city19.png' },
+        { id: 20, src: '/images/main/city20.png' },
+        { id: 21, src: '/images/main/city21.png' },
+    ];
+
     // 무한 스크롤을 위해 이미지 배열을 3번 복제
     const tripleImages = [...images, ...images, ...images];
 

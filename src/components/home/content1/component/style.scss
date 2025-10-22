@@ -1,78 +1,186 @@
-@use '../../../../styles/utils' as *;
+@use '../../../../styles/utils/' as *;
 
-.circle-component {
-    display: flex;
-    position: relative;
-    width: 100%;
-    align-items: center;
+.right {
+    /* 데스크톱 기본 슬롯 위치 */
+    --slot-top: 12%;
+    --slot-center: 48%;
+    --slot-bottom: 85%;
 
-    .left {
-        flex: 1;
-        align-items: center;
-        justify-content: center;
-        position: relative;
+    pointer-events: none;
+    position: absolute;
+    top: 0;
+    right: -5%;
+    width: vw(1050);
+    aspect-ratio: 1 / 1;
+    z-index: 10;
+    background: transparent;
+    overflow: visible; /* 블롭이 튀어나와도 보이게 */
 
-        .background {
+    /* ✅ 스테이지에 이동 오프셋 변수 추가 (모바일에서 쓰임) */
+    --tx: vw(50);
+    --ty: vw(10);
+
+    &-shape-stage {
+        position: absolute;
+        inset: 0;
+        /* 이동(translate) + 스케일을 묶어서 적용 */
+        transform: translate(var(--tx), var(--ty)) scale(var(--scale, 1)) rotate(var(--angle, 0deg));
+        transform-origin: center center;
+        pointer-events: none;
+    }
+
+    &-shape-wrap {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: vw(1379);
+        height: vw(1379);
+        transform-origin: top right;
+        transform: scale(var(--scale, 1));
+        pointer-events: none;
+    }
+
+    &-shape {
+        position: absolute;
+        z-index: 15;
+        offset-path: var(--orbit-path);
+        offset-rotate: 0deg;
+        will-change: offset-distance;
+        background: $white;
+        overflow: hidden;
+        pointer-events: none;
+
+        .img-wrap {
+            position: relative;
             width: 100%;
-            height: auto;
+            height: 100%;
+            border-radius: inherit;
+            overflow: hidden;
+        }
+        img {
+            width: 100%;
+            height: 100%;
+            display: block;
             object-fit: cover;
-            position: relative;
+            object-position: center;
+            border-radius: inherit;
+            backface-visibility: hidden;
+            transform: translateZ(0);
         }
 
-        .re-button {
-            position: absolute;
-
-            // top: 730px;
-            top: vw(730);
-
-            left: 25%;
-            background: $mint;
-            color: $white;
-
-            // width: 180px;
-            width: vw(180);
-
-            // height: 45px;
-            height: vw(45);
-
-            // border-radius: 30px;
-            border-radius: vw(30);
-
-            @include font-18px;
-            text-align: center;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            border: none;
-            pointer-events: auto;
-
-            background-color: $mint;
+        &.top {
         }
-        .btn-wrap {
-            position: relative;
+        &.center {
+            /* offset-distance: 48%; */
+        }
+        &.bottom {
+            /* offset-distance: 85%; */
+        }
 
-            button {
-                margin-left: 200px;
+        /* 도착 스냅(데스크톱 기본 크기) */
+        &.as-top {
+            width: vw(625);
+            height: vw(560);
+            border-radius: 56% 44% 54% 46% / 72% 70% 30% 28%;
+        }
+        &.as-center {
+            width: vw(820);
+            height: vw(820);
+            border-radius: 60% 40% 30% 70% / 55% 67% 33% 45%;
+        }
+        &.as-bottom {
+            width: vw(605);
+            height: vw(570);
+            border-radius: 73% 27% 41% 59% / 37% 19% 81% 63%;
+        }
+
+        &.at-center {
+            // filter: drop-shadow(0 vw(10) vw(30) rgba($black, 0.1));
+            .img-wrap {
+                box-shadow: 0 vw(10) vw(30) rgba($black, 0.1);
+            }
+            .img-wrap img {
+                filter: brightness(1);
+            }
+        }
+        &.at-top,
+        &.at-bottom {
+            filter: none; /* 부모 필터 잔존 방지 */
+            .img-wrap {
+                box-shadow: none;
+            }
+            .img-wrap img {
+                filter: brightness(0.8);
             }
         }
     }
 
-    .right {
+    .circle-line {
         position: absolute;
+        top: 0;
+        right: -40%;
+        width: vw(1379);
+        height: vw(1379);
+        transform-origin: top right;
+        pointer-events: none;
 
-        // right: 280px;
-        right: vw(280);
+        path {
+            stroke: #acacac;
+            stroke-width: 1;
+            fill: #acacac;
+        }
+    }
+}
 
-        // top: 70px;
-        top: vw(70);
-
-        .display-img {
-            // width: 700px;
-            width: vw(700);
-
+@include tablet {
+    @include mobile {
+        .right {
+            overflow: hidden;
+            top: 20%;
+            right: 0%;
+            width: 100%;
             height: auto;
+
+            /* translate 대신 vw만 사용해서 이동 제어 */
+            --tx: -90vw;
+            --ty: -50vw;
+
+            /* 블롭 위치 (원 위의 퍼센트) */
+            --slot-top: 0%;
+            --slot-center: 0%;
+            --slot-bottom: 0%;
+
+            /* 크기 및 라인 */
+            .circle-line {
+                top: -180%;
+                left: 120%;
+                width: 500%;
+                height: auto;
+            }
+
+            &-shape {
+                /* 중앙 블롭 크기 키우기 */
+                &.as-center {
+                    width: 160vw;
+                    height: 170vw;
+                    transform: translate(10%, 80%);
+                }
+                &.as-top {
+                    transform: translate(-125%, 90%);
+                    border-radius: 47% 53% 45% 55% / 65% 33% 67% 35%;
+                }
+                &.as-bottom {
+                    transform: translate(145%, 90%);
+                }
+                &.as-center {
+                }
+
+                &.as-top,
+                &.as-bottom {
+                    width: 130vw;
+                    height: 125vw;
+                }
+            }
         }
     }
 }

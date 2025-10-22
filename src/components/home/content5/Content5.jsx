@@ -52,7 +52,7 @@ const Content5 = () => {
     };
 
     return (
-        <div className="content5-container">
+        <div className="content5">
             <div className="roadon-pick-section">
                 {/* 헤더 */}
                 <div className="roadon-pick-header">

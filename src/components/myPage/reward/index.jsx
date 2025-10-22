@@ -33,15 +33,6 @@ const Reward = ({ defaultTab = 'coupons' }) => {
         <div id="reward">
             <h2 className="mypage-title">할인 혜택</h2>
 
-            {/* ✅ 쿠폰 발급 버튼: 성공 시 확인 → 쿠폰함으로 이동 */}
-            {/* <div className="coupon-wrap">
-                <CouponButton
-                    onIssued={() => {
-                        openCouponBoxShortcut({ navigate });
-                    }}
-                />
-            </div> */}
-
             <div className="tab-button-wrap" role="tablist" aria-label="할인 혜택 탭">
                 <TabButton
                     label="쿠폰함"

@@ -1,74 +1,168 @@
 @use '../../../styles/utils' as *;
 
-.themeSection {
-    width: 100%;
+.content1 {
+    overflow: hidden;
+    position: relative;
+    padding-bottom: vw(290);
 
-    .inner {
-        padding-bottom: vw(20) !important;
-
-        .title-wrap {
-            position: relative;
-            display: inline-block;
-
-            .title-img {
-                width: 90%;
-                position: relative;
-                z-index: 2;
-
-                // margin-bottom: 2.94rem; // ≈ 47.04px
-                margin-bottom: vw(47.04);
-            }
-
-            .highlight {
-                position: absolute;
-
-                // bottom: 50px; // 글씨 높이에 맞춰 조정
-                bottom: vw(50);
-
-                // right: 58px;
-                right: vw(58);
-
-                width: 33%;
-
-                // height: 20%; // 박스 높이 (퍼센트라 그대로 둠)
-                height: 20%;
-
-                background: #ffd6cc;
-
-                // z-index: 1; // 이미지 아래
-                z-index: 1;
-            }
-        }
-
-        .tags {
-            display: flex;
-
-            // gap: 5rem; // ≈ 80px
-            gap: vw(80);
-
-            list-style: none;
-            padding: 0;
-
-            li {
-                position: relative; // ::after 위치 기준
-
-                // font-size: 30px;
-                font-size: vw(30);
-
-                font-weight: 700;
-                color: #a7a7a7;
-                cursor: pointer;
-
-                &.active {
+    &-head-txt {
+        z-index: 20;
+        padding-top: vw(160);
+        .title {
+            font-size: rem(50);
+            font-weight: 500;
+            margin-bottom: vw(60px);
+            color: $greyscale-1100;
+            strong {
+                font-weight: 600;
+                .r {
                     color: $mint;
+                }
+                .o {
+                    color: $orange;
+                }
+            }
+            .thic {
+                font-weight: 700;
+                position: relative;
+                margin-left: vw(6);
+                &::after {
+                    content: '';
+                    position: absolute;
+                    z-index: -1;
+                    left: 0;
+                    bottom: vw(10);
+                    width: 100%;
+                    height: vw(20);
+                    background-color: rgba($orange, 0.2);
                 }
             }
         }
+        &-line {
+            display: flex;
+            gap: vw(60px);
+            li {
+                color: $greyscale-900;
+                font-family: 'suit';
+                transition: 0.3s;
+                position: relative;
+                &:before {
+                    content: '#';
+                }
+                &.on,
+                &:hover {
+                    color: $mint;
+                    cursor: pointer;
+                }
+                @include font-35px-B;
+                letter-spacing: rem(-2);
+            }
+        }
     }
-    @include tablet {
-        @include mobile {
-            height: 590px;
-            background-color: pink;
+
+    .left {
+        margin-top: vw(80);
+        position: relative;
+        width: max-content;
+        .img-wrap {
+            .img {
+                width: 100%;
+                &-desktop {
+                    display: block;
+                }
+                &-mobile {
+                    display: none;
+                }
+            }
+        }
+        .button-reserve {
+            position: absolute;
+            bottom: 27%;
+            left: 50%;
+            &--drama {
+                // bottom: 0;
+            }
+            &--enter {
+                bottom: 25%;
+            }
+            &--movie {
+                bottom: 25%;
+            }
+            &--kpop {
+                bottom: 25%;
+            }
+        }
+    }
+}
+@include tablet {
+    @include mobile {
+        .content1 {
+            height: 146.1538vw;
+            padding-bottom: 30.7692vw;
+            &-head-txt {
+                .title {
+                    @include font-16px;
+                    text-align: center;
+                    strong {
+                        .r {
+                        }
+                        .o {
+                        }
+                    }
+                    .thic {
+                        &::after {
+                        }
+                    }
+                }
+                &-line {
+                    justify-content: center;
+                    li {
+                        font-size: rem(10);
+                        min-height: vw(20);
+                        padding: 0 2.3077vw;
+                        line-height: 1.6;
+                        @include circle;
+                        font-weight: 500;
+                        letter-spacing: normal;
+                        &:before {
+                            display: none;
+                        }
+                        &.on,
+                        &:hover {
+                            background-color: $mint;
+                            color: $white;
+                        }
+                    }
+                }
+            }
+            .left {
+                width: 100%;
+                height: 103.3333vw;
+
+                .img-wrap {
+                    margin: auto;
+                    width: 56.4103vw;
+                    .img {
+                        width: 100%;
+                        &-desktop {
+                            display: none;
+                        }
+                        &-mobile {
+                            display: block;
+                        }
+                    }
+                }
+                .button-reserve {
+                    bottom: -8%;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    width: 140px;
+                    height: 35px;
+                    @include circle;
+                    font-size: rem(16);
+                    font-weight: 400;
+                }
+            }
         }
     }
 }

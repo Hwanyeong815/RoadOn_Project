@@ -1,0 +1,78 @@
+@use '../../../../styles/utils' as *;
+
+.circle-component {
+    display: flex;
+    position: relative;
+    width: 100%;
+    align-items: center;
+
+    .left {
+        flex: 1;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+
+        .background {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            position: relative;
+        }
+
+        .re-button {
+            position: absolute;
+
+            // top: 730px;
+            top: vw(730);
+
+            left: 25%;
+            background: $mint;
+            color: $white;
+
+            // width: 180px;
+            width: vw(180);
+
+            // height: 45px;
+            height: vw(45);
+
+            // border-radius: 30px;
+            border-radius: vw(30);
+
+            @include font-18px;
+            text-align: center;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: none;
+            pointer-events: auto;
+
+            background-color: $mint;
+        }
+        .btn-wrap {
+            position: relative;
+
+            button {
+                margin-left: 200px;
+            }
+        }
+    }
+
+    .right {
+        position: absolute;
+
+        // right: 280px;
+        right: vw(280);
+
+        // top: 70px;
+        top: vw(70);
+
+        .display-img {
+            // width: 700px;
+            width: vw(700);
+
+            height: auto;
+        }
+    }
+}
