@@ -43,7 +43,7 @@
 
         .coupon-image {
             display: block;
-            width: vw(260);
+            min-width: vw(260);
             height: auto;
             max-width: 100%;
             user-select: none;

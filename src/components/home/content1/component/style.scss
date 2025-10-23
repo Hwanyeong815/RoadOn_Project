@@ -5,43 +5,37 @@
     --slot-top: 12%;
     --slot-center: 48%;
     --slot-bottom: 85%;
+    height: max-content;
 
     pointer-events: none;
     position: absolute;
     top: 0;
-    right: -5%;
+    right: 0;
     width: vw(1050);
+    height: 100%;
     aspect-ratio: 1 / 1;
     z-index: 10;
-    background: transparent;
+    // background: transparent;
     overflow: visible; /* 블롭이 튀어나와도 보이게 */
 
-    /* ✅ 스테이지에 이동 오프셋 변수 추가 (모바일에서 쓰임) */
-    --tx: vw(50);
-    --ty: vw(10);
-
     &-shape-stage {
-        position: absolute;
-        inset: 0;
-        /* 이동(translate) + 스케일을 묶어서 적용 */
-        transform: translate(var(--tx), var(--ty)) scale(var(--scale, 1)) rotate(var(--angle, 0deg));
-        transform-origin: center center;
-        pointer-events: none;
-    }
-
-    &-shape-wrap {
-        position: absolute;
+        /* ⬇️ wrap의 의도(고정 좌표, 우측 기준, 스케일 기준점)를 stage로 이관 */
+        position: absolute; /* relative → absolute */
         top: 0;
-        right: 0;
+        right: -10%; /* 기존 wrap의 right 오프셋 유지 */
         width: vw(1379);
         height: vw(1379);
         transform-origin: top right;
-        transform: scale(var(--scale, 1));
+
+        /* 이동 + 스케일 + 회전 한 번에 */
+        transform: translate(vw(100), 0), rotate(0deg);
+
         pointer-events: none;
     }
 
     &-shape {
         position: absolute;
+        transform: translateX(82%);
         z-index: 15;
         offset-path: var(--orbit-path);
         offset-rotate: 0deg;
