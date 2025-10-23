@@ -2,6 +2,7 @@
 
 .detail-thum {
     height: vw(425px);
+
     display: flex;
     justify-content: center;
     gap: vw(24px);
@@ -37,15 +38,16 @@
     // height: vw(3000px);
 
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     gap: vw(24px);
     margin-top: vw(30px);
     .left {
-        width: vw(920px);
+        width: vw(920);
         overflow: hidden;
 
         box-sizing: border-box;
         background-color: $white;
+
         .detail-title {
             width: 100%;
             height: vw(330px);
@@ -464,6 +466,8 @@
     .right {
         width: vw(456px);
         // height: vw(2500px);
+
+        position: relative;
         .detail-side {
             width: 100%;
             // height: vw(460px);

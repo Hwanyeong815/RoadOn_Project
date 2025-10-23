@@ -1,19 +1,13 @@
 @use '../../../styles/utils' as *;
 
 #TourDetail {
-    & > .inner {
-        padding-top: 95px;
-    }
-    // background-color: #dcdcdc;
-
+    padding-top: vw(130);
     .searchBar-BG {
         background-color: green;
         padding: 120px 0;
     }
 }
 #DetailBody {
-    // padding-top: vw(130px);
-    // background-color: red;
 }
 #DetailBottom {
     // background-color: green;
