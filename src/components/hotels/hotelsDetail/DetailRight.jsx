@@ -93,10 +93,10 @@ const DetailRight = ({ hotel, selectedRoom }) => {
                     </div>
                 </div>
                 <div className="btn-wrap">
-                    {/* <button className="button large o reserve" onClick={handleReservation}>
+                    <button className="button large o reserve" onClick={handleReservation}>
                         예약하기
-                    </button> */}
-                    <ReserveBtn className="g" />
+                    </button>
+                    {/* <ReserveBtn className="g" /> */}
                 </div>
             </section>
         </div>
