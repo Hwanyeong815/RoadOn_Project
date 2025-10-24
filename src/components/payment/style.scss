@@ -129,66 +129,73 @@
                     }
                 }
                 // 투어결제만
-                .depart-info.compact {
-                    background-color: $greyscale-100;
-                    border-radius: vw(15px);
-                    border: 1px solid $greyscale-600;
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-between;
-                    padding: vw(28px) vw(36px); // 내부 여백 살짝
-                    gap: vw(40px);
-                    .col {
-                        flex: 1 1 0;
-                        min-width: 0;
+                // 투어결제만
+.depart-info.compact {
+    background-color: $greyscale-100;
+    border-radius: vw(15px);
+    border: 1px solid $greyscale-600;
+    display: flex;
+    align-items: center;
+    justify-content: space-between; 
+    padding: vw(28px) vw(36px);
+    gap: vw(40px);
+    
+    .col {
+        flex: 0 1 auto; 
+        min-width: 0;
+        max-width: 35%; 
 
-                        .code-badge {
-                            display: inline-block;
-                            padding: vw(6px) vw(10px);
-                            border-radius: vw(6px);
-                            background: #fff3ee;
-                            @include font-12px-SB;
-                            margin-bottom: vw(12px);
-                            color: $orange;
-                        }
+        .code-badge {
+            display: inline-block;
+            padding: vw(6px) vw(10px);
+            border-radius: vw(6px);
+            background: #fff3ee;
+            @include font-12px-SB;
+            margin-bottom: vw(12px);
+            color: $orange;
+        }
 
-                        .row {
-                            display: flex;
-                            align-items: center;
-                            gap: vw(16px);
-                            + .row {
-                                margin-top: vw(10px);
-                            }
+        .row {
+            display: flex;
+            align-items: center;
+            gap: vw(16px);
+            + .row {
+                margin-top: vw(10px);
+            }
 
-                            .label {
-                                @include font-16px-M;
-                                color: $greyscale-1200;
-                            }
-                            .value {
-                                @include font-16px;
-                                color: $greyscale-1100;
-                            }
-                        }
-                    }
-                    .center {
-                        flex: 0 0 auto;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
+            .label {
+                @include font-16px-M;
+                color: $greyscale-1200;
+                white-space: nowrap; 
+            }
+            .value {
+                @include font-16px;
+                color: $greyscale-1100;
+                white-space: nowrap; 
+            }
+        }
+    }
+    
+    .center {
+        flex: 0 0 auto; 
+        display: flex;
+        align-items: center;
+        justify-content: center;
 
-                        .nights-badge {
-                            display: inline-flex;
-                            align-items: center;
-                            justify-content: center;
-                            width: vw(56px);
-                            height: vw(56px);
-                            border-radius: 50%;
-                            background: $greyscale-300;
-                            @include font-16px-SB;
-                            color: $greyscale-1200;
-                        }
-                    }
-                }
+        .nights-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: vw(56px);
+            height: vw(56px);
+            border-radius: 50%;
+            background: $greyscale-300;
+            @include font-16px-SB;
+            color: $greyscale-1200;
+        }
+    }
+    
+}
             }
             .pay-schedule {
                 .check-in-out {

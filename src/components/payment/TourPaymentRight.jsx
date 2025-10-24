@@ -1,18 +1,21 @@
 // src/components/payment/TourPaymentRight.jsx
 import './style.scss';
 import { loadTossPayments } from '@tosspayments/payment-sdk';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
+
+// 이미지 기본 경로를 상수로 정의 (프로젝트 구조에 따라 조정 필요)
+const TOUR_IMG_BASE = '/images/tour'; 
 
 const TourPaymentRight = ({
     // 상품/선택 옵션/인원/날짜
     tour, // tourData 전체가 넘어옴
-    option = null,
-    party = { adults: 0, children: 0, infants: 0 }, // DetailSide에서 전달받은 party 객체
+    option = null, 
+    party = { adults: 0, children: 0, infants: 0 }, 
     startDate,
     endDate,
 
     // 가격 및 결제
-    totalPrice = 0, // DetailSide에서 전달받은 할인 전 총액 (baseAmount 역할)
+    totalPrice = 0, 
     paymentMethod = 'card',
 
     // 할인(좌측 PaymentReward에서 전달)
@@ -26,22 +29,22 @@ const TourPaymentRight = ({
         import.meta.env.VITE_TOSS_CLIENT_KEY || 'test_ck_D5GePWvyJnrK0W0k6q8gLzN97Eoq';
 
     const safe = (n) => Math.max(0, Math.round(Number(n || 0)));
-    const baseAmount = safe(totalPrice); // 할인 전 총액 (예: 740,000원)
-
-    // ✅ 인원별 단가 및 수량 추출 (tour 객체와 party 객체 활용)
+    
+    // 인원별 단가 및 수량 추출
     const adultFee = safe(tour?.adult_fee || 0);
     const childFee = safe(tour?.child_fee || 0);
     const adultCount = safe(party.adults);
     const childCount = safe(party.children);
-    
-    // 금액 계산 (DetailSide에서 계산된 totalPrice와 동일해야 함)
     const adultPrice = adultCount * adultFee;
     const childPrice = childCount * childFee;
-    // baseAmount = adultPrice + childPrice; // 이 값이 totalPrice로 이미 넘어오지만, 안전을 위해 단가도 확인
-
+    
+    const calculatedBaseAmount = useMemo(() => {
+        return adultPrice + childPrice;
+    }, [adultPrice, childPrice]);
+    
     const coupon = safe(couponAmount);
     const points = safe(usedPoints);
-    const finalAmount = safe(baseAmount - coupon - points);
+    const finalAmount = safe(calculatedBaseAmount - coupon - points);
 
     const generateOrderId = () => {
         const ts = Date.now();
@@ -59,15 +62,26 @@ const TourPaymentRight = ({
         return map[method] || '카드';
     };
 
-    const imgSrc =
-        (tour?.image?.[0] && `/images/tour/${tour.image[0]}`) ||
-        tour?.thumb ||
-        '/images/tour/default.jpg';
+    // ==========================================================
+    // ✅ 이미지 소스 계산 로직 수정
+    const imgSrc = useMemo(() => {
+        // 1. tour 객체에서 posterImg 사용 (썸네일 이미지)
+        if (tour?.posterImg) return tour.posterImg.startsWith('/') ? tour.posterImg : `${TOUR_IMG_BASE}/${tour.posterImg}`;
+        
+        // 2. tour 객체에 images 배열이 있다면 첫 번째 이미지 사용
+        if (Array.isArray(tour?.images) && tour.images.length > 0) {
+            const firstImg = tour.images[0];
+            return firstImg.startsWith('/') ? firstImg : `${TOUR_IMG_BASE}/${firstImg}`;
+        }
+        
+        // 3. 대체 이미지
+        return '/images/tour/default.jpg';
+    }, [tour]);
+    // ==========================================================
 
-    const peopleTotal = adultCount + childCount; // 유아 제외 총 인원
+    const peopleTotal = adultCount + childCount;
 
     const handlePayment = async () => {
-        // ... (결제 로직은 동일)
         if (isProcessing) return;
         if (!tour) {
             alert('투어 정보를 확인할 수 없습니다.');
@@ -76,7 +90,6 @@ const TourPaymentRight = ({
 
         setIsProcessing(true);
         try {
-            // ✅ 결제 완료 페이지에서 표시할 데이터 저장 (baseAmount로 통일)
             const paymentData = {
                 productType: 'tour',
                 tour,
@@ -84,7 +97,7 @@ const TourPaymentRight = ({
                 party,
                 startDate,
                 endDate,
-                baseAmount: baseAmount, // ✅ 할인 전 금액 저장
+                baseAmount: calculatedBaseAmount, 
                 discount: {
                     couponAmount: coupon,
                     pointAmount: points,
@@ -99,9 +112,9 @@ const TourPaymentRight = ({
             const methodKey = getPaymentMethodKey(paymentMethod);
 
             await tossPayments.requestPayment(methodKey, {
-                amount: finalAmount, // ✅ 최종 결제 금액
+                amount: finalAmount, 
                 orderId,
-                orderName: `${tour?.name || '투어'}${
+                orderName: `${tour?.title || '투어'}${ // ✅ tour?.title 사용
                     option?.title ? ` - ${option.title}` : ''
                 } (${peopleTotal}명)`,
                 customerName: '홍길동',
@@ -132,11 +145,11 @@ const TourPaymentRight = ({
         <div className="pay payment-right">
             <div className="res-title">
                 <div className="ht-img">
-                    <img src={imgSrc} alt={tour?.name || 'tour'} />
+                    <img src={imgSrc} alt={tour?.title || 'tour'} /> {/* ✅ imgSrc 사용 */}
                 </div>
                 <div className="text">
                     <span>투어</span>
-                    <span>{tour?.name || '투어 상품'}</span>
+                    <span>{tour?.title || '투어 상품'}</span> {/* ✅ tour?.title 사용 */}
                     <span>{option?.title || tour?.location || ''}</span>
                 </div>
             </div>
@@ -145,7 +158,7 @@ const TourPaymentRight = ({
                 <ul className="price total">
                     <li>
                         <b>요금 합계</b>
-                        <b>{baseAmount.toLocaleString()}원</b> {/* ✅ 총 요금 합계 */}
+                        <b>{calculatedBaseAmount.toLocaleString()}원</b>
                     </li>
                     
                     {/* 성인 인원별 요금 세부 표시 */}
