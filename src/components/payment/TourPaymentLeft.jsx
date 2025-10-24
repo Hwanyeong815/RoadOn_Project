@@ -1,22 +1,36 @@
 // src/components/tour/TourPaymentLeft.jsx
 import './style.scss';
-import { useState } from 'react';
+import { useState, useMemo } from 'react'; // useMemo 추가
 import { IoCardOutline } from 'react-icons/io5';
 import useAuthStore from '../../store/authStore';
 import PaymentReward from '../ui/coupon/PaymentReward';
 
 const TourPaymentLeft = ({
-    segments = [],
-    party = { adults: 2, children: 1, infants: 0 },
+    // segments = [], // 사용하지 않으므로 주석 처리하거나 제거
+    tour,
+    party = { adults: 0, children: 0, infants: 0 }, // DetailSide에서 전달받은 인원 정보
+    baseAmount = 0, // DetailSide에서 전달받은 할인 전 총액
     reserver = { name: '', email: '', phone: '' },
-    totalPrice = 0,
+    onPaymentMethodChange,
     onRewardChange, // ✅ 부모(PaymentLayout)에서 내려주는 함수
 }) => {
     const currentUser = useAuthStore((s) => s.currentUser);
     const userId = currentUser?.id || 'u_test_1';
 
-    const [payMethod, setPayMethod] = useState('card');
+    const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('card');
 
+    const handlePaymentMethodSelect = (method) => {
+        setSelectedPaymentMethod(method);
+        onPaymentMethodChange?.(method);
+    };
+
+    // PaymentReward에 전달할 상품 데이터 (총액 포함)
+    const productData = useMemo(() => ({
+        totalPrice: baseAmount,
+        party,
+        // 기타 필요한 tour 정보
+    }), [baseAmount, party]);
+    
     // 더미 세그먼트 (데이터 없을 때 fallback)
     const fallbackSegments = [
         {
@@ -52,7 +66,10 @@ const TourPaymentLeft = ({
             direct: true,
         },
     ];
-    const segs = Array.isArray(segments) && segments.length > 0 ? segments : fallbackSegments;
+    // tour.flight_info가 있다면 segments로 사용, 없으면 더미 사용
+    const segs = (tour?.flight_info && tour.flight_info.length > 0) 
+        ? tour.flight_info.slice(0, 2) 
+        : fallbackSegments;
 
     return (
         <div className="pay payment-left">
@@ -64,6 +81,7 @@ const TourPaymentLeft = ({
 
                 <div className="pay-box-wrap">
                     {/* 항공 스케줄 */}
+                    {/* segments가 아닌 tour.flight_info (segs)를 사용하도록 보정 */}
                     <div className="flight-schedule">
                         <div className="depart-info compact">
                             {/* 왼쪽(가는편) */}
@@ -89,31 +107,33 @@ const TourPaymentLeft = ({
                             </div>
 
                             {/* 오른쪽(오는편) */}
-                            <div className="col right">
-                                <p className="code-badge">{segs[1].flightNo}</p>
-                                <div className="row">
-                                    <span className="label">{segs[1].departureAirport}</span>
-                                    <span className="value">
-                                        {segs[1].departureDate} {segs[1].departureTime}
-                                    </span>
+                            {segs[1] && (
+                                <div className="col right">
+                                    <p className="code-badge">{segs[1].flightNo}</p>
+                                    <div className="row">
+                                        <span className="label">{segs[1].departureAirport}</span>
+                                        <span className="value">
+                                            {segs[1].departureDate} {segs[1].departureTime}
+                                        </span>
+                                    </div>
+                                    <div className="row">
+                                        <span className="label">{segs[1].arrivalAirport}</span>
+                                        <span className="value">
+                                            {segs[1].arrivalDate} {segs[1].arrivalTime}
+                                        </span>
+                                    </div>
                                 </div>
-                                <div className="row">
-                                    <span className="label">{segs[1].arrivalAirport}</span>
-                                    <span className="value">
-                                        {segs[1].arrivalDate} {segs[1].arrivalTime}
-                                    </span>
-                                </div>
-                            </div>
+                            )}
                         </div>
                     </div>
 
-                    {/* 예약 인원 */}
+                    {/* ✅ 예약 인원 (party props 적용) */}
                     <div className="pay-party">
                         <h4>예약 인원</h4>
                         <p>
                             성인 {party.adults}명
-                            {party.children ? ` · 아동 ${party.children}명` : ''}
-                            {party.infants ? ` · 유아 ${party.infants}명` : ''}
+                            {party.children > 0 ? ` · 아동 ${party.children}명` : ''}
+                            {party.infants > 0 ? ` · 유아 ${party.infants}명` : ''}
                         </p>
                     </div>
 
@@ -145,8 +165,9 @@ const TourPaymentLeft = ({
                     {/* ✅ 쿠폰/포인트 */}
                     <PaymentReward
                         userId={userId}
-                        productType="tour"
-                        onChange={(next) => onRewardChange?.(next)} // 부모(PaymentLayout)로 전달
+                        productType={'tour'}
+                        productData={productData} // ✅ baseAmount가 포함된 productData 전달
+                        onChange={(next) => onRewardChange?.(next)}
                     />
 
                     {/* 결제 수단 */}
@@ -154,31 +175,61 @@ const TourPaymentLeft = ({
                         <h4>결제수단</h4>
                         <ul className="payments">
                             <li
-                                className={payMethod === 'card' ? 'on' : ''}
-                                onClick={() => setPayMethod('card')}
+                                className={selectedPaymentMethod === 'card' ? 'selected' : ''}
+                                onClick={() => handlePaymentMethodSelect('card')}
                             >
                                 <IoCardOutline />
                                 <span>신용/체크 카드</span>
                             </li>
                             <li
-                                className={payMethod === 'tosspay' ? 'on' : ''}
-                                onClick={() => setPayMethod('tosspay')}
+                                className={selectedPaymentMethod === 'tosspay' ? 'selected' : ''}
+                                onClick={() => handlePaymentMethodSelect('tosspay')}
                             >
                                 <img src="/images/icon/tosspay.png" alt="토스페이" />
                             </li>
                             <li
-                                className={payMethod === 'naverpay' ? 'on' : ''}
-                                onClick={() => setPayMethod('naverpay')}
+                                className={selectedPaymentMethod === 'naverpay' ? 'selected' : ''}
+                                onClick={() => handlePaymentMethodSelect('naverpay')}
                             >
                                 <img src="/images/icon/naverpay.png" alt="네이버페이" />
                             </li>
                             <li
-                                className={payMethod === 'kakaopay' ? 'on' : ''}
-                                onClick={() => setPayMethod('kakaopay')}
+                                className={selectedPaymentMethod === 'kakaopay' ? 'selected' : ''}
+                                onClick={() => handlePaymentMethodSelect('kakaopay')}
                             >
                                 <img src="/images/icon/kakaopay.png" alt="카카오페이" />
                             </li>
                         </ul>
+
+                        {selectedPaymentMethod === 'card' && (
+                            <>
+                                <div className="card-types">
+                                    <h5>카드 종류</h5>
+                                    <select defaultValue="">
+                                        <option value="" disabled>
+                                            카드를 선택해주세요.
+                                        </option>
+                                        <option value="kb">KB국민카드</option>
+                                        <option value="sh">신한카드</option>
+                                        <option value="bc">BC카드</option>
+                                        <option value="hy">현대카드</option>
+                                    </select>
+                                </div>
+                                <div className="installment">
+                                    <h5>할부 선택</h5>
+                                    <select defaultValue="0">
+                                        <option value="0">일시불</option>
+                                        <option value="3">3개월</option>
+                                        <option value="6">6개월</option>
+                                        <option value="12">12개월</option>
+                                    </select>
+                                </div>
+                            </>
+                        )}
+                        <div className="pay-default">
+                            <input id="saveMethod" type="checkbox" />
+                            <label htmlFor="saveMethod">이 결제수단을 다음에도 사용</label>
+                        </div>
                     </div>
                 </div>
             </div>

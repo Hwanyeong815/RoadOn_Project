@@ -26,7 +26,6 @@ const DetailTitle = ({ tourData }) => {
                     </p>
                 </div>
                 <div className="more-btn-a">
-                        // <img src="/images/icon/share.svg" className='share-btn' alt="공유" />
                         {/* <img src="/images/icon/like.svg" alt="찜하기" /> */}
                         {/* <WishButton className='wish-hotel-btn'/> */}
                     <img src="/images/icon/share.svg" className="share-btn" alt="공유" />

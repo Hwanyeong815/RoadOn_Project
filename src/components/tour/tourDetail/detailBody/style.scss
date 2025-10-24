@@ -466,8 +466,8 @@
     .right {
         width: vw(456px);
         // height: vw(2500px);
-
         position: relative;
+        pointer-events: auto;
         .detail-side {
             width: 100%;
             // height: vw(460px);
