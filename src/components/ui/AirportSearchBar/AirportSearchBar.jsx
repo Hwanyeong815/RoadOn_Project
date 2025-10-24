@@ -200,6 +200,18 @@ const AirportSearchBar = () => {
                 {/* 왕복/편도 */}
                 {(mode === 'roundtrip' || mode === 'oneway') && (
                     <div className="search-form">
+
+                        <div className="form-item start" onClick={() => setOpenDropdown('from')}>
+                            <FiSearch className="search icon" />
+                            {segments[0].from || '출발지'}
+                            {renderLocationDropdown(0, 'from', 'from')}
+                        </div>
+
+                        <div className="form-item end" onClick={() => setOpenDropdown('to')}>
+                            <FiSearch className="search icon" />
+                            {segments[0].to || '도착지'}
+                            {renderLocationDropdown(0, 'to', 'to')}
+                        </div>
                         <div className="form-item date">
                             <FiCalendar className="calendar icon" />
                             {mode === 'roundtrip' ? (
@@ -223,18 +235,6 @@ const AirportSearchBar = () => {
                                     shouldCloseOnSelect
                                 />
                             )}
-                        </div>
-
-                        <div className="form-item start" onClick={() => setOpenDropdown('from')}>
-                            <FiSearch className="search icon" />
-                            {segments[0].from || '출발지'}
-                            {renderLocationDropdown(0, 'from', 'from')}
-                        </div>
-
-                        <div className="form-item end" onClick={() => setOpenDropdown('to')}>
-                            <FiSearch className="search icon" />
-                            {segments[0].to || '도착지'}
-                            {renderLocationDropdown(0, 'to', 'to')}
                         </div>
 
                         <div className="form-item" onClick={() => setOpenDropdown('peopleSeat')}>

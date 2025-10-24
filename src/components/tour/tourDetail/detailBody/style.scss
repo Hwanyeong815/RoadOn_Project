@@ -6,6 +6,7 @@
     display: flex;
     justify-content: center;
     gap: vw(24px);
+    position: relative;
     .img-box {
         height: vw(425px);
         border-radius: vw(15px);
@@ -28,6 +29,9 @@
         position: absolute;
         width: vw(24px) !important;
         height: vw(24px) !important;
+        right: vw(30px);   
+        bottom: vw(20px);
+
     }
 }
 .detail-body-info {
@@ -462,8 +466,8 @@
     .right {
         width: vw(456px);
         // height: vw(2500px);
-
         position: relative;
+        pointer-events: auto;
         .detail-side {
             width: 100%;
             // height: vw(460px);

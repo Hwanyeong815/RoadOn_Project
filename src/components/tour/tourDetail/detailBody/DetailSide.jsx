@@ -1,3 +1,4 @@
+// src/components/tour/tourDetail/DetailSide.jsx
 import './style.scss';
 import { FiMinus, FiPlus } from 'react-icons/fi';
 import { useState } from 'react';
@@ -11,8 +12,8 @@ const DetailSide = ({ tourData }) => {
 
     if (!tourData) return null;
 
-    const { subtitle, adult_fee = 0, child_fee = 0, posterImg } = tourData;
-    const totalPrice = adultCount * adult_fee + childCount * child_fee;
+    const { subtitle, adult_fee = 0, child_fee = 0, posterImg, title } = tourData;
+    const baseAmount = adultCount * adult_fee + childCount * child_fee; // 총액 -> baseAmount로 이름 변경
 
     const handleCountChange = (type, operation) => {
         if (type === 'child') {
@@ -24,11 +25,16 @@ const DetailSide = ({ tourData }) => {
 
     const handleReservation = () => {
         const reservationData = {
-            tour: tourData,
-            adultCount,
-            childCount,
-            totalPrice,
             productType: 'tour',
+            tour: tourData,
+            // ✅ TourPaymentLeft/Right에서 사용하는 party 구조에 맞춤
+            party: { 
+                adults: adultCount, 
+                children: childCount, 
+                infants: 0 
+            },
+            baseAmount: baseAmount, // ✅ 할인 전 금액을 baseAmount로 전달
+            // totalPrice는 PaymentLayout에서 prop으로 전달되지 않으므로, 여기서는 baseAmount로 전달
         };
 
         navigate('/payment', {
@@ -49,29 +55,7 @@ const DetailSide = ({ tourData }) => {
 
             <div className="box-option">
                 <div className="people people1">
-                    <div className="peop-wrap">
-                        <p className="type">아동</p>
-                        <p className="price">{child_fee.toLocaleString()}원</p>
-                    </div>
-                    <div className="step">
-                        <button
-                            className="button minus"
-                            onClick={() => handleCountChange('child', 'minus')}
-                        >
-                            <FiMinus />
-                        </button>
-                        <span>{childCount}</span>
-                        <button
-                            className="button plus"
-                            onClick={() => handleCountChange('child', 'plus')}
-                        >
-                            <FiPlus />
-                        </button>
-                    </div>
-                </div>
-
-                <div className="people people2">
-                    <div className="peop-wrap">
+                   <div className="peop-wrap">
                         <p className="type">성인</p>
                         <p className="price">{adult_fee.toLocaleString()}원</p>
                     </div>
@@ -92,9 +76,33 @@ const DetailSide = ({ tourData }) => {
                     </div>
                 </div>
 
+                <div className="people people2">
+                    
+
+                     <div className="peop-wrap">
+                        <p className="type">아동</p>
+                        <p className="price">{child_fee.toLocaleString()}원</p>
+                    </div>
+                    <div className="step">
+                        <button
+                            className="button minus"
+                            onClick={() => handleCountChange('child', 'minus')}
+                        >
+                            <FiMinus />
+                        </button>
+                        <span>{childCount}</span>
+                        <button
+                            className="button plus"
+                            onClick={() => handleCountChange('child', 'plus')}
+                        >
+                            <FiPlus />
+                        </button>
+                    </div>
+                </div>
+
                 <div className="total-wrap">
                     <strong>총액</strong>
-                    <em>{totalPrice.toLocaleString()}원</em>
+                    <em>{baseAmount.toLocaleString()}원</em>
                 </div>
             </div>
 
@@ -102,7 +110,7 @@ const DetailSide = ({ tourData }) => {
                 <ReserveBtn
                     className="o"
                     disabled={adultCount === 0 && childCount === 0}
-                    onReserve={handleReservation} // ✅ 여기 추가
+                    onReserve={handleReservation}
                 />
             </div>
         </section>

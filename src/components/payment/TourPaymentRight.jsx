@@ -1,4 +1,3 @@
-
 // src/components/payment/TourPaymentRight.jsx
 import './style.scss';
 import { loadTossPayments } from '@tosspayments/payment-sdk';
@@ -6,20 +5,20 @@ import { useState } from 'react';
 
 const TourPaymentRight = ({
     // 상품/선택 옵션/인원/날짜
-    tour,
-    option = null, // 예: { title: '오전타임', price: 120000 } 등
-    party = { adults: 1, children: 0 },
+    tour, // tourData 전체가 넘어옴
+    option = null,
+    party = { adults: 0, children: 0, infants: 0 }, // DetailSide에서 전달받은 party 객체
     startDate,
     endDate,
 
     // 가격 및 결제
-    totalPrice = 0, // 좌측에서 계산된 원가 총액
-    paymentMethod = 'card', // 'card' | 'tosspay' | 'naverpay' | 'kakaopay'
+    totalPrice = 0, // DetailSide에서 전달받은 할인 전 총액 (baseAmount 역할)
+    paymentMethod = 'card',
 
     // 할인(좌측 PaymentReward에서 전달)
     couponAmount = 0,
     usedPoints = 0,
-    selectedCoupon = null, // { id, label, amount, ... } | null
+    selectedCoupon = null,
 }) => {
     const [isProcessing, setIsProcessing] = useState(false);
 
@@ -27,10 +26,22 @@ const TourPaymentRight = ({
         import.meta.env.VITE_TOSS_CLIENT_KEY || 'test_ck_D5GePWvyJnrK0W0k6q8gLzN97Eoq';
 
     const safe = (n) => Math.max(0, Math.round(Number(n || 0)));
-    const price = safe(totalPrice);
+    const baseAmount = safe(totalPrice); // 할인 전 총액 (예: 740,000원)
+
+    // ✅ 인원별 단가 및 수량 추출 (tour 객체와 party 객체 활용)
+    const adultFee = safe(tour?.adult_fee || 0);
+    const childFee = safe(tour?.child_fee || 0);
+    const adultCount = safe(party.adults);
+    const childCount = safe(party.children);
+    
+    // 금액 계산 (DetailSide에서 계산된 totalPrice와 동일해야 함)
+    const adultPrice = adultCount * adultFee;
+    const childPrice = childCount * childFee;
+    // baseAmount = adultPrice + childPrice; // 이 값이 totalPrice로 이미 넘어오지만, 안전을 위해 단가도 확인
+
     const coupon = safe(couponAmount);
     const points = safe(usedPoints);
-    const finalAmount = safe(price - coupon - points);
+    const finalAmount = safe(baseAmount - coupon - points);
 
     const generateOrderId = () => {
         const ts = Date.now();
@@ -53,9 +64,10 @@ const TourPaymentRight = ({
         tour?.thumb ||
         '/images/tour/default.jpg';
 
-    const peopleTotal = Number(party?.adults || 0) + Number(party?.children || 0);
+    const peopleTotal = adultCount + childCount; // 유아 제외 총 인원
 
     const handlePayment = async () => {
+        // ... (결제 로직은 동일)
         if (isProcessing) return;
         if (!tour) {
             alert('투어 정보를 확인할 수 없습니다.');
@@ -64,7 +76,7 @@ const TourPaymentRight = ({
 
         setIsProcessing(true);
         try {
-            // ✅ 결제 완료 페이지에서 표시할 데이터 저장
+            // ✅ 결제 완료 페이지에서 표시할 데이터 저장 (baseAmount로 통일)
             const paymentData = {
                 productType: 'tour',
                 tour,
@@ -72,7 +84,7 @@ const TourPaymentRight = ({
                 party,
                 startDate,
                 endDate,
-                totalPrice: price,
+                baseAmount: baseAmount, // ✅ 할인 전 금액 저장
                 discount: {
                     couponAmount: coupon,
                     pointAmount: points,
@@ -116,7 +128,6 @@ const TourPaymentRight = ({
         }
     };
 
-    // ⬇️ 호텔 결제 오른쪽과 "동일한 클래스/마크업 구조" 유지
     return (
         <div className="pay payment-right">
             <div className="res-title">
@@ -134,14 +145,25 @@ const TourPaymentRight = ({
                 <ul className="price total">
                     <li>
                         <b>요금 합계</b>
-                        <b>{price.toLocaleString()}원</b>
+                        <b>{baseAmount.toLocaleString()}원</b> {/* ✅ 총 요금 합계 */}
                     </li>
-                    <li>
-                        <span>
-                            인원 {peopleTotal}명{option?.title ? ` · ${option.title}` : ''}
-                        </span>
-                        <span>{price.toLocaleString()}원</span>
-                    </li>
+                    
+                    {/* 성인 인원별 요금 세부 표시 */}
+                    {adultCount > 0 && (
+                        <li>
+                            <span>성인 {adultCount}명</span>
+                            <span>{adultPrice.toLocaleString()}원</span>
+                        </li>
+                    )}
+                    
+                    {/* 아동 인원별 요금 세부 표시 */}
+                    {childCount > 0 && (
+                        <li>
+                            <span>아동 {childCount}명</span>
+                            <span>{childPrice.toLocaleString()}원</span>
+                        </li>
+                    )}
+                    
                 </ul>
 
                 <ul className="price discount">
