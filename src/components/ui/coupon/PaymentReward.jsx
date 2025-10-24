@@ -1,3 +1,4 @@
+// src/components/ui/coupon/PaymentReward.jsx
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import useRewardStore from '../../../store/rewardStore';
 
@@ -79,13 +80,20 @@ const PaymentReward = ({
         };
     }, [userId]);
 
-    // compute totalAmount: prop preferred, else productData.roomPrice * nights
+    // compute totalAmount: prop preferred, else productData.baseAmount > roomPrice*nights
     const roomPrice = Number(productData?.roomPrice ?? productData?.price ?? 0) || 0;
     const nights = Number(productData?.nights ?? 1) || 1;
+    
+    // ✅ 수정: productData.baseAmount (투어에서 넘어오는 총액)을 최우선으로 사용
+    const productBaseAmount = Number(productData?.baseAmount ?? 0) || 0; 
+
     const totalAmount =
         typeof totalAmountProp === 'number'
             ? totalAmountProp
-            : Math.max(0, Math.round(roomPrice * nights));
+            : productBaseAmount > 0
+            ? productBaseAmount // ✅ 투어 예약 총액 우선 사용
+            : Math.max(0, Math.round(roomPrice * nights)); // 호텔 예약 계산 (Fallback)
+
 
     // local UI state
     const [selectedCouponId, setSelectedCouponId] = useState('');
@@ -138,16 +146,22 @@ const PaymentReward = ({
     useEffect(() => {
         const maxAllowed = Math.max(0, totalAmount - couponAmount);
         const clamped = Math.min(pointBalance || 0, maxAllowed);
+        
+        // ⚠️ 사용된 포인트가 허용치를 초과하면 클램핑
+        const usedPointsClamped = Math.min(usePoints, clamped);
+
         if (usePoints > clamped) setUsePoints(clamped);
+        
         const finalAmount = Math.max(
             0,
-            Math.round(totalAmount - couponAmount - Math.min(usePoints, clamped))
+            Math.round(totalAmount - couponAmount - usedPointsClamped) // ✅ 클램핑된 값 사용
         );
         const selectedCoupon =
             (coupons || []).find((c) => String(c.id) === String(selectedCouponId)) || null;
+        
         onChange?.({
             coupon: selectedCoupon,
-            usedPoints: Math.min(usePoints, clamped),
+            usedPoints: usedPointsClamped, // ✅ 클램핑된 값 전달
             couponAmount: Number(couponAmount || 0),
             finalAmount,
         });
@@ -155,12 +169,14 @@ const PaymentReward = ({
     }, [selectedCouponId, usePoints, totalAmount, pointBalance, couponAmount, coupons]);
 
     const handleSelectCoupon = (e) => setSelectedCouponId(e.target.value || '');
+    
     const handlePointChange = (e) => {
         const raw = Number(e.target.value || 0);
         const maxAllowed = Math.max(0, totalAmount - couponAmount);
         const v = Math.max(0, Math.min(raw, pointBalance || 0, maxAllowed));
         setUsePoints(Number.isFinite(v) ? v : 0);
     };
+    
     const handleUseAllPoints = () => {
         const maxAllowed = Math.max(0, totalAmount - couponAmount);
         setUsePoints(Math.min(pointBalance || 0, maxAllowed));

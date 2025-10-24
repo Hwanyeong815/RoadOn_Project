@@ -177,10 +177,7 @@ const FlightPaymentLeft = ({ airport, segments, onPaymentMethodChange }) => {
                                 </label>
                             </div>
                         </div>
-                        <div className="gender-toggle">
-                            <button type="button" className="gender"></button>
-                            <button type="button" className="gender"></button>
-                        </div>
+                        
                     </div>
 
                     {/* 여권 정보  */}
@@ -241,7 +238,7 @@ const FlightPaymentLeft = ({ airport, segments, onPaymentMethodChange }) => {
                     <div className="pay-point">
                         <h4>포인트</h4>
                         <p>
-                            RT 포인트 {/*props*/}
+                            RT 포인트 
                             <span>12,000</span>P
                         </p>
                         <input type="number" />

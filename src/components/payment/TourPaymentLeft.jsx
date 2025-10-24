@@ -1,18 +1,17 @@
 // src/components/tour/TourPaymentLeft.jsx
 import './style.scss';
-import { useState, useMemo } from 'react'; // useMemo 추가
+import { useState, useMemo } from 'react';
 import { IoCardOutline } from 'react-icons/io5';
 import useAuthStore from '../../store/authStore';
 import PaymentReward from '../ui/coupon/PaymentReward';
 
 const TourPaymentLeft = ({
-    // segments = [], // 사용하지 않으므로 주석 처리하거나 제거
     tour,
-    party = { adults: 0, children: 0, infants: 0 }, // DetailSide에서 전달받은 인원 정보
-    baseAmount = 0, // DetailSide에서 전달받은 할인 전 총액
+    party = { adults: 0, children: 0, infants: 0 },
+    baseAmount = 0,
     reserver = { name: '', email: '', phone: '' },
     onPaymentMethodChange,
-    onRewardChange, // ✅ 부모(PaymentLayout)에서 내려주는 함수
+    onRewardChange,
 }) => {
     const currentUser = useAuthStore((s) => s.currentUser);
     const userId = currentUser?.id || 'u_test_1';
@@ -24,14 +23,11 @@ const TourPaymentLeft = ({
         onPaymentMethodChange?.(method);
     };
 
-    // PaymentReward에 전달할 상품 데이터 (총액 포함)
     const productData = useMemo(() => ({
         totalPrice: baseAmount,
         party,
-        // 기타 필요한 tour 정보
     }), [baseAmount, party]);
     
-    // 더미 세그먼트 (데이터 없을 때 fallback)
     const fallbackSegments = [
         {
             title: '가는편',
@@ -66,7 +62,7 @@ const TourPaymentLeft = ({
             direct: true,
         },
     ];
-    // tour.flight_info가 있다면 segments로 사용, 없으면 더미 사용
+    
     const segs = (tour?.flight_info && tour.flight_info.length > 0) 
         ? tour.flight_info.slice(0, 2) 
         : fallbackSegments;
@@ -81,7 +77,6 @@ const TourPaymentLeft = ({
 
                 <div className="pay-box-wrap">
                     {/* 항공 스케줄 */}
-                    {/* segments가 아닌 tour.flight_info (segs)를 사용하도록 보정 */}
                     <div className="flight-schedule">
                         <div className="depart-info compact">
                             {/* 왼쪽(가는편) */}
@@ -107,27 +102,25 @@ const TourPaymentLeft = ({
                             </div>
 
                             {/* 오른쪽(오는편) */}
-                            {segs[1] && (
-                                <div className="col right">
-                                    <p className="code-badge">{segs[1].flightNo}</p>
-                                    <div className="row">
-                                        <span className="label">{segs[1].departureAirport}</span>
-                                        <span className="value">
-                                            {segs[1].departureDate} {segs[1].departureTime}
-                                        </span>
-                                    </div>
-                                    <div className="row">
-                                        <span className="label">{segs[1].arrivalAirport}</span>
-                                        <span className="value">
-                                            {segs[1].arrivalDate} {segs[1].arrivalTime}
-                                        </span>
-                                    </div>
+                            <div className="col right">
+                                <p className="code-badge">{segs[1].flightNo}</p>
+                                <div className="row">
+                                    <span className="label">{segs[1].departureAirport}</span>
+                                    <span className="value">
+                                        {segs[1].departureDate} {segs[1].departureTime}
+                                    </span>
                                 </div>
-                            )}
+                                <div className="row">
+                                    <span className="label">{segs[1].arrivalAirport}</span>
+                                    <span className="value">
+                                        {segs[1].arrivalDate} {segs[1].arrivalTime}
+                                    </span>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    {/* ✅ 예약 인원 (party props 적용) */}
+                    {/* 예약 인원 */}
                     <div className="pay-party">
                         <h4>예약 인원</h4>
                         <p>
@@ -162,11 +155,11 @@ const TourPaymentLeft = ({
                         </p>
                     </div>
 
-                    {/* ✅ 쿠폰/포인트 */}
+                    {/* 쿠폰/포인트 */}
                     <PaymentReward
                         userId={userId}
                         productType={'tour'}
-                        productData={productData} // ✅ baseAmount가 포함된 productData 전달
+                        productData={productData}
                         onChange={(next) => onRewardChange?.(next)}
                     />
 
