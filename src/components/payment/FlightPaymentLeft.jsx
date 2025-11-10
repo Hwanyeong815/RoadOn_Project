@@ -1,17 +1,33 @@
+// src/components/airport/FlightPaymentLeft.jsx
 import { IoCardOutline } from 'react-icons/io5';
 import useAirportStore from '../../store/airportStore';
+import useAuthStore from '../../store/authStore';
+import PaymentReward from '../ui/coupon/PaymentReward';
 import { IoIosCheckmarkCircleOutline, IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 
-const FlightPaymentLeft = ({ airport, segments, onPaymentMethodChange }) => {
-    const getAirportById = useAirportStore((state) => state.getAirportById);
+// ✅ totalPrice와 onRewardChange prop 추가
+const FlightPaymentLeft = ({ airport, segments, totalPrice, onPaymentMethodChange, onRewardChange }) => { 
     const filters = useAirportStore((state) => state.filters);
-    // const airport = getAirportById(airportId);
+    
+    // 현재 로그인된 사용자 id (u_test_1)
+    const currentUser = useAuthStore((s) => s.currentUser);
+    const userId = currentUser?.id || 'u_test_1';
+    
+    // ✅ PaymentReward에 전달할 상품 데이터 (총액)
+    const productData = useMemo(() => ({
+        baseAmount: totalPrice || 0, // 총액을 baseAmount로 전달
+        productType: 'flight',
+    }), [totalPrice]);
 
     const [gender, setGender] = useState('male');
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('card');
-    const user = { gender };
-    const [isOpen, setIsOpen] = useState(false);
+    
+    // Select 화살표를 제어하는 간단한 헬퍼
+    const [isSelectOpen, setIsSelectOpen] = useState(false); 
+    const toggleSelect = () => setIsSelectOpen(prev => !prev);
+    const SelectIcon = isSelectOpen ? IoIosArrowUp : IoIosArrowDown;
+
 
     if (!airport || !segments) {
         return <div>항공권 정보를 불러올 수 없습니다.</div>;
@@ -30,10 +46,7 @@ const FlightPaymentLeft = ({ airport, segments, onPaymentMethodChange }) => {
             onPaymentMethodChange(method);
         }
     };
-
-    console.log('현재 인원 수:', filters.people);
-    console.log('현재 좌석 종류:', filters.seat);
-
+    
     return (
         <div className="pay payment-left">
             <div className="pay-detail">
@@ -47,6 +60,7 @@ const FlightPaymentLeft = ({ airport, segments, onPaymentMethodChange }) => {
                 </div>
 
                 <div className="pay-box-wrap">
+                    {/* 항공 스케줄 */}
                     <div className="flight-schedule">
                         {segments.map((segment, index) => (
                             <div key={index} className="depart-wrap">
@@ -104,6 +118,7 @@ const FlightPaymentLeft = ({ airport, segments, onPaymentMethodChange }) => {
                             </div>
                         ))}
                     </div>
+                    
                     <div className="flight-resname">
                         <h4>예약자 정보</h4>
                         <p>
@@ -137,7 +152,7 @@ const FlightPaymentLeft = ({ airport, segments, onPaymentMethodChange }) => {
                             <div className="select-wrap">
                                 <select
                                     className="nationality-country"
-                                    onClick={() => setIsOpen(!isOpen)}
+                                    onClick={toggleSelect} 
                                 >
                                     <option value="KOR"> 대한민국(KOR)</option>
                                     <option value="USA"> 미국(USA)</option>
@@ -146,7 +161,7 @@ const FlightPaymentLeft = ({ airport, segments, onPaymentMethodChange }) => {
                                     <option value="VNM"> 베트남(VNM)</option>
                                 </select>
                                 <span className="icon">
-                                    {isOpen ? <IoIosArrowUp /> : <IoIosArrowDown />}
+                                    <SelectIcon />
                                 </span>
                             </div>
                             <div className="gender-group">
@@ -179,7 +194,6 @@ const FlightPaymentLeft = ({ airport, segments, onPaymentMethodChange }) => {
                         </div>
                         
                     </div>
-
                     {/* 여권 정보  */}
                     <div className="passport-info">
                         <div className="pass-head">
@@ -200,50 +214,30 @@ const FlightPaymentLeft = ({ airport, segments, onPaymentMethodChange }) => {
                         <div className="select-wrap">
                             <select
                                 className="nationality-country"
-                                onClick={() => setIsOpen(!isOpen)}
+                                onClick={toggleSelect} 
                             >
                                 <option value="KOR"> 대한민국(KOR)</option>
                                 <option value="USA"> 미국(USA)</option>
                                 <option value="JAN"> 일본(JAN)</option>
                                 <option value="CHN"> 중국(CHN)</option>
                                 <option value="VNM"> 베트남(VNM)</option>
-                            </select>{' '}
+                            </select>
                             <span className="icon">
-                                {isOpen ? <IoIosArrowUp /> : <IoIosArrowDown />}
+                                <SelectIcon />
                             </span>
                         </div>
                     </div>
 
-                    {/* 쿠폰 */}
-                    <div className="pay-coupon">
-                        <h4>쿠폰</h4>
-                        <div className="select-wrap">
-                            <select
-                                id="coupon"
-                                name="select-coupon"
-                                onClick={() => setIsOpen(!isOpen)}
-                            >
-                                <option value="" disabled hidden>
-                                    사용 가능한 쿠폰 1개
-                                </option>
-                                <option value="apple">가능한 옵션</option>
-                                <option value="banana">마이페이지의</option>
-                                <option value="grape">쿠폰이랑 연결</option>
-                            </select>
-                            <span className="icon">
-                                {isOpen ? <IoIosArrowUp /> : <IoIosArrowDown />}
-                            </span>
-                        </div>
-                    </div>
-                    <div className="pay-point">
-                        <h4>포인트</h4>
-                        <p>
-                            RT 포인트 
-                            <span>12,000</span>P
-                        </p>
-                        <input type="number" />
-                        <button>전액 사용</button>
-                    </div>
+                    {/* ===== 쿠폰/포인트 섹션 (PaymentReward 통합) ===== */}
+                    <PaymentReward
+                        userId={userId}
+                        productType={'flight'} // 항공권 타입 지정
+                        productData={productData}
+                        onChange={onRewardChange} // 부모(PaymentLayout)로 할인 상태 전달
+                    />
+                    {/* ==================================================== */}
+
+                    {/* 결제수단 */}
                     <div className="pay-method">
                         <h4>결제수단</h4>
                         <ul className="payments">
@@ -273,6 +267,7 @@ const FlightPaymentLeft = ({ airport, segments, onPaymentMethodChange }) => {
                                 <img src="/images/icon/kakaopay.png" alt="카카오페이" />
                             </li>
                         </ul>
+
                         {selectedPaymentMethod === 'card' && (
                             <>
                                 <div className="card-types">
