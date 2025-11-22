@@ -201,7 +201,7 @@ const TourPaymentRight = ({
             </div>
 
             <p className="assent">
-                <span></span>개인정보 처리 및 이용약관에 동의합니다.
+                <input type="checkbox" />개인정보 처리 및 이용약관에 동의합니다.
             </p>
 
             <button className="pay-btn" onClick={handlePayment} disabled={isProcessing}>
