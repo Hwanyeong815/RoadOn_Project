@@ -130,10 +130,10 @@
                 }
                 // 투어결제만
                 // 투어결제만
-.depart-info.compact {
+.depart-info, .compact {
     background-color: $greyscale-100;
     border-radius: vw(15px);
-    border: 1px solid $greyscale-600;
+    border: vw(1px) solid $greyscale-600;
     display: flex;
     align-items: center;
     justify-content: space-between; 
@@ -270,6 +270,7 @@
                         align-items: center;
                     }
                 }
+
                 .eng-name,
                 .pass-ide {
                     display: flex;
@@ -407,6 +408,7 @@
                             text-indent: vw(15px);
                         }
                     }
+
                 }
             }
             .select-wrap {

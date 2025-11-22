@@ -78,7 +78,7 @@ const TourPaymentLeft = ({
                 <div className="pay-box-wrap">
                     {/* 항공 스케줄 */}
                     <div className="flight-schedule">
-                        <div className="depart-info compact">
+                        <div className=" compact">
                             {/* 왼쪽(가는편) */}
                             <div className="col left">
                                 <p className="code-badge">{segs[0].flightNo}</p>
